@@ -1,4 +1,10 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.google.com/url?sa=E&source=gmail&q=https://valorantaimtrainer.online/sitemap.xml
+# Ensure Google Images can index your blog thumbnails
+User-agent: Googlebot-Image
+Allow: /assets/blog/
+Allow: /assets/preview-image.jpg
+
+# Sitemap Location
+Sitemap: https://valorantaimtrainer.online/sitemap.xml

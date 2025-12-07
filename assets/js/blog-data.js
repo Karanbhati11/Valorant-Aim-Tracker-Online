@@ -122,7 +122,7 @@ const BLOG_DATA = [
         <li><strong>Repeat:</strong> Repeat this process 3 or 4 times, narrowing the gap until you find a number that feels perfectly natural.</li>
       </ol>
       
-      <p>If you want a tool to do the math for you, the <a href="https://jscalc.io/embed/vqOrqXRpMgmwb8tG" target="_blank" style="color: var(--accent); text-decoration: underline;">PSA Method Calculator</a> is a great external resource to keep open in another tab while you train.</p>
+      <p>If you want a tool to do the math for you, the <a href="https://jscalc.io/embed/vqOrqXRpMgmwb8tV" target="_blank" style="color: var(--accent); text-decoration: underline;">PSA Method Calculator</a> is a great external resource to keep open in another tab while you train.</p>
 
       <h2>Valorant Pro Player Settings (2025 Updated)</h2>
       <p>Most Radiant players fall into the eDPI range of <strong>160 to 400</strong>. Anything higher is usually considered "wrist aiming" (risky for consistency), and anything lower is "arm aiming" (great for precision but tiring).</p>
