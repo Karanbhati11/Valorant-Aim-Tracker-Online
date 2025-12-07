@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Valorant Aim Trainer Online - Free 3D Browser Aim Practice</title>
+
+    <meta
+      name="description"
+      content="The best free Valorant Aim Trainer Online. Improve your raw aim with 3D browser-based exercises for flicking, tracking, and micro-adjustments. No download required. Optimized for low-end PCs."
+    />
+    <meta
+      name="keywords"
+      content="valorant aim trainer online, valorant aim trainer, aim trainer 3d, browser aim trainer, free aim trainer, aim lab online, valorant warmup, aim practice online, fps trainer"
+    />
+    <meta name="author" content="Aim Pro 3D" />
+    <meta name="robots" content="index, follow" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://valorantaimtrainer.online/" />
+    <meta property="og:title" content="Valorant Aim Trainer Online - Free 3D" />
+    <meta
+      property="og:description"
+      content="Practice your aim in browser with this 3D Valorant Trainer. Features Gridshot, Strafing, and Micro-adjustments. No download needed."
+    />
+    <meta property="og:image" content="assets/preview-image.jpg" />
+
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://valorantaimtrainer.online/" />
+    <meta property="twitter:title" content="Valorant Aim Trainer Online" />
+    <meta
+      property="twitter:description"
+      content="Improve your aim instantly. Free 3D browser aim trainer."
+    />
+    <meta property="twitter:image" content="assets/preview-image.jpg" />
+
+    <link rel="icon" type="image/x-icon" href="assets/favicon.png" />
+
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Valorant Aim Trainer Online",
+        "url": "https://valorantaimtrainer.online/",
+        "description": "A free 3D browser-based aim trainer designed for Valorant players.",
+        "applicationCategory": "Game",
+        "genre": "FPS Trainer",
+        "operatingSystem": "Web Browser",
+        "browserRequirements": "Requires WebGL",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+      }
+    </script>
+
+    <link rel="stylesheet" href="assets/css/styles.css" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  </head>
+  <body>
+    <noscript>
+      <div
+        style="
+          padding: 20px;
+          text-align: center;
+          color: white;
+          background: #111;
+        "
+      >
+        <h1>JavaScript Required</h1>
+        <p>Please enable JavaScript to play Valorant Aim Trainer Online.</p>
+      </div>
+    </noscript>
+
+    <div id="mobile-warning">
+      <div class="warning-content">
+        <h1 class="warning-title">DESKTOP ONLY</h1>
+        <p class="warning-desc">
+          This Aim Trainer is optimized for <strong>Mouse & Keyboard</strong> to
+          ensure the best training experience.
+        </p>
+        <p class="warning-sub">Please open on a PC or Laptop to play.</p>
+      </div>
+    </div>
+
+    <div
+      id="game-container"
+      style="
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+      "
+    ></div>
+
+    <canvas
+      id="crosshair-canvas"
+      style="
+        position: absolute;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        z-index: 5;
+      "
+    ></canvas>
+
+    <div id="vignette"></div>
+
+    <div
+      id="click-overlay"
+      class="hidden"
+      onclick="ExerciseController.resume()"
+    >
+      <div class="click-msg">Click to Resume</div>
+    </div>
+
+    <div id="hud" style="opacity: 0">
+      <div class="hud-stat">
+        <div class="hud-val" id="score-val">0</div>
+        <div class="hud-lbl">Score</div>
+      </div>
+      <div class="hud-stat">
+        <div class="hud-val" id="time-val">00:00</div>
+        <div class="hud-lbl">Time</div>
+      </div>
+      <div class="hud-stat">
+        <div class="hud-val" id="acc-val">100%</div>
+        <div class="hud-lbl">Accuracy</div>
+      </div>
+    </div>
+
+    <div id="ui-layer">
+      <div id="fps-counter" style="display: none">60 FPS</div>
+      <div id="center-msg">3</div>
+
+      <div id="main-menu" class="panel">
+        <div class="panel-header">
+          <h1 style="font-size: 2rem">
+            VALORANT <span class="brand-accent">TRAINER 3D</span>
+          </h1>
+          <div style="font-size: 0.8rem; color: var(--text-muted)">
+            FREE ONLINE AIM TRAINER
+          </div>
+        </div>
+
+        <div class="content-area">
+          <div class="sidebar">
+            <button class="nav-btn active" onclick="showTab('exercises')">
+              Exercises
+            </button>
+            <button class="nav-btn" onclick="showTab('progress')">Stats</button>
+            <button class="nav-btn" onclick="showTab('settings')">
+              Settings
+            </button>
+
+            <button class="nav-btn" onclick="window.location.href='blog.html'">
+              Blog
+            </button>
+
+            <div
+              style="
+                margin-top: auto;
+                padding: 20px;
+                font-size: 0.7rem;
+                color: #444;
+                line-height: 1.4;
+              "
+            >
+              <p>
+                <strong>Valorant Aim Trainer Online</strong> is a free 3D tool
+                to improve your aim in browser. No download required.
+              </p>
+              <p>© 2025 Aim Pro 3D</p>
+              <p style="margin-top: 5px">
+                <a
+                  href="mailto:kbnoname1.1@gmail.com"
+                  style="color: #555; text-decoration: none"
+                  >kbnoname1.1@gmail.com</a
+                >
+              </p>
+            </div>
+          </div>
+
+          <div id="tab-exercises" class="main-view">
+            <div id="category-selector">
+              <h2 style="color: var(--accent)">Select Training Mode</h2>
+              <div id="category-grid" class="mode-grid"></div>
+            </div>
+            <div id="exercises-container" style="display: none"></div>
+          </div>
+
+          <div id="tab-progress" class="main-view hidden">
+            <h2 style="color: var(--accent)">Your Stats</h2>
+            <div id="progress-stats"></div>
+            <button
+              class="action-btn"
+              onclick="Storage.clearStats(); renderProgress();"
+              style="margin-top: 20px; background: #444"
+            >
+              Clear History
+            </button>
+          </div>
+
+          <div id="tab-settings" class="main-view hidden">
+            <div class="settings-container" style="display: flex; gap: 20px">
+              <div style="flex: 1">
+                <h3 style="color: var(--accent)">Game Settings</h3>
+                <div
+                  style="
+                    background: rgba(255, 70, 85, 0.1);
+                    padding: 15px;
+                    border-radius: 6px;
+                    border: 1px solid rgba(255, 70, 85, 0.3);
+                    margin-bottom: 20px;
+                  "
+                >
+                  <div class="setting-group">
+                    <label class="setting-label">Valorant Sensitivity</label>
+                    <input
+                      type="number"
+                      id="val-sens-input"
+                      step="0.001"
+                      value="0.35"
+                      oninput="Settings.updateSens()"
+                      style="
+                        width: 100%;
+                        color: var(--accent);
+                        font-weight: bold;
+                      "
+                    />
+                  </div>
+                  <div class="setting-group">
+                    <label class="setting-label">Mouse DPI</label>
+                    <input
+                      type="number"
+                      id="mouse-dpi-input"
+                      step="50"
+                      value="800"
+                      oninput="Settings.updateSens()"
+                      style="width: 100%"
+                    />
+                  </div>
+                  <div
+                    id="edpi-display"
+                    style="
+                      text-align: right;
+                      font-size: 0.8rem;
+                      color: #fff;
+                      opacity: 0.7;
+                      font-weight: bold;
+                    "
+                  >
+                    eDPI: 280
+                  </div>
+                </div>
+                <div class="setting-group">
+                  <label class="setting-label">Target Size</label>
+                  <input
+                    type="range"
+                    id="target-size-slider"
+                    min="1"
+                    max="5"
+                    step="0.1"
+                    oninput="Settings.setTargetSize(this.value)"
+                  />
+                </div>
+                <div class="setting-group">
+                  <label class="setting-label">Target Color</label>
+                  <div style="display: flex; gap: 10px">
+                    <div
+                      class="color-opt"
+                      style="background: #00ffff"
+                      onclick="Settings.setTargetColor('#00ffff')"
+                    ></div>
+                    <div
+                      class="color-opt"
+                      style="background: #ff4655"
+                      onclick="Settings.setTargetColor('#ff4655')"
+                    ></div>
+                    <div
+                      class="color-opt"
+                      style="background: #ffff00"
+                      onclick="Settings.setTargetColor('#ffff00')"
+                    ></div>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                style="
+                  flex: 1;
+                  background: rgba(0, 0, 0, 0.2);
+                  padding: 15px;
+                  border-radius: 8px;
+                "
+              >
+                <h3 style="color: var(--accent); margin-top: 0">
+                  Crosshair Creator
+                </h3>
+                <div style="text-align: center; margin-bottom: 15px">
+                  <canvas
+                    id="crosshair-preview-canvas"
+                    width="150"
+                    height="150"
+                    style="background: #333; border: 1px solid #555"
+                  ></canvas>
+                </div>
+                <div class="setting-group">
+                  <label class="setting-label">Name</label>
+                  <input
+                    type="text"
+                    id="cr-name"
+                    placeholder="My Crosshair"
+                    oninput="CrosshairManager.onInputChange()"
+                    style="width: 100%"
+                  />
+                </div>
+                <div style="display: flex; gap: 10px">
+                  <div style="flex: 1">
+                    <label class="setting-label">Style</label>
+                    <select
+                      id="cr-style"
+                      onchange="CrosshairManager.onInputChange()"
+                      style="width: 100%"
+                    >
+                      <option value="classic">Classic</option>
+                      <option value="dot">Dot</option>
+                      <option value="circle">Circle</option>
+                      <option value="plus">Plus</option>
+                    </select>
+                  </div>
+                  <div style="flex: 1">
+                    <label class="setting-label">Size</label>
+                    <input
+                      type="number"
+                      id="cr-size"
+                      value="6"
+                      oninput="CrosshairManager.onInputChange()"
+                      style="width: 100%"
+                    />
+                  </div>
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 10px">
+                  <div style="flex: 1">
+                    <label class="setting-label">Color</label>
+                    <input
+                      type="color"
+                      id="cr-color"
+                      value="#00ff00"
+                      oninput="CrosshairManager.onInputChange()"
+                      style="width: 100%"
+                    />
+                  </div>
+                  <div style="flex: 1">
+                    <label class="setting-label">Opacity</label>
+                    <input
+                      type="number"
+                      id="cr-opacity"
+                      step="0.1"
+                      max="1"
+                      min="0.1"
+                      value="1"
+                      oninput="CrosshairManager.onInputChange()"
+                      style="width: 100%"
+                    />
+                  </div>
+                </div>
+                <div style="margin-top: 15px; display: flex; gap: 10px">
+                  <button
+                    class="action-btn primary"
+                    onclick="CrosshairManager.savePreset()"
+                  >
+                    Save New
+                  </button>
+                </div>
+                <hr style="border-color: #444; margin: 15px 0" />
+                <label class="setting-label">Saved Crosshairs</label>
+                <div style="display: flex; gap: 10px">
+                  <select
+                    id="saved-crosshairs"
+                    onchange="CrosshairManager.loadPreset(this.value)"
+                    style="flex: 1"
+                  ></select>
+                  <button
+                    class="action-btn"
+                    onclick="CrosshairManager.deletePreset()"
+                    style="background: #444"
+                  >
+                    Del
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="exercise-hud" class="panel mini-menu hidden">
+        <div style="position: absolute; top: 20px; right: 30px">
+          <span
+            id="exercise-name"
+            style="color: var(--accent); font-weight: bold"
+          ></span>
+        </div>
+        <h2>PAUSED</h2>
+        <div class="btn-row">
+          <button class="action-btn" onclick="ExerciseController.quit()">
+            Exit
+          </button>
+          <button
+            class="action-btn primary"
+            onclick="ExerciseController.resume()"
+          >
+            Resume
+          </button>
+        </div>
+      </div>
+
+      <div id="results-menu" class="panel mini-menu hidden">
+        <h2>COMPLETE</h2>
+        <div id="exercise-result"></div>
+        <div class="stats-grid">
+          <div class="hud-stat">
+            <div class="hud-val" id="res-score">0</div>
+            <div class="hud-lbl">Score</div>
+          </div>
+          <div class="hud-stat">
+            <div class="hud-val" id="res-acc">0%</div>
+            <div class="hud-lbl">Accuracy</div>
+          </div>
+          <div class="hud-stat">
+            <div class="hud-val" id="res-hits">0</div>
+            <div class="hud-lbl">Hits</div>
+          </div>
+          <div class="hud-stat">
+            <div class="hud-val" id="res-kps">0</div>
+            <div class="hud-lbl">KPS</div>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="action-btn" onclick="ExerciseController.menu()">
+            Menu
+          </button>
+          <button
+            class="action-btn primary"
+            onclick="ExerciseController.repeatExercise()"
+          >
+            Replay
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="assets/js/storage.js"></script>
+    <script src="assets/js/audio.js"></script>
+    <script src="assets/js/exercises/exercise-definitions.js"></script>
+    <script src="assets/js/exercises/exercise-engine.js"></script>
+    <script src="assets/js/ui.js"></script>
+  </body>
+</html>
