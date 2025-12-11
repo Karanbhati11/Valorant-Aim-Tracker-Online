@@ -26,6 +26,15 @@ class ExerciseEngine {
     });
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+    // Ensure the renderer canvas fills the container and is positioned correctly
+    this.renderer.domElement.id = "game-canvas";
+    this.renderer.domElement.style.position = "absolute";
+    this.renderer.domElement.style.top = "0";
+    this.renderer.domElement.style.left = "0";
+    this.renderer.domElement.style.width = "100%";
+    this.renderer.domElement.style.height = "100%";
+    this.renderer.domElement.style.zIndex = "1";
+    this.renderer.domElement.style.touchAction = "none"; // allow touch handling manually
     container.appendChild(this.renderer.domElement);
 
     // 4. Raycaster
@@ -248,12 +257,32 @@ class ExerciseEngine {
   }
 
   createTargetMesh(x, y, z, mech) {
-    let size = parseFloat(Storage.get(Storage.KEYS.TARGET_SIZE));
-    if (!size || size > 8) size = 2.0;
+    // Prefer per-exercise target size if provided, otherwise fall back to global storage
+    let size = mech && mech.targetSize ? parseFloat(mech.targetSize) : null;
+    if (!size) {
+      size = parseFloat(Storage.get(Storage.KEYS.TARGET_SIZE));
+    }
+    if (isNaN(size) || size <= 0 || size > 10) size = 2.0;
+
+    // Adjust target size based on device and exercise specifics.
+    // Desktop → make targets smaller (harder) by default. Mobile keeps configured size.
+    // The `micro_adjust` exercise should be notably smaller on desktop to increase difficulty.
+    let deviceMultiplier = this.isMobile ? 1.0 : 0.6;
+    const exId =
+      this.currentExercise && this.currentExercise.id
+        ? this.currentExercise.id
+        : null;
+    if (exId === "micro_adjust") {
+      // Make micro adjustments significantly smaller on desktop
+      deviceMultiplier = this.isMobile ? 1.0 : 0.35;
+    }
+
+    // Final computed size (clamped to reasonable min/max)
+    const finalSize = Math.max(0.25, Math.min(6.0, size * deviceMultiplier));
 
     const colorHex = Storage.get(Storage.KEYS.TARGET_COLOR) || "#00ffff";
 
-    const geometry = new THREE.SphereGeometry(size, 24, 24);
+    const geometry = new THREE.SphereGeometry(finalSize, 24, 24);
     const material = new THREE.MeshLambertMaterial({
       color: colorHex,
       emissive: colorHex,
@@ -281,12 +310,7 @@ class ExerciseEngine {
    * Check if cursor/aim is over any target and auto-pop on mobile
    */
   checkAimOverTarget() {
-    if (
-      !this.isMobile ||
-      !this.exerciseState.running ||
-      this.exerciseState.paused
-    )
-      return;
+    if (!this.exerciseState.running || this.exerciseState.paused) return;
 
     // Cooldown to prevent spam
     if (this.autoPopCooldown > 0) return;
@@ -299,16 +323,21 @@ class ExerciseEngine {
       const hitMesh = intersects[0].object;
       const index = this.targets.findIndex((t) => t.mesh === hitMesh);
 
-      if (index !== -1 && this.lastAutoPopTarget !== index) {
+      if (index !== -1) {
+        const uuid = hitMesh.uuid;
+        if (this.lastAutoPopTarget === uuid) return;
+
         // Register as hit
         this.exerciseState.clicks++;
         this.exerciseState.hits++;
         this.exerciseState.score +=
           this.currentExercise.scoringRules.hitReward || 100;
         AudioSys.play("hit");
+
+        // store uuid then remove
+        this.lastAutoPopTarget = uuid;
         this.removeTarget(index, true);
 
-        this.lastAutoPopTarget = index;
         this.autoPopCooldown = 150; // Prevent immediate re-pop
       }
     }
@@ -324,9 +353,6 @@ class ExerciseEngine {
     } else {
       this.autoPopCooldown = 0;
     }
-
-    // Check auto-pop on mobile
-    this.checkAimOverTarget();
 
     for (let i = this.targets.length - 1; i >= 0; i--) {
       const t = this.targets[i];
@@ -348,6 +374,9 @@ class ExerciseEngine {
         this.removeTarget(i, false);
       }
     }
+
+    // Check auto-pop on mobile AFTER targets have been updated/scaled
+    this.checkAimOverTarget();
 
     if (this.targets.length === 0 && !this.respawnTimer) {
       this.respawnTimer = setTimeout(() => {
@@ -426,6 +455,11 @@ class ExerciseEngine {
       this.camera.aspect = window.innerWidth / window.innerHeight;
       this.camera.updateProjectionMatrix();
       this.renderer.setSize(window.innerWidth, window.innerHeight);
+      // keep canvas style full-bleed
+      if (this.renderer.domElement) {
+        this.renderer.domElement.style.width = window.innerWidth + "px";
+        this.renderer.domElement.style.height = window.innerHeight + "px";
+      }
     }
   }
 

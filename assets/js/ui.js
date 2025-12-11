@@ -46,6 +46,8 @@ let ExerciseController = {
     if (!this.isMobile && document.body.requestPointerLock) {
       document.body.requestPointerLock();
     }
+    // Hide native cursor while playing on desktop
+    if (!this.isMobile) document.body.classList.add("playing");
   },
 
   resizeCrosshairCanvas() {
@@ -170,6 +172,8 @@ let ExerciseController = {
     this.hideMobilePauseButton();
 
     document.exitPointerLock();
+    // Restore native cursor when exercise finishes
+    if (!this.isMobile) document.body.classList.remove("playing");
 
     const results = this.engine.exerciseState;
 
@@ -211,6 +215,7 @@ let ExerciseController = {
       if (!this.isMobile && document.body.requestPointerLock) {
         document.body.requestPointerLock();
       }
+      if (!this.isMobile) document.body.classList.add("playing");
     }
   },
 
@@ -225,6 +230,12 @@ let ExerciseController = {
     if (!this.isMobile && document.exitPointerLock) {
       document.exitPointerLock();
     }
+
+    // Restore native cursor when paused/menus open
+    if (!this.isMobile) document.body.classList.remove("playing");
+
+    // Hide mobile pause button when returning to menu
+    this.hideMobilePauseButton();
   },
 
   quit() {
@@ -258,6 +269,7 @@ let ExerciseController = {
     if (!this.isMobile && document.exitPointerLock) {
       document.exitPointerLock();
     }
+    if (!this.isMobile) document.body.classList.remove("playing");
 
     renderProgress();
   },

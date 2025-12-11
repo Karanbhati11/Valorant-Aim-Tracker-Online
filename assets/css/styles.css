@@ -36,6 +36,17 @@ body {
   touch-action: none;
 }
 
+/* Hide native cursor during active play (desktop). The crosshair is drawn
+   on the overlay canvas so it remains visible while the system cursor is hidden. */
+body.playing, body.playing * {
+  cursor: none !important;
+}
+
+#crosshair-canvas {
+  pointer-events: none;
+  z-index: 60;
+}
+
 /* --- UTILITY --- */
 .hidden {
   display: none !important;
@@ -162,8 +173,8 @@ body {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.98); }
-  to { opacity: 1; transform: scale(1); }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .panel-header {
@@ -685,7 +696,7 @@ select option {
 
 /* --- HUD --- */
 #hud {
-  position: absolute;
+  position: fixed;
   top: 20px;
   left: 50%;
   transform: translateX(-50%);
@@ -697,6 +708,19 @@ select option {
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.5s;
+  z-index: 60;
+}
+
+/* Respect iOS safe area insets */
+@supports(padding: env(safe-area-inset-left)) {
+  #hud {
+    top: calc(20px + env(safe-area-inset-top));
+    left: 50%;
+    transform: translateX(-50%);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    box-sizing: border-box;
+  }
 }
 
 @media (max-width: 600px) {
@@ -759,6 +783,22 @@ select option {
   .mini-menu {
     width: 95%;
     padding: 30px 20px;
+  }
+}
+
+/* Ensure pause/results menus are centered and fixed so they overlay the game correctly */
+.mini-menu {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 80;
+}
+
+@media (max-width: 768px) {
+  .mini-menu {
+    width: 90vw;
+    max-width: 420px;
   }
 }
 
@@ -884,25 +924,40 @@ select option {
 
 /* Mobile HUD - Responsive positioning and sizing */
 @media (max-width: 768px) {
+  /* Arrange HUD items horizontally on small screens for compact view */
   #hud {
-    flex-direction: column;
-    gap: 15px;
-    width: 100%;
+    flex-direction: row;
+    gap: 12px;
+    width: 95%;
     max-width: 100%;
-    padding: 10px;
+    padding: 6px 12px;
+    justify-content: space-between;
+    align-items: center;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .hud-stat {
-    display: inline-block;
-    margin: 0 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 60px;
+    padding: 4px 6px;
   }
 
   .hud-val {
-    font-size: 2rem;
+    font-size: 1.8rem;
   }
 
   .hud-lbl {
     font-size: 0.65rem;
+  }
+
+  /* small phones: tighten sizing */
+  @media (max-width: 420px) {
+    #hud { gap: 8px; }
+    .hud-val { font-size: 1.4rem; }
+    .hud-stat { min-width: 48px; }
   }
 }
 
@@ -1065,6 +1120,14 @@ select option {
   .mobile-pause-button:active {
     transform: scale(0.95);
     background: rgba(255, 70, 85, 1);
+  }
+}
+
+/* Adjust pause button for devices with safe area (notch) */
+@supports(padding: env(safe-area-inset-left)) {
+  .mobile-pause-button {
+    top: calc(10px + env(safe-area-inset-top));
+    left: calc(10px + env(safe-area-inset-left));
   }
 }
 
