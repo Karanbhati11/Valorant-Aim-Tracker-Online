@@ -1,7 +1,7 @@
 /**
  * 3D Exercise Engine (Three.js)
  * Aim Lab Style "Graybox" Environment
- * Mobile Support Added: Touch Drag for Look, Tap for Shoot
+ * Mobile Support: Touch Drag for Look, Auto-pop when aiming at target
  */
 
 class ExerciseEngine {
@@ -50,17 +50,31 @@ class ExerciseEngine {
 
     this.respawnTimer = null;
 
-    // Mobile Touch State
+    // Mobile Detection
+    this.isMobile = this.detectMobileDevice();
     this.lastTouchX = null;
     this.lastTouchY = null;
+    this.lastAutoPopTarget = null; // Track last auto-popped target to prevent spam
+    this.autoPopCooldown = 0;
 
     this.resize();
-    this.bindInputEvents(); // Hook up inputs
+    this.bindInputEvents();
+  }
+
+  /**
+   * Detect if device is mobile
+   */
+  detectMobileDevice() {
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+    const mobileRegex =
+      /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i;
+    return mobileRegex.test(userAgent.toLowerCase()) || window.innerWidth < 900;
   }
 
   bindInputEvents() {
     // Mouse (Desktop)
     document.addEventListener("mousemove", (e) => this.handleMouseMove(e));
+    document.addEventListener("click", () => this.handleInput());
 
     // Touch (Mobile)
     const el = this.renderer.domElement;
@@ -76,16 +90,11 @@ class ExerciseEngine {
   handleTouchStart(e) {
     if (!this.exerciseState.running || this.exerciseState.paused) return;
 
-    // Don't prevent default instantly to allow some UI interaction if needed,
-    // but usually for a game canvas we want to stop scroll.
     if (e.target === this.renderer.domElement) e.preventDefault();
 
     const touch = e.touches[0];
     this.lastTouchX = touch.clientX;
     this.lastTouchY = touch.clientY;
-
-    // Treat a tap as a shot (Input)
-    this.handleInput();
   }
 
   handleTouchMove(e) {
@@ -98,9 +107,8 @@ class ExerciseEngine {
       const dx = touch.clientX - this.lastTouchX;
       const dy = touch.clientY - this.lastTouchY;
 
-      // Create a fake event object to reuse logic
       const fakeEvent = {
-        movementX: dx * 2.5, // Sensitivity multiplier for touch feel
+        movementX: dx * 2.5,
         movementY: dy * 2.5,
       };
 
@@ -269,9 +277,56 @@ class ExerciseEngine {
     this.targets.push(targetObj);
   }
 
+  /**
+   * Check if cursor/aim is over any target and auto-pop on mobile
+   */
+  checkAimOverTarget() {
+    if (
+      !this.isMobile ||
+      !this.exerciseState.running ||
+      this.exerciseState.paused
+    )
+      return;
+
+    // Cooldown to prevent spam
+    if (this.autoPopCooldown > 0) return;
+
+    this.raycaster.setFromCamera(this.center, this.camera);
+    const meshes = this.targets.map((t) => t.mesh);
+    const intersects = this.raycaster.intersectObjects(meshes);
+
+    if (intersects.length > 0) {
+      const hitMesh = intersects[0].object;
+      const index = this.targets.findIndex((t) => t.mesh === hitMesh);
+
+      if (index !== -1 && this.lastAutoPopTarget !== index) {
+        // Register as hit
+        this.exerciseState.clicks++;
+        this.exerciseState.hits++;
+        this.exerciseState.score +=
+          this.currentExercise.scoringRules.hitReward || 100;
+        AudioSys.play("hit");
+        this.removeTarget(index, true);
+
+        this.lastAutoPopTarget = index;
+        this.autoPopCooldown = 150; // Prevent immediate re-pop
+      }
+    }
+  }
+
   update(dt) {
     if (!this.exerciseState.running || this.exerciseState.paused) return;
     this.exerciseState.timeElapsed += dt;
+
+    // Update cooldown
+    if (this.autoPopCooldown > 0) {
+      this.autoPopCooldown -= dt * 1000;
+    } else {
+      this.autoPopCooldown = 0;
+    }
+
+    // Check auto-pop on mobile
+    this.checkAimOverTarget();
 
     for (let i = this.targets.length - 1; i >= 0; i--) {
       const t = this.targets[i];

@@ -28,8 +28,12 @@ body {
   color: var(--text-main);
   font-family: var(--font-stack);
   height: 100vh;
-  width: 100vw;
-  touch-action: none; /* Prevent browser scrolling on mobile */
+  /* FIX 1: Strict viewport locking */
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  touch-action: none;
 }
 
 /* --- UTILITY --- */
@@ -66,7 +70,6 @@ body {
   50% { transform: rotate(-90deg); }
 }
 
-/* Only show warning on mobile in portrait mode when needed */
 @media screen and (max-width: 900px) and (orientation: portrait) {
   .force-landscape #orientation-warning {
     display: flex;
@@ -102,6 +105,7 @@ body {
   justify-content: center;
   align-items: center;
   font-family: var(--font-stack);
+  overflow: hidden;
 }
 
 /* --- FPS COUNTER --- */
@@ -135,16 +139,25 @@ body {
   pointer-events: auto;
   overflow: hidden;
   animation: fadeIn 0.5s ease-out;
+  margin: 0 auto;
 }
 
+/* FIX 2: FORCE ABSOLUTE POSITIONING ON MOBILE */
+/* This removes the panel from the flex container flow and staples it to the corners */
 @media (max-width: 1024px) {
   .panel {
+    position: absolute; /* Bypass flex centering */
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    max-width: 100%;
-    max-height: 100%;
+    max-width: none;
+    max-height: none;
+    margin: 0;
     border-radius: 0;
     border: none;
+    display: flex;
+    flex-direction: column;
   }
 }
 
@@ -164,10 +177,20 @@ body {
 
 @media (max-width: 768px) {
   .panel-header {
-    padding: 15px 20px;
+    padding: 15px 12px;
     flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
+    /* FIX 3: Center the Text Content */
+    align-items: center; 
+    justify-content: center;
+    text-align: center;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .panel-header {
+    padding: 12px 10px;
+    gap: 5px;
   }
 }
 
@@ -182,6 +205,21 @@ h1 {
   -webkit-text-fill-color: transparent;
 }
 
+@media (max-width: 768px) {
+  h1 {
+    font-size: 1.3rem;
+    letter-spacing: 2px;
+    text-align: center; /* Ensure title is centered */
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+  }
+}
+
 .brand-accent {
   color: var(--primary);
   -webkit-text-fill-color: var(--primary);
@@ -194,6 +232,22 @@ h1 {
   text-transform: uppercase;
   margin-top: 5px;
   font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .subtitle {
+    font-size: 0.65rem;
+    letter-spacing: 1px;
+    text-align: center; /* Ensure subtitle is centered */
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .subtitle {
+    font-size: 0.6rem;
+    letter-spacing: 0.5px;
+  }
 }
 
 /* --- DASHBOARD LAYOUT --- */
@@ -215,7 +269,7 @@ h1 {
 
 @media (max-width: 768px) {
   .content-area {
-    flex-direction: column-reverse; /* Sidebar moves to bottom */
+    flex-direction: column-reverse;
   }
   
   .sidebar {
@@ -226,11 +280,21 @@ h1 {
     border-top: 1px solid var(--border);
     padding: 0;
     overflow-x: auto;
+    overflow-y: hidden;
     background: var(--bg-dark);
+    -webkit-overflow-scrolling: touch;
+    /* Center sidebar buttons on mobile */
+    justify-content: center; 
   }
 
   .sidebar div {
-    display: none; /* Hide footer text on mobile */
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar {
+    max-height: 60px;
   }
 }
 
@@ -243,7 +307,23 @@ h1 {
 
 @media (max-width: 768px) {
   .main-view {
-    padding: 20px;
+    padding: 15px 12px;
+    /* Optional: Center content inside the main view */
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+  }
+  
+  /* Ensure children take full width when needed inside centered view */
+  .main-view > * {
+    width: 100%;
+    max-width: 600px;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-view {
+    padding: 10px 8px;
   }
 }
 
@@ -262,6 +342,7 @@ h1 {
   letter-spacing: 1px;
   transition: all 0.2s ease;
   position: relative;
+  white-space: nowrap;
 }
 
 @media (max-width: 768px) {
@@ -270,13 +351,23 @@ h1 {
     text-align: center;
     border-left: none;
     border-bottom: 3px solid transparent;
-    padding: 15px 10px;
-    font-size: 0.8rem;
+    padding: 12px 8px;
+    font-size: 0.7rem;
+    min-width: 70px;
+    max-width: 150px; /* Prevent huge buttons */
   }
   
   .nav-btn.active {
     border-left-color: transparent;
     border-bottom-color: var(--primary);
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-btn {
+    padding: 10px 6px;
+    font-size: 0.65rem;
+    min-width: 60px;
   }
 }
 
@@ -301,11 +392,27 @@ h1 {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 20px;
+  width: 100%; /* Ensure grid takes full width */
+}
+
+@media (max-width: 768px) {
+  .mode-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+  }
 }
 
 @media (max-width: 600px) {
   .mode-grid {
     grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .mode-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
   }
 }
 
@@ -319,6 +426,18 @@ h1 {
   position: relative;
   overflow: hidden;
   group: mode;
+}
+
+@media (max-width: 600px) {
+  .mode-card {
+    padding: 18px 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .mode-card {
+    padding: 15px 12px;
+  }
 }
 
 .mode-card:hover {
@@ -356,6 +475,19 @@ h1 {
   color: white;
 }
 
+@media (max-width: 600px) {
+  .exercise-category-btn {
+    padding: 15px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .exercise-category-btn {
+    padding: 12px 10px;
+    font-size: 0.9rem;
+  }
+}
+
 .exercise-category-btn:hover {
   background: rgba(255, 255, 255, 0.08);
   border-color: var(--primary);
@@ -380,6 +512,18 @@ h1 {
   overflow: hidden;
 }
 
+@media (max-width: 600px) {
+  .exercise-card {
+    padding: 18px 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .exercise-card {
+    padding: 15px 12px;
+  }
+}
+
 .exercise-card:hover {
   background: rgba(255, 255, 255, 0.06);
   border-color: var(--primary);
@@ -392,6 +536,41 @@ h1 {
   font-size: 1.4rem;
   font-weight: 700;
   color: white;
+}
+
+@media (max-width: 600px) {
+  .exercise-card h3 {
+    font-size: 1.1rem;
+    margin: 0 0 8px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .exercise-card h3 {
+    font-size: 1rem;
+    margin: 0 0 6px 0;
+  }
+}
+
+.exercise-card p {
+  margin: 0 0 8px 0;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+@media (max-width: 600px) {
+  .exercise-card p {
+    font-size: 0.8rem;
+    margin: 0 0 6px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .exercise-card p {
+    font-size: 0.75rem;
+    margin: 0 0 5px 0;
+  }
 }
 
 /* --- SETTINGS --- */
@@ -700,3 +879,291 @@ select option {
 ::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
 ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: #555; }
+
+/* ==================== MOBILE OPTIMIZATION ==================== */
+
+/* Mobile HUD - Responsive positioning and sizing */
+@media (max-width: 768px) {
+  #hud {
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    max-width: 100%;
+    padding: 10px;
+  }
+
+  .hud-stat {
+    display: inline-block;
+    margin: 0 15px;
+  }
+
+  .hud-val {
+    font-size: 2rem;
+  }
+
+  .hud-lbl {
+    font-size: 0.65rem;
+  }
+}
+
+/* Mobile Exercise HUD - Larger and more accessible */
+@media (max-width: 768px) {
+  #exercise-hud {
+    width: 90%;
+    padding: 30px 20px !important;
+  }
+
+  #exercise-hud h2 {
+    font-size: 2rem;
+    margin-bottom: 25px;
+  }
+
+  #exercise-hud .btn-row {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  #exercise-hud .action-btn {
+    padding: 15px;
+    font-size: 0.95rem;
+    min-height: 50px;
+  }
+}
+
+/* Mobile Results Menu - Optimized layout */
+@media (max-width: 768px) {
+  #results-menu {
+    width: 90%;
+    padding: 25px 20px !important;
+  }
+
+  #results-menu h2 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+  }
+
+  #results-menu .stats-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 25px;
+  }
+
+  #results-menu .hud-val {
+    font-size: 1.8rem;
+  }
+
+  #results-menu .btn-row {
+    flex-direction: column;
+  }
+
+  #results-menu .action-btn {
+    min-height: 45px;
+    font-size: 0.9rem;
+    padding: 12px;
+  }
+}
+
+/* Mobile Click Overlay - Larger touch target */
+@media (max-width: 768px) {
+  .click-msg {
+    font-size: 1rem;
+    padding: 20px 40px;
+    min-width: 70vw;
+  }
+}
+
+/* Mobile Center Message - Scale down for smaller screens */
+@media (max-width: 768px) {
+  #center-msg {
+    font-size: 5rem;
+  }
+}
+
+/* Mobile Action Buttons - More touchable */
+@media (max-width: 768px) {
+  .action-btn {
+    min-height: 48px;
+    padding: 15px 10px;
+    font-size: 0.9rem;
+  }
+
+  .action-btn:active {
+    transform: translateY(-1px);
+    opacity: 0.9;
+  }
+}
+
+/* Mobile Exercise Cards - Full width on small screens */
+@media (max-width: 600px) {
+  .exercise-card {
+    padding: 20px;
+  }
+
+  .exercise-card h3 {
+    font-size: 1.1rem;
+  }
+}
+
+/* Mobile Mini Menu - Stack layout */
+@media (max-width: 600px) {
+  .mini-menu {
+    width: 90vw;
+    max-width: 320px;
+    padding: 25px 20px;
+  }
+
+  .mini-menu h2 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+  }
+
+  .btn-row {
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+
+/* Mobile Panel adjustments for full screen */
+@media (max-width: 768px) {
+  .panel-header {
+    padding: 20px;
+  }
+
+  .panel-header h1 {
+    font-size: 1.5rem;
+  }
+}
+
+/* Mobile Game Pause Button visibility - Add easy exit */
+@media (max-width: 768px) {
+  #exercise-name {
+    font-size: 0.9rem;
+  }
+
+  /* Touch-friendly pause button overlay */
+  .mobile-pause-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 70, 85, 0.8);
+    border: 2px solid #ff4655;
+    border-radius: 50%;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+  }
+
+  .mobile-pause-button:active {
+    transform: scale(0.95);
+    background: rgba(255, 70, 85, 1);
+  }
+}
+
+/* Mobile target size display - make it readable */
+@media (max-width: 768px) {
+  .setting-label {
+    font-size: 0.75rem;
+  }
+
+  .setting-group {
+    margin-bottom: 20px;
+  }
+
+  input[type="number"], input[type="text"], select {
+    font-size: 16px; /* Prevent auto-zoom on iOS */
+    padding: 12px;
+  }
+}
+
+/* Mobile Exercise Container - Full height gameplay area */
+@media (max-width: 768px) {
+  #game-container {
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  /* Better touch scrolling */
+  .main-view {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+}
+
+/* Landscape mode optimizations (mobile) */
+@media (max-width: 1024px) and (orientation: landscape) {
+  #hud {
+    top: 5px;
+    gap: 30px;
+  }
+
+  .hud-val {
+    font-size: 1.5rem;
+  }
+
+  .hud-lbl {
+    font-size: 0.6rem;
+  }
+
+  .mini-menu {
+    width: 70vw;
+    padding: 20px;
+  }
+
+  .mini-menu h2 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+  }
+
+  .action-btn {
+    min-height: 40px;
+    padding: 10px;
+    font-size: 0.85rem;
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  /* Disable hover effects on touch devices */
+  .action-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    box-shadow: none;
+    transform: none;
+  }
+
+  .action-btn.primary:hover {
+    background: var(--primary);
+    color: white;
+    box-shadow: none;
+  }
+
+  .nav-btn:hover {
+    background: transparent;
+    color: var(--text-muted);
+  }
+
+  .mode-card:hover {
+    transform: none;
+    background: var(--bg-card);
+  }
+
+  /* Active states for touch */
+  .action-btn:active {
+    opacity: 0.8;
+    transform: scale(0.98);
+  }
+
+  .mode-card:active {
+    transform: scale(0.98);
+    background: rgba(255, 255, 255, 0.08);
+  }
+}

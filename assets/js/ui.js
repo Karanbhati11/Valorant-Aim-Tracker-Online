@@ -7,6 +7,10 @@ let ExerciseController = {
   engine: null,
   currentExercise: null,
   animationId: null,
+  isMobile:
+    /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(
+      navigator.userAgent.toLowerCase()
+    ) || window.innerWidth < 900,
 
   async initExercise(exerciseId) {
     const ex = getExerciseById(exerciseId);
@@ -31,18 +35,41 @@ let ExerciseController = {
     document.getElementById("fps-counter").style.display = "block";
 
     this.resizeCrosshairCanvas();
+    this.showMobilePauseButton();
 
     await this.countdown();
 
     this.engine.spawnTargets();
     this.startGameLoop();
-    document.body.requestPointerLock();
+
+    // Only request pointer lock on desktop (mobile doesn't support it)
+    if (!this.isMobile && document.body.requestPointerLock) {
+      document.body.requestPointerLock();
+    }
   },
 
   resizeCrosshairCanvas() {
     const c = document.getElementById("crosshair-canvas");
     c.width = window.innerWidth;
     c.height = window.innerHeight;
+  },
+
+  showMobilePauseButton() {
+    if (this.isMobile) {
+      const btn = document.getElementById("mobile-pause-btn");
+      if (btn) {
+        btn.classList.remove("hidden");
+        btn.style.display = "flex";
+      }
+    }
+  },
+
+  hideMobilePauseButton() {
+    const btn = document.getElementById("mobile-pause-btn");
+    if (btn) {
+      btn.classList.add("hidden");
+      btn.style.display = "none";
+    }
   },
 
   countdown() {
@@ -140,6 +167,7 @@ let ExerciseController = {
     document.getElementById("click-overlay").classList.add("hidden");
     document.getElementById("hud").style.opacity = 0;
     document.getElementById("fps-counter").style.display = "none";
+    this.hideMobilePauseButton();
 
     document.exitPointerLock();
 
@@ -179,7 +207,10 @@ let ExerciseController = {
     document.getElementById("click-overlay").classList.add("hidden");
     if (this.engine) {
       this.engine.exerciseState.paused = false;
-      document.body.requestPointerLock();
+      // Only request pointer lock on desktop
+      if (!this.isMobile && document.body.requestPointerLock) {
+        document.body.requestPointerLock();
+      }
     }
   },
 
@@ -190,7 +221,10 @@ let ExerciseController = {
 
     this.engine.exerciseState.paused = true;
     document.getElementById("exercise-hud").classList.remove("hidden");
-    document.exitPointerLock();
+    // Only exit pointer lock if it was enabled (desktop)
+    if (!this.isMobile && document.exitPointerLock) {
+      document.exitPointerLock();
+    }
   },
 
   quit() {
@@ -219,6 +253,12 @@ let ExerciseController = {
 
     document.getElementById("main-menu").classList.remove("hidden");
     document.getElementById("hud").style.opacity = 0;
+
+    // Only exit pointer lock if it was enabled (desktop)
+    if (!this.isMobile && document.exitPointerLock) {
+      document.exitPointerLock();
+    }
+
     renderProgress();
   },
 };
