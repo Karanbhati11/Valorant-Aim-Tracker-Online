@@ -1,7 +1,7 @@
 /**
  * 3D Exercise Engine (Three.js)
  * Aim Lab Style "Graybox" Environment
- * Fixed: Spawning Logic (Prevents floor/ceiling clipping)
+ * Mobile Support Added: Touch Drag for Look, Tap for Shoot
  */
 
 class ExerciseEngine {
@@ -49,7 +49,71 @@ class ExerciseEngine {
     };
 
     this.respawnTimer = null;
+
+    // Mobile Touch State
+    this.lastTouchX = null;
+    this.lastTouchY = null;
+
     this.resize();
+    this.bindInputEvents(); // Hook up inputs
+  }
+
+  bindInputEvents() {
+    // Mouse (Desktop)
+    document.addEventListener("mousemove", (e) => this.handleMouseMove(e));
+
+    // Touch (Mobile)
+    const el = this.renderer.domElement;
+    el.addEventListener("touchstart", (e) => this.handleTouchStart(e), {
+      passive: false,
+    });
+    el.addEventListener("touchmove", (e) => this.handleTouchMove(e), {
+      passive: false,
+    });
+    el.addEventListener("touchend", (e) => this.handleTouchEnd(e));
+  }
+
+  handleTouchStart(e) {
+    if (!this.exerciseState.running || this.exerciseState.paused) return;
+
+    // Don't prevent default instantly to allow some UI interaction if needed,
+    // but usually for a game canvas we want to stop scroll.
+    if (e.target === this.renderer.domElement) e.preventDefault();
+
+    const touch = e.touches[0];
+    this.lastTouchX = touch.clientX;
+    this.lastTouchY = touch.clientY;
+
+    // Treat a tap as a shot (Input)
+    this.handleInput();
+  }
+
+  handleTouchMove(e) {
+    if (!this.exerciseState.running || this.exerciseState.paused) return;
+    if (e.target === this.renderer.domElement) e.preventDefault();
+
+    const touch = e.touches[0];
+
+    if (this.lastTouchX !== null && this.lastTouchY !== null) {
+      const dx = touch.clientX - this.lastTouchX;
+      const dy = touch.clientY - this.lastTouchY;
+
+      // Create a fake event object to reuse logic
+      const fakeEvent = {
+        movementX: dx * 2.5, // Sensitivity multiplier for touch feel
+        movementY: dy * 2.5,
+      };
+
+      this.handleMouseMove(fakeEvent);
+    }
+
+    this.lastTouchX = touch.clientX;
+    this.lastTouchY = touch.clientY;
+  }
+
+  handleTouchEnd(e) {
+    this.lastTouchX = null;
+    this.lastTouchY = null;
   }
 
   createEnvironment() {
@@ -157,18 +221,13 @@ class ExerciseEngine {
           attempts++;
         }
       } else if (mech.minDistance || mech.maxDistance) {
-        // Radial Logic (Dynamic Flicks / Micro Adjust)
+        // Radial Logic
         const angle = Math.random() * Math.PI * 2;
         const minR = mech.minDistance || 0;
         const maxR = mech.maxDistance || 15;
         const rad = minR + Math.random() * (maxR - minR);
 
         x = Math.cos(angle) * rad;
-
-        // --- FIX HERE: SQUASH THE Y-AXIS ---
-        // Dynamic flicks has a maxR of ~30.
-        // Multiplying Y by 0.45 ensures max height is ~13.5 (Safe from floor/ceiling)
-        // while X remains full width (good for horizontal flicks).
         y = Math.sin(angle) * rad * 0.45;
       } else {
         // Pure Random
@@ -227,7 +286,7 @@ class ExerciseEngine {
         t.mesh.position.x += t.vx;
         t.mesh.position.y += t.vy;
         if (Math.abs(t.mesh.position.x) > 35) t.vx *= -1;
-        if (Math.abs(t.mesh.position.y) > 12) t.vy *= -1; // Tighter vertical bounds
+        if (Math.abs(t.mesh.position.y) > 12) t.vy *= -1;
       }
 
       if (t.mech.reflexMode && t.age > t.mech.reflexTime / 1000) {

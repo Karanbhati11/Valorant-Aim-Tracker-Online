@@ -16,7 +16,10 @@
       gtag("config", "G-RW21VMXTMF");
     </script>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
 
     <title>Valorant Aim Trainer Online - Free 3D Browser Aim Practice</title>
 
@@ -87,14 +90,14 @@
       </div>
     </noscript>
 
-    <div id="mobile-warning">
+    <!-- NEW ORIENTATION WARNING FOR MOBILE -->
+    <div id="orientation-warning">
+      <div class="rotate-icon">↻</div>
       <div class="warning-content">
-        <h1 class="warning-title">DESKTOP ONLY</h1>
+        <h1 class="warning-title">ROTATE DEVICE</h1>
         <p class="warning-desc">
-          This Aim Trainer is optimized for <strong>Mouse & Keyboard</strong> to
-          ensure the best training experience.
+          Please rotate your device to <strong>Landscape</strong> mode to play.
         </p>
-        <p class="warning-sub">Please open on a PC or Laptop to play.</p>
       </div>
     </div>
 
@@ -219,7 +222,7 @@
           </div>
 
           <div id="tab-settings" class="main-view hidden">
-            <div class="settings-container" style="display: flex; gap: 20px">
+            <div class="settings-container">
               <div style="flex: 1">
                 <h3 style="color: var(--accent)">Game Settings</h3>
                 <div
@@ -473,5 +476,37 @@
     <script src="assets/js/exercises/exercise-definitions.js"></script>
     <script src="assets/js/exercises/exercise-engine.js"></script>
     <script src="assets/js/ui.js"></script>
+
+    <!-- MOBILE ORIENTATION HANDLER -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const handlePlayClick = () => {
+          // Check if device is mobile (rough check)
+          if (window.innerWidth < 1000) {
+            document.body.classList.add("force-landscape");
+            // Attempt fullscreen
+            if (document.documentElement.requestFullscreen) {
+              document.documentElement.requestFullscreen().catch(() => {});
+            }
+            // Attempt orientation lock (Android mostly)
+            if (screen.orientation && screen.orientation.lock) {
+              screen.orientation.lock("landscape").catch(() => {
+                console.log("Orientation lock not supported by device/browser");
+              });
+            }
+          }
+        };
+
+        // Delegate listener to catch clicks on dynamically created exercise cards
+        document.body.addEventListener("click", (e) => {
+          if (
+            e.target.closest(".exercise-card") ||
+            e.target.closest(".action-btn.primary")
+          ) {
+            handlePlayClick();
+          }
+        });
+      });
+    </script>
   </body>
 </html>
