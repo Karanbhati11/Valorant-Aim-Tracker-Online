@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://valorantaimtrainer.online"),
   title: "Valorant Aim Trainer Online - Free 3D Browser Aim Practice",
   description:
     "The best free Valorant Aim Trainer Online. Improve your raw aim with 3D browser-based exercises for flicking, tracking, and micro-adjustments. No download required. Optimized for low-end PCs.",

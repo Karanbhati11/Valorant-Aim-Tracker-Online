@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 
-export default function BlogPage() {
+function BlogContent() {
   const searchParams = useSearchParams();
   const postId = searchParams.get("id");
   const [isLoading, setIsLoading] = useState(true);
@@ -190,5 +190,13 @@ export default function BlogPage() {
         ></div>
       </div>
     </>
+  );
+}
+
+export default function BlogPage() {
+  return (
+    <Suspense fallback={<div style={{ minHeight: "100vh", background: "#0f0f23" }} />}>
+      <BlogContent />
+    </Suspense>
   );
 }
