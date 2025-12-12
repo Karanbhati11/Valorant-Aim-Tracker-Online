@@ -3,15 +3,15 @@ import { MongoClient } from "mongodb";
 let client: MongoClient | null = null;
 
 export async function getMongoClient(): Promise<MongoClient> {
-  if (!process.env.MONGO_URI) {
-    throw new Error("MONGO_URI environment variable is not set");
+  if (!process.env.MONGODB_URI) {
+    throw new Error("MONGODB_URI environment variable is not set");
   }
 
-  if (client && client.topology && client.topology.isConnected()) {
+  if (client) {
     return client;
   }
 
-  client = new MongoClient(process.env.MONGO_URI);
+  client = new MongoClient(process.env.MONGODB_URI);
   await client.connect();
   return client;
 }
