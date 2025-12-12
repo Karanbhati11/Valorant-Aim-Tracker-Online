@@ -3,6 +3,7 @@
  * Handles rendering of list view and detailed article view
  */
 
+// Auto-init if DOMContentLoaded already fired (normal page load)
 document.addEventListener("DOMContentLoaded", () => {
   const urlParams = new URLSearchParams(window.location.search);
   const postId = urlParams.get("id");
@@ -16,6 +17,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function renderList() {
   const container = document.getElementById("blog-content");
+  if (!container) return;
+
   let html = `<h1 style="margin-bottom:30px; font-size:2.5rem;">Latest <span style="color:var(--primary)">Articles</span></h1>`;
   html += `<div class="blog-grid">`;
 
@@ -49,13 +52,14 @@ function renderArticle(id) {
 
   // UPDATE SEO TAGS DYNAMICALLY
   document.title = `${post.title} - Valorant Aim Trainer`;
-  document
-    .querySelector('meta[name="description"]')
-    .setAttribute("content", post.excerpt);
+  const metaDesc = document.querySelector('meta[name="description"]');
+  if (metaDesc) {
+    metaDesc.setAttribute("content", post.excerpt);
+  }
 
   let html = `
         <div class="article-view">
-            <button onclick="window.location.href='blog.html'" style="background:none; border:none; color:var(--text-muted); cursor:pointer; margin-bottom:20px; font-size:1rem;">← Back to Articles</button>
+            <button onclick="window.location.href='/blog'" style="background:none; border:none; color:var(--text-muted); cursor:pointer; margin-bottom:20px; font-size:1rem;">← Back to Articles</button>
             
             <div class="article-header">
                 <h1 class="article-title">${post.title}</h1>
@@ -72,5 +76,10 @@ function renderArticle(id) {
 }
 
 function openArticle(id) {
-  window.location.href = `blog.html?id=${id}`;
+  window.location.href = `/blog?id=${id}`;
 }
+
+// Expose functions to window for dynamic loading
+window.renderList = renderList;
+window.renderArticle = renderArticle;
+window.openArticle = openArticle;

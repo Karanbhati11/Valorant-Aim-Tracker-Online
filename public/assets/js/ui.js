@@ -204,9 +204,30 @@ let ExerciseController = {
     document.getElementById(
       "exercise-result"
     ).innerHTML = `<h3 style="margin:0">${this.currentExercise.name} Completed</h3>`;
+
+    // Submit score to leaderboard (serverless) if player has a saved name
+    try {
+      const playerName = localStorage.getItem("player_name");
+      if (
+        playerName &&
+        window.Leaderboard &&
+        typeof window.Leaderboard.postScore === "function"
+      ) {
+        // post asynchronously (don't block UI)
+        window.Leaderboard.postScore(finalData.score).then((res) => {
+          // Optionally re-render leaderboard if visible
+          if (document.getElementById("leaderboard-container")) {
+            window.Leaderboard.renderInto("leaderboard-container");
+          }
+        });
+      }
+    } catch (e) {
+      console.warn("Leaderboard submit error", e);
+    }
   },
 
   resume() {
+    console.log("[resume] Called");
     document.getElementById("exercise-hud").classList.add("hidden");
     document.getElementById("click-overlay").classList.add("hidden");
     if (this.engine) {
@@ -220,10 +241,22 @@ let ExerciseController = {
   },
 
   pause() {
-    if (!this.engine || !this.engine.exerciseState.running) return;
-    if (!document.getElementById("results-menu").classList.contains("hidden"))
+    console.log(
+      "[pause] Called - engine:",
+      !!this.engine,
+      "running:",
+      this.engine?.exerciseState?.running
+    );
+    if (!this.engine || !this.engine.exerciseState.running) {
+      console.warn("[pause] Returning early - no engine or not running");
       return;
+    }
+    if (!document.getElementById("results-menu").classList.contains("hidden")) {
+      console.warn("[pause] Returning early - results menu visible");
+      return;
+    }
 
+    console.log("[pause] Setting paused state");
     this.engine.exerciseState.paused = true;
     document.getElementById("exercise-hud").classList.remove("hidden");
     // Only exit pointer lock if it was enabled (desktop)
@@ -239,16 +272,22 @@ let ExerciseController = {
   },
 
   quit() {
+    console.log("[quit] Called");
     document.getElementById("exercise-hud").classList.add("hidden");
     this.returnToMenu();
   },
 
   menu() {
+    console.log("[menu] Called");
     document.getElementById("results-menu").classList.add("hidden");
     this.returnToMenu();
   },
 
   repeatExercise() {
+    console.log(
+      "[repeatExercise] Called with exercise:",
+      this.currentExercise?.id
+    );
     document.getElementById("results-menu").classList.add("hidden");
     this.initExercise(this.currentExercise.id);
   },
@@ -271,7 +310,9 @@ let ExerciseController = {
     }
     if (!this.isMobile) document.body.classList.remove("playing");
 
-    renderProgress();
+    if (window.renderProgress) {
+      window.renderProgress();
+    }
   },
 };
 
@@ -439,6 +480,24 @@ window.showTab = (tabName) => {
     Settings.init();
     CrosshairManager.init();
   }
+  if (tabName === "leaderboard") {
+    // lazy-load leaderboard
+    console.log(
+      "[showTab] leaderboard tab - checking window.Leaderboard:",
+      !!window.Leaderboard
+    );
+    if (
+      window.Leaderboard &&
+      typeof window.Leaderboard.renderInto === "function"
+    ) {
+      console.log("[showTab] Rendering leaderboard...");
+      window.Leaderboard.renderInto("leaderboard-container");
+    } else {
+      console.warn(
+        "[showTab] Leaderboard not available or renderInto not a function"
+      );
+    }
+  }
 };
 
 window.renderExercises = () => {
@@ -537,6 +596,45 @@ const Settings = {
 };
 
 // --- INPUT LISTENERS ---
+const initEventListeners = () => {
+  // Remove existing listeners to prevent duplicates
+  window.removeEventListener("mousemove", ExerciseController.handleMouseMove);
+  window.removeEventListener("mousedown", ExerciseController.handleMouseDown);
+  window.removeEventListener("keydown", ExerciseController.handleKeyDown);
+  document.removeEventListener(
+    "pointerlockchange",
+    ExerciseController.handlePointerLockChange
+  );
+  window.removeEventListener("resize", ExerciseController.handleResize);
+
+  // Add listeners
+  window.addEventListener("mousemove", (e) => {
+    if (document.pointerLockElement && ExerciseController.engine) {
+      ExerciseController.engine.handleMouseMove(e);
+    }
+  });
+  window.addEventListener("mousedown", () => {
+    if (document.pointerLockElement && ExerciseController.engine) {
+      ExerciseController.engine.handleInput();
+    }
+  });
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") ExerciseController.pause();
+  });
+  document.addEventListener("pointerlockchange", () => {
+    if (
+      !document.pointerLockElement &&
+      ExerciseController.engine?.exerciseState.running
+    ) {
+      ExerciseController.pause();
+    }
+  });
+  window.addEventListener("resize", () => {
+    if (ExerciseController.engine) ExerciseController.engine.resize();
+    ExerciseController.resizeCrosshairCanvas();
+  });
+};
+
 window.addEventListener("mousemove", (e) => {
   if (document.pointerLockElement && ExerciseController.engine) {
     ExerciseController.engine.handleMouseMove(e);
@@ -565,3 +663,6 @@ window.addEventListener("resize", () => {
 window.addEventListener("load", () => {
   window.showTab("exercises");
 });
+
+// Expose ExerciseController to window so React can access it
+window.ExerciseController = ExerciseController;
