@@ -195,7 +195,9 @@ function BlogContent() {
 
 export default function BlogPage() {
   return (
-    <Suspense fallback={<div style={{ minHeight: "100vh", background: "#0f0f23" }} />}>
+    <Suspense
+      fallback={<div style={{ minHeight: "100vh", background: "#0f0f23" }} />}
+    >
       <BlogContent />
     </Suspense>
   );

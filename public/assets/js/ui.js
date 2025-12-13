@@ -472,7 +472,8 @@ window.showTab = (tabName) => {
   const btns = document.querySelectorAll(".nav-btn");
   if (tabName === "exercises") btns[0].classList.add("active");
   if (tabName === "progress") btns[1].classList.add("active");
-  if (tabName === "settings") btns[2].classList.add("active");
+  if (tabName === "leaderboard") btns[2].classList.add("active");
+  if (tabName === "settings") btns[3].classList.add("active");
 
   if (tabName === "exercises") window.renderExercises();
   if (tabName === "progress") window.renderProgress();
@@ -571,6 +572,22 @@ const Settings = {
     document.getElementById("val-sens-input").value = sens;
     document.getElementById("mouse-dpi-input").value = dpi;
     Settings.calcEdpi();
+
+    // Initialize player name field/display if present
+    try {
+      const nameInput = document.getElementById("player-name-input");
+      const nameDisplay = document.getElementById("player-name-display");
+      const currentName =
+        (window.Leaderboard &&
+          window.Leaderboard.getPlayerName &&
+          window.Leaderboard.getPlayerName()) ||
+        localStorage.getItem("player_name") ||
+        "Guest";
+      if (nameInput) nameInput.value = currentName;
+      if (nameDisplay) nameDisplay.textContent = currentName;
+    } catch (e) {
+      console.warn("[Settings] Unable to initialize player name:", e);
+    }
   },
   setTargetColor(c) {
     Storage.set(Storage.KEYS.TARGET_COLOR, c);
@@ -584,6 +601,18 @@ const Settings = {
     Storage.set(Storage.KEYS.SENSITIVITY, sens);
     Storage.set("aim_mouse_dpi", dpi);
     Settings.calcEdpi();
+  },
+  updatePlayerName() {
+    const nameInput = document.getElementById("player-name-input");
+    const newName = nameInput && nameInput.value ? nameInput.value.trim() : "";
+    if (!newName) return;
+    if (window.Leaderboard && window.Leaderboard.setPlayerName) {
+      window.Leaderboard.setPlayerName(newName);
+    } else {
+      localStorage.setItem("player_name", newName);
+    }
+    const nameDisplay = document.getElementById("player-name-display");
+    if (nameDisplay) nameDisplay.textContent = newName;
   },
   calcEdpi() {
     const sens =
@@ -640,6 +669,9 @@ window.addEventListener("mousemove", (e) => {
     ExerciseController.engine.handleMouseMove(e);
   }
 });
+
+// Expose Settings to window so React can call its methods
+window.Settings = Settings;
 window.addEventListener("mousedown", () => {
   if (document.pointerLockElement && ExerciseController.engine) {
     ExerciseController.engine.handleInput();

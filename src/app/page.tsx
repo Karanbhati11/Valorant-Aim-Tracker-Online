@@ -286,6 +286,36 @@ export default function Home() {
                   >
                     <div className="setting-group">
                       <label className="setting-label">
+                        Player Display Name
+                      </label>
+                      <div style={{ display: "flex", gap: "10px" }}>
+                        <input
+                          type="text"
+                          id="player-name-input"
+                          placeholder="Your name"
+                          style={{ flex: 1 }}
+                        />
+                        <button
+                          className="action-btn primary"
+                          onClick={() =>
+                            (window as any).Settings?.updatePlayerName?.()
+                          }
+                        >
+                          Save
+                        </button>
+                      </div>
+                      <div
+                        style={{
+                          fontSize: "0.85rem",
+                          color: "#aaa",
+                          marginTop: "6px",
+                        }}
+                      >
+                        Current: <span id="player-name-display">Guest</span>
+                      </div>
+                    </div>
+                    <div className="setting-group">
+                      <label className="setting-label">
                         Valorant Sensitivity
                       </label>
                       <input
