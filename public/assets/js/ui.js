@@ -505,6 +505,9 @@ window.renderExercises = () => {
   window.showCategoryExercises("CORE");
 };
 
+// Expose CrosshairManager globally for React UI handlers
+window.CrosshairManager = CrosshairManager;
+
 window.showCategoryExercises = (key) => {
   document.getElementById("category-selector").style.display = "none";
   document.getElementById("exercises-container").style.display = "block";
