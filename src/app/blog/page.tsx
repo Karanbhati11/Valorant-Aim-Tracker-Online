@@ -71,6 +71,13 @@ function BlogContent() {
   return (
     <>
       <style jsx>{`
+        html, body {
+          overflow-y: auto !important;
+          overflow-x: hidden;
+          height: auto;
+          position: static;
+        }
+
         @keyframes shimmer {
           0% {
             background-position: -1000px 0;

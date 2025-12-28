@@ -28,16 +28,14 @@
 
 body {
   margin: 0;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   background-color: var(--bg-dark);
   color: var(--text-main);
   font-family: var(--font-stack);
-  height: 100vh;
+  min-height: 100vh;
   /* FIX 1: Strict viewport locking */
   width: 100%;
-  position: fixed;
-  top: 0;
-  left: 0;
   touch-action: none;
 }
 
