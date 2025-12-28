@@ -71,7 +71,8 @@ function BlogContent() {
   return (
     <>
       <style jsx>{`
-        html, body {
+        html,
+        body {
           overflow-y: auto !important;
           overflow-x: hidden;
           height: auto;
