@@ -37,7 +37,7 @@ export default function Home() {
 
         script.onload = () => resolve();
         script.onerror = () => {
-          console.error(`Failed to load script: ${src}`);
+          // console.error(`Failed to load script: ${src}`);
           resolve(); // Resolve even on error to prevent hanging
         };
 
@@ -51,15 +51,15 @@ export default function Home() {
       // Initialize event listeners
       if ((window as any).initEventListeners) {
         (window as any).initEventListeners();
-        console.log("Event listeners initialized");
+        // console.log("Event listeners initialized");
       }
 
       // Call showTab to display exercises (mimics the load event behavior)
       if ((window as any).showTab) {
         (window as any).showTab("exercises");
-        console.log("Scripts loaded, exercises initialized");
+        // console.log("Scripts loaded, exercises initialized");
       } else {
-        console.warn("showTab not available after loading scripts");
+        // console.warn("showTab not available after loading scripts");
       }
     });
 
@@ -72,7 +72,7 @@ export default function Home() {
         }
         if ((screen.orientation as any)?.lock) {
           (screen.orientation as any).lock("landscape").catch(() => {
-            console.log("Orientation lock not supported");
+            // console.log("Orientation lock not supported");
           });
         }
       }
@@ -98,7 +98,7 @@ export default function Home() {
       <div id="orientation-warning">
         <div className="rotate-icon">↻</div>
         <div className="warning-content">
-          <h1 className="warning-title">ROTATE DEVICE</h1>
+          <h2 className="warning-title">ROTATE DEVICE</h2>
           <p className="warning-desc">
             Please rotate your device to <strong>Landscape</strong> mode to
             play.
@@ -558,7 +558,7 @@ export default function Home() {
             <button
               className="action-btn"
               onClick={() => {
-                console.log("[React] Exit button clicked");
+                // console.log("[React] Exit button clicked");
                 (window as any).ExerciseController?.quit?.();
               }}
             >
@@ -567,7 +567,7 @@ export default function Home() {
             <button
               className="action-btn primary"
               onClick={() => {
-                console.log("[React] Resume button clicked");
+                // console.log("[React] Resume button clicked");
                 (window as any).ExerciseController?.resume?.();
               }}
             >
@@ -609,7 +609,7 @@ export default function Home() {
             <button
               className="action-btn"
               onClick={() => {
-                console.log("[React] Menu button clicked");
+                // console.log("[React] Menu button clicked");
                 (window as any).ExerciseController?.menu?.();
               }}
             >
@@ -618,7 +618,7 @@ export default function Home() {
             <button
               className="action-btn primary"
               onClick={() => {
-                console.log("[React] Replay button clicked");
+                // console.log("[React] Replay button clicked");
                 (window as any).ExerciseController?.repeatExercise?.();
               }}
             >

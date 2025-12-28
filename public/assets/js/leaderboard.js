@@ -27,30 +27,30 @@ const Leaderboard = (function () {
 
   function promptForNameIfMissing() {
     const existingName = getPlayerName();
-    console.log("[Leaderboard] Checking for stored name:", existingName);
+    // console.log("[Leaderboard] Checking for stored name:", existingName);
 
     if (!existingName) {
-      console.log("[Leaderboard] No name found. Prompting user...");
+      // console.log("[Leaderboard] No name found. Prompting user...");
       const name = prompt(
         "Enter your display name for the leaderboard (or leave blank for 'Guest'):",
         "Player"
       );
       const finalName = name && name.trim() ? name.trim() : "Guest";
       setPlayerName(finalName);
-      console.log("[Leaderboard] Set name to:", finalName);
+      // console.log("[Leaderboard] Set name to:", finalName);
     } else {
-      console.log("[Leaderboard] Using existing name:", existingName);
+      // console.log("[Leaderboard] Using existing name:", existingName);
     }
   }
 
   async function fetchTop(exerciseId = currentExerciseId) {
     try {
-      console.log(
-        "[Leaderboard] Fetching from",
-        API_GET,
-        "for exercise:",
-        exerciseId
-      );
+      // console.log(
+      //   "[Leaderboard] Fetching from",
+      //   API_GET,
+      //   "for exercise:",
+      //   exerciseId
+      // );
       const res = await fetch(
         `${API_GET}?exerciseId=${encodeURIComponent(exerciseId)}`
       );
@@ -58,27 +58,27 @@ const Leaderboard = (function () {
         throw new Error(`Failed to fetch: ${res.status} ${res.statusText}`);
       }
       const data = await res.json();
-      console.log(
-        "[Leaderboard] Fetched",
-        data.length || 0,
-        "entries for",
-        exerciseId
-      );
+      // console.log(
+      //   "[Leaderboard] Fetched",
+      //   data.length || 0,
+      //   "entries for",
+      //   exerciseId
+      // );
       return data;
     } catch (err) {
-      console.error("[Leaderboard] Fetch error:", err);
+      // console.error("[Leaderboard] Fetch error:", err);
       throw err;
     }
   }
 
   async function postScore(score, exerciseId = currentExerciseId) {
     const name = getPlayerName() || "Guest";
-    console.log(
-      "[Leaderboard] Posting score:",
-      { name, score, exerciseId },
-      "to",
-      API_POST
-    );
+    // console.log(
+    //   "[Leaderboard] Posting score:",
+    //   { name, score, exerciseId },
+    //   "to",
+    //   API_POST
+    // );
     try {
       const res = await fetch(API_POST, {
         method: "POST",
@@ -86,10 +86,10 @@ const Leaderboard = (function () {
         body: JSON.stringify({ name, score, exerciseId }),
       });
       const data = await res.json();
-      console.log("[Leaderboard] Post response:", data);
+      // console.log("[Leaderboard] Post response:", data);
       return data;
     } catch (err) {
-      console.error("[Leaderboard] Post error:", err);
+      // console.error("[Leaderboard] Post error:", err);
       return null;
     }
   }
@@ -202,7 +202,7 @@ const Leaderboard = (function () {
   }
 
   function switchExercise(exerciseId) {
-    console.log("[Leaderboard] Switching to exercise:", exerciseId);
+    // console.log("[Leaderboard] Switching to exercise:", exerciseId);
     renderInto("leaderboard-container", exerciseId);
   }
 
@@ -222,11 +222,11 @@ window.Leaderboard = Leaderboard;
 // Auto-init prompt on page load
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", () => {
-    console.log("[Leaderboard] Page loaded, initializing...");
+    // console.log("[Leaderboard] Page loaded, initializing...");
     Leaderboard.init();
   });
 } else {
   // Document already loaded (e.g., script added dynamically)
-  console.log("[Leaderboard] Document already loaded, initializing...");
+  // console.log("[Leaderboard] Document already loaded, initializing...");
   Leaderboard.init();
 }

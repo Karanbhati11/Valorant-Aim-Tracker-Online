@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://valorantaimtrainer.online"),
   title: "Valorant Aim Trainer Online - Free 3D Browser Aim Practice",
   description:
-    "The best free Valorant Aim Trainer Online. Improve your raw aim with 3D browser-based exercises for flicking, tracking, and micro-adjustments. No download required. Optimized for low-end PCs.",
+    "Free online Valorant aim trainer. Practice gridshot, flicking, and tracking with 3D exercises. No download needed.",
   keywords: [
     "valorant aim trainer online",
     "valorant aim trainer",

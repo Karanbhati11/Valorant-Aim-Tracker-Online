@@ -228,12 +228,12 @@ let ExerciseController = {
         });
       }
     } catch (e) {
-      console.warn("Leaderboard submit error", e);
+      // console.warn("Leaderboard submit error", e);
     }
   },
 
   resume() {
-    console.log("[resume] Called");
+    // console.log("[resume] Called");
     document.getElementById("exercise-hud").classList.add("hidden");
     document.getElementById("click-overlay").classList.add("hidden");
     if (this.engine) {
@@ -247,22 +247,22 @@ let ExerciseController = {
   },
 
   pause() {
-    console.log(
-      "[pause] Called - engine:",
-      !!this.engine,
-      "running:",
-      this.engine?.exerciseState?.running
-    );
+    // console.log(
+    //   "[pause] Called - engine:",
+    //   !!this.engine,
+    //   "running:",
+    //   this.engine?.exerciseState?.running
+    // );
     if (!this.engine || !this.engine.exerciseState.running) {
-      console.warn("[pause] Returning early - no engine or not running");
+      // console.warn("[pause] Returning early - no engine or not running");
       return;
     }
     if (!document.getElementById("results-menu").classList.contains("hidden")) {
-      console.warn("[pause] Returning early - results menu visible");
+      // console.warn("[pause] Returning early - results menu visible");
       return;
     }
 
-    console.log("[pause] Setting paused state");
+    // console.log("[pause] Setting paused state");
     this.engine.exerciseState.paused = true;
     document.getElementById("exercise-hud").classList.remove("hidden");
     // Only exit pointer lock if it was enabled (desktop)
@@ -278,22 +278,22 @@ let ExerciseController = {
   },
 
   quit() {
-    console.log("[quit] Called");
+    // console.log("[quit] Called");
     document.getElementById("exercise-hud").classList.add("hidden");
     this.returnToMenu();
   },
 
   menu() {
-    console.log("[menu] Called");
+    // console.log("[menu] Called");
     document.getElementById("results-menu").classList.add("hidden");
     this.returnToMenu();
   },
 
   repeatExercise() {
-    console.log(
-      "[repeatExercise] Called with exercise:",
-      this.currentExercise?.id
-    );
+    // console.log(
+    //   "[repeatExercise] Called with exercise:",
+    //   this.currentExercise?.id
+    // );
     document.getElementById("results-menu").classList.add("hidden");
     this.initExercise(this.currentExercise.id);
   },
@@ -489,20 +489,20 @@ window.showTab = (tabName) => {
   }
   if (tabName === "leaderboard") {
     // lazy-load leaderboard
-    console.log(
-      "[showTab] leaderboard tab - checking window.Leaderboard:",
-      !!window.Leaderboard
-    );
+    // console.log(
+    //   "[showTab] leaderboard tab - checking window.Leaderboard:",
+    //   !!window.Leaderboard
+    // );
     if (
       window.Leaderboard &&
       typeof window.Leaderboard.renderInto === "function"
     ) {
-      console.log("[showTab] Rendering leaderboard...");
+      // console.log("[showTab] Rendering leaderboard...");
       window.Leaderboard.renderInto("leaderboard-container");
     } else {
-      console.warn(
-        "[showTab] Leaderboard not available or renderInto not a function"
-      );
+      // console.warn(
+      //   "[showTab] Leaderboard not available or renderInto not a function"
+      // );
     }
   }
 };
@@ -595,7 +595,7 @@ const Settings = {
       if (nameInput) nameInput.value = currentName;
       if (nameDisplay) nameDisplay.textContent = currentName;
     } catch (e) {
-      console.warn("[Settings] Unable to initialize player name:", e);
+      // console.warn(\"[Settings] Unable to initialize player name:\", e);
     }
   },
   setTargetColor(c) {

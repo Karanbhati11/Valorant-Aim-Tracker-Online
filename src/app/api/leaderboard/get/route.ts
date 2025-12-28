@@ -22,10 +22,10 @@ export async function GET(request: NextRequest) {
     const url = new URL(request.url);
     const exerciseId = url.searchParams.get("exerciseId") || "static_grid";
 
-    console.log(
-      "[leaderboard-get] Fetching leaderboard for exercise:",
-      exerciseId
-    );
+    // console.log(
+    //   "[leaderboard-get] Fetching leaderboard for exercise:",
+    //   exerciseId
+    // );
     try {
       const db = await getDatabase();
       const col = db.collection("leaderboard");
@@ -39,18 +39,18 @@ export async function GET(request: NextRequest) {
         .limit(10)
         .toArray();
 
-      console.log(
-        "[leaderboard-get] Returned",
-        top.length,
-        "entries from MongoDB for",
-        exerciseId
-      );
+      // console.log(
+      //   "[leaderboard-get] Returned",
+      //   top.length,
+      //   "entries from MongoDB for",
+      //   exerciseId
+      // );
       return NextResponse.json(top, { headers });
     } catch (mongoError) {
-      console.warn(
-        "[leaderboard-get] MongoDB connection failed, using mock data:",
-        mongoError
-      );
+      // console.warn(
+      //   "[leaderboard-get] MongoDB connection failed, using mock data:",
+      //   mongoError
+      // );
       // Return mock data as fallback
       const mockForExercise = mockLeaderboard.filter(
         (e) => (e as any).exerciseId === exerciseId
@@ -58,7 +58,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(mockForExercise, { headers });
     }
   } catch (err: any) {
-    console.error("[leaderboard-get] Error:", err);
+    // console.error("[leaderboard-get] Error:", err);
     return NextResponse.json(
       { error: err.message, details: err.toString() },
       { status: 500, headers }

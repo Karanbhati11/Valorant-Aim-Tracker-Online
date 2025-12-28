@@ -31,11 +31,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log("[leaderboard-post] Posting score:", {
-      name,
-      score,
-      exerciseId,
-    });
+    // console.log("[leaderboard-post] Posting score:", {
+    //   name,
+    //   score,
+    //   exerciseId,
+    // });
 
     try {
       const db = await getDatabase();
@@ -66,9 +66,9 @@ export async function POST(request: NextRequest) {
 
       return NextResponse.json({ ok: true, promoted: false }, { headers });
     } catch (mongoError) {
-      console.warn(
-        "[leaderboard-post] MongoDB connection failed, using mock data"
-      );
+      // console.warn(
+      //   "[leaderboard-post] MongoDB connection failed, using mock data"
+      // );
       // Fallback: add to mock leaderboard if not full
       if (mockLeaderboard.length < 10) {
         mockLeaderboard.push({ name, score, exerciseId });
@@ -87,7 +87,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ ok: true, promoted: false }, { headers });
     }
   } catch (err: any) {
-    console.error("[leaderboard-post] Error:", err);
+    // console.error("[leaderboard-post] Error:", err);
     return NextResponse.json({ error: err.message }, { status: 500, headers });
   }
 }
