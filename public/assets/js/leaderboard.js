@@ -6,6 +6,15 @@
 const Leaderboard = (function () {
   const API_GET = "/api/leaderboard/get";
   const API_POST = "/api/leaderboard/post";
+  let currentExerciseId = "static_grid";
+
+  const EXERCISE_NAMES = {
+    static_grid: "Static Grid",
+    micro_adjust: "Micro Adjustments",
+    pop_up_reflex: "Pop-Up Reflex",
+    strafe_track: "Strafe Tracking",
+    dynamic_flicks: "Dynamic Flicks",
+  };
 
   function getPlayerName() {
     return localStorage.getItem("player_name") || null;
@@ -34,15 +43,27 @@ const Leaderboard = (function () {
     }
   }
 
-  async function fetchTop() {
+  async function fetchTop(exerciseId = currentExerciseId) {
     try {
-      console.log("[Leaderboard] Fetching from", API_GET);
-      const res = await fetch(API_GET);
+      console.log(
+        "[Leaderboard] Fetching from",
+        API_GET,
+        "for exercise:",
+        exerciseId
+      );
+      const res = await fetch(
+        `${API_GET}?exerciseId=${encodeURIComponent(exerciseId)}`
+      );
       if (!res.ok) {
         throw new Error(`Failed to fetch: ${res.status} ${res.statusText}`);
       }
       const data = await res.json();
-      console.log("[Leaderboard] Fetched", data.length || 0, "entries");
+      console.log(
+        "[Leaderboard] Fetched",
+        data.length || 0,
+        "entries for",
+        exerciseId
+      );
       return data;
     } catch (err) {
       console.error("[Leaderboard] Fetch error:", err);
@@ -50,11 +71,11 @@ const Leaderboard = (function () {
     }
   }
 
-  async function postScore(score) {
+  async function postScore(score, exerciseId = currentExerciseId) {
     const name = getPlayerName() || "Guest";
     console.log(
       "[Leaderboard] Posting score:",
-      { name, score },
+      { name, score, exerciseId },
       "to",
       API_POST
     );
@@ -62,7 +83,7 @@ const Leaderboard = (function () {
       const res = await fetch(API_POST, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, score }),
+        body: JSON.stringify({ name, score, exerciseId }),
       });
       const data = await res.json();
       console.log("[Leaderboard] Post response:", data);
@@ -73,26 +94,47 @@ const Leaderboard = (function () {
     }
   }
 
-  async function renderInto(elementId) {
+  async function renderInto(elementId, exerciseId = currentExerciseId) {
     const el = document.getElementById(elementId);
     if (!el) return;
     el.innerHTML = "Loading...";
+    currentExerciseId = exerciseId;
     try {
-      const top = await fetchTop();
+      const top = await fetchTop(exerciseId);
+      const exerciseName = EXERCISE_NAMES[exerciseId] || exerciseId;
 
       let html = `
         <div style="max-width: 600px; margin: 0 auto;">
-          <div style="text-align: center; margin-bottom: 30px;">
-            <h2 style="color: var(--accent); font-size: 2rem; margin: 0 0 10px 0;">GRID WARMUP LEADERBOARD</h2>
-            <p style="color: #888; font-size: 0.9rem; margin: 0;">Top 10 scores from Grid Warmup exercise</p>
+          <div style="text-align: center; margin-bottom: 20px;">
+            <h2 style="color: var(--accent); font-size: 2rem; margin: 0 0 10px 0;">${exerciseName.toUpperCase()} LEADERBOARD</h2>
+            <p style="color: #888; font-size: 0.9rem; margin: 0;">Top 10 scores</p>
+            <div style="margin-top: 15px; padding: 10px;">
+              <label style="color: #aaa; margin-right: 10px;">Select Exercise:</label>
+              <select id="leaderboard-exercise-select" onChange="window.Leaderboard.switchExercise(this.value)" style="background: #222; color: var(--accent); border: 1px solid var(--accent); padding: 5px 10px; border-radius: 4px; cursor: pointer;">
+                <option value="static_grid" ${
+                  exerciseId === "static_grid" ? "selected" : ""
+                }>Static Grid</option>
+                <option value="micro_adjust" ${
+                  exerciseId === "micro_adjust" ? "selected" : ""
+                }>Micro Adjustments</option>
+                <option value="pop_up_reflex" ${
+                  exerciseId === "pop_up_reflex" ? "selected" : ""
+                }>Pop-Up Reflex</option>
+                <option value="strafe_track" ${
+                  exerciseId === "strafe_track" ? "selected" : ""
+                }>Strafe Tracking</option>
+                <option value="dynamic_flicks" ${
+                  exerciseId === "dynamic_flicks" ? "selected" : ""
+                }>Dynamic Flicks</option>
+              </select>
+            </div>
           </div>
           
           <div style="background: rgba(255, 70, 85, 0.05); border: 1px solid rgba(255, 70, 85, 0.2); border-radius: 8px; padding: 20px;">
       `;
 
       if (!top || top.length === 0) {
-        html +=
-          '<div style="text-align: center; color: #888; padding: 40px 20px;">No scores yet. Complete the Grid Warmup exercise to appear on the leaderboard!</div>';
+        html += `<div style="text-align: center; color: #888; padding: 40px 20px;">No scores yet. Complete the ${exerciseName} exercise to appear on the leaderboard!</div>`;
       } else {
         html += '<table style="width: 100%; border-collapse: collapse;">';
         html +=
@@ -130,7 +172,7 @@ const Leaderboard = (function () {
           </div>
           
           <div style="text-align: center; margin-top: 20px; padding: 15px; background: rgba(0, 0, 0, 0.3); border-radius: 6px; font-size: 0.85rem; color: #aaa;">
-            <p style="margin: 0;">Complete the <strong>Grid Warmup</strong> exercise to submit your score to this leaderboard.</p>
+            <p style="margin: 0;">Complete the <strong>${exerciseName}</strong> exercise to submit your score to this leaderboard.</p>
           </div>
         </div>
       `;
@@ -159,12 +201,18 @@ const Leaderboard = (function () {
     });
   }
 
+  function switchExercise(exerciseId) {
+    console.log("[Leaderboard] Switching to exercise:", exerciseId);
+    renderInto("leaderboard-container", exerciseId);
+  }
+
   return {
     init: promptForNameIfMissing,
     renderInto,
     postScore,
     setPlayerName,
     getPlayerName,
+    switchExercise,
   };
 })();
 

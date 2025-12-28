@@ -213,11 +213,17 @@ let ExerciseController = {
         window.Leaderboard &&
         typeof window.Leaderboard.postScore === "function"
       ) {
-        // post asynchronously (don't block UI)
-        window.Leaderboard.postScore(finalData.score).then((res) => {
+        // post asynchronously (don't block UI) with exerciseId
+        window.Leaderboard.postScore(
+          finalData.score,
+          finalData.exerciseId
+        ).then((res) => {
           // Optionally re-render leaderboard if visible
           if (document.getElementById("leaderboard-container")) {
-            window.Leaderboard.renderInto("leaderboard-container");
+            window.Leaderboard.renderInto(
+              "leaderboard-container",
+              finalData.exerciseId
+            );
           }
         });
       }

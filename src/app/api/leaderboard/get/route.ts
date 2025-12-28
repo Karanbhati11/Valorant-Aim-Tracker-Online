@@ -3,8 +3,10 @@ import { getDatabase } from "@/lib/mongo";
 
 // In-memory fallback leaderboard
 let mockLeaderboard = [
-  { name: "ProPlayer1", score: 8950 },
-  { name: "AimMaster", score: 8420 },
+  { name: "ProPlayer1", score: 8950, exerciseId: "static_grid" },
+  { name: "AimMaster", score: 8420, exerciseId: "static_grid" },
+  { name: "SpeedRunner", score: 7850, exerciseId: "micro_adjust" },
+  { name: "FlickKing", score: 9200, exerciseId: "dynamic_flicks" },
 ];
 
 export async function GET(request: NextRequest) {
@@ -17,13 +19,22 @@ export async function GET(request: NextRequest) {
   };
 
   try {
-    console.log("[leaderboard-get] Fetching leaderboard...");
+    const url = new URL(request.url);
+    const exerciseId = url.searchParams.get("exerciseId") || "static_grid";
+
+    console.log(
+      "[leaderboard-get] Fetching leaderboard for exercise:",
+      exerciseId
+    );
     try {
       const db = await getDatabase();
       const col = db.collection("leaderboard");
 
       const top = await col
-        .find({}, { projection: { name: 1, score: 1 } })
+        .find(
+          { exerciseId },
+          { projection: { name: 1, score: 1, exerciseId: 1 } }
+        )
         .sort({ score: -1, createdAt: 1 })
         .limit(10)
         .toArray();
@@ -31,7 +42,8 @@ export async function GET(request: NextRequest) {
       console.log(
         "[leaderboard-get] Returned",
         top.length,
-        "entries from MongoDB"
+        "entries from MongoDB for",
+        exerciseId
       );
       return NextResponse.json(top, { headers });
     } catch (mongoError) {
@@ -40,7 +52,10 @@ export async function GET(request: NextRequest) {
         mongoError
       );
       // Return mock data as fallback
-      return NextResponse.json(mockLeaderboard, { headers });
+      const mockForExercise = mockLeaderboard.filter(
+        (e) => (e as any).exerciseId === exerciseId
+      );
+      return NextResponse.json(mockForExercise, { headers });
     }
   } catch (err: any) {
     console.error("[leaderboard-get] Error:", err);
