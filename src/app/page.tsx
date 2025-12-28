@@ -222,6 +222,12 @@ export default function Home() {
               >
                 Blog
               </button>
+              <button
+                className="nav-btn"
+                onClick={() => (window.location.href = "/contact")}
+              >
+                Contact
+              </button>
 
               <div
                 style={{

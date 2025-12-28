@@ -1,5 +1,6 @@
 {
+  "/_not-found/page": "app/_not-found/page.js",
+  "/contact/page": "app/contact/page.js",
   "/page": "app/page.js",
-  "/api/leaderboard/get/route": "app/api/leaderboard/get/route.js",
-  "/api/leaderboard/post/route": "app/api/leaderboard/post/route.js"
+  "/api/leaderboard/get/route": "app/api/leaderboard/get/route.js"
 }
