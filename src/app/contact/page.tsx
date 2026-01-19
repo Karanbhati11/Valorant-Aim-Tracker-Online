@@ -77,6 +77,24 @@ export default function ContactPage() {
               </a>
             </div>
           </form>
+
+          <div
+            style={{
+              marginTop: "24px",
+              paddingTop: "16px",
+              borderTop: "1px solid var(--border)",
+              color: "var(--text-muted)",
+              fontSize: "0.85rem",
+              lineHeight: 1.4,
+            }}
+          >
+            <div>
+              AimTrainerPro is not affiliated with, endorsed, sponsored, or
+              specifically approved by Riot Games, Inc. Valorant and Riot Games
+              are trademarks or registered trademarks of Riot Games, Inc.
+            </div>
+            <div style={{ marginTop: "8px" }}>© 2026 AimTrainerPro</div>
+          </div>
         </div>
       </div>
     </div>

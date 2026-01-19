@@ -135,7 +135,7 @@ function BlogContent() {
             ← Back to Trainer
           </Link>
           <h1 className="blog-logo">
-            VALORANT <span style={{ color: "var(--primary)" }}>BLOG</span>
+            AIMTRAINERPRO <span style={{ color: "var(--primary)" }}>BLOG</span>
           </h1>
         </nav>
 
@@ -196,6 +196,24 @@ function BlogContent() {
           className="blog-content"
           style={{ display: isLoading ? "none" : "block" }}
         ></div>
+
+        <footer
+          style={{
+            marginTop: "40px",
+            padding: "18px 5% 30px",
+            borderTop: "1px solid var(--border)",
+            color: "var(--text-muted)",
+            fontSize: "0.8rem",
+            lineHeight: 1.4,
+          }}
+        >
+          <div>
+            AimTrainerPro is not affiliated with, endorsed, sponsored, or
+            specifically approved by Riot Games, Inc. Valorant and Riot Games
+            are trademarks or registered trademarks of Riot Games, Inc.
+          </div>
+          <div style={{ marginTop: "8px" }}>© 2026 AimTrainerPro</div>
+        </footer>
       </div>
     </>
   );

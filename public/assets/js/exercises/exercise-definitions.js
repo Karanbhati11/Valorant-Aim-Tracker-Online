@@ -5,7 +5,7 @@
 
 const EXERCISES = {
   CORE: {
-    category: "Valorant Core Training",
+    category: "Core Training",
     icon: "🏆",
     exercises: [
       {
@@ -26,7 +26,7 @@ const EXERCISES = {
       },
       {
         id: "micro_adjust",
-        name: "2. Micro Corrections (Sheriff)",
+        name: "2. Micro Corrections (Precision)",
         description: "Tiny targets spawn near center.",
         difficulty: 3,
         duration: 60,
@@ -76,7 +76,7 @@ const EXERCISES = {
       },
       {
         id: "dynamic_flicks",
-        name: "5. Dynamic Flicks (Vandal)",
+        name: "5. Dynamic Flicks (Rifle)",
         description: "Targets spawn at random distances wide on screen.",
         difficulty: 2,
         duration: 60,

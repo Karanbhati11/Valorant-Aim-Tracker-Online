@@ -2,29 +2,25 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://valorantaimtrainer.online"),
-  title: "Valorant Aim Trainer Online - Free 3D Browser Aim Practice",
+  metadataBase: new URL("https://aimtrainerpro.online"),
+  title: "AimTrainerPro - Free 3D Browser Aim Practice",
   description:
-    "Free online Valorant aim trainer. Practice gridshot, flicking, and tracking with 3D exercises. No download needed.",
+    "Free online aim trainer. Practice gridshot, flicking, and tracking with 3D exercises. No download needed.",
   keywords: [
-    "valorant aim trainer online",
-    "valorant aim trainer",
     "aim trainer online",
-    "online aim trainer valorant",
-    "valorant online trainer",
     "aim trainer 3d",
     "browser aim trainer",
     "free aim trainer",
     "aim lab online",
-    "valorant warmup",
     "aim practice online",
     "fps trainer",
-    "valorant practice",
+    "fps aim trainer",
+    "tactical shooter aim trainer",
     "gridshot trainer",
   ],
-  authors: [{ name: "Aim Pro 3D" }],
-  creator: "Aim Pro 3D",
-  publisher: "Aim Pro 3D",
+  authors: [{ name: "AimTrainerPro" }],
+  creator: "AimTrainerPro",
+  publisher: "AimTrainerPro",
   robots: {
     index: true,
     follow: true,
@@ -39,25 +35,25 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://valorantaimtrainer.online/",
-    siteName: "Valorant Aim Trainer Online",
-    title: "Valorant Aim Trainer Online - Free 3D Browser Aim Practice",
+    url: "https://aimtrainerpro.online/",
+    siteName: "AimTrainerPro",
+    title: "AimTrainerPro - Free 3D Browser Aim Practice",
     description:
-      "Practice your aim in browser with this 3D Valorant Trainer. No download required. Features Gridshot, Strafing, and Micro-adjustments.",
+      "Practice your aim in browser with this free 3D aim trainer. No download required. Features Gridshot, Strafing, and Micro-adjustments.",
     images: [
       {
         url: "/assets/preview-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Valorant Aim Trainer Online Preview",
+        alt: "AimTrainerPro Preview",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Valorant Aim Trainer Online - Free 3D",
+    title: "AimTrainerPro - Free 3D",
     description:
-      "Improve your aim instantly. Free 3D browser aim trainer for Valorant.",
+      "Improve your aim instantly. Free 3D browser aim trainer.",
     images: ["/assets/preview-image.jpg"],
   },
   icons: {
@@ -67,7 +63,7 @@ export const metadata: Metadata = {
   },
   manifest: "/manifest.json",
   alternates: {
-    canonical: "https://valorantaimtrainer.online/",
+    canonical: "https://aimtrainerpro.online/",
   },
 };
 
@@ -100,10 +96,10 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "WebApplication",
-              name: "Valorant Aim Trainer Online",
-              url: "https://valorantaimtrainer.online/",
+              name: "AimTrainerPro",
+              url: "https://aimtrainerpro.online/",
               description:
-                "A free 3D browser-based aim trainer designed for Valorant players to improve flicking, tracking, and micro-adjustments.",
+                "A free 3D browser-based aim trainer to improve flicking, tracking, and micro-adjustments.",
               applicationCategory: "Game",
               genre: "FPS Trainer",
               operatingSystem: "Web Browser",

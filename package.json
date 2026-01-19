@@ -1,8 +1,8 @@
 {
-  "name": "valorant-aim-trainer",
+  "name": "aimtrainerpro-online",
   "version": "1.0.0",
   "private": true,
-  "description": "Valorant Aim Trainer with Leaderboard - Next.js",
+  "description": "AimTrainerPro Online with Leaderboard - Next.js",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

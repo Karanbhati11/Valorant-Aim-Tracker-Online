@@ -8,6 +8,19 @@
 [build.environment]
   NODE_VERSION = "18"
 
+# Domain migration (old -> new)
+[[redirects]]
+  from = "https://valorantaimtrainer.online/*"
+  to = "https://aimtrainerpro.online/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://www.valorantaimtrainer.online/*"
+  to = "https://aimtrainerpro.online/:splat"
+  status = 301
+  force = true
+
 # Redirects for SPA routing
 [[redirects]]
   from = "/*"

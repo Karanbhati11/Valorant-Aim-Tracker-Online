@@ -41,7 +41,9 @@ function renderList() {
 }
 
 function renderArticle(id) {
-  const post = BLOG_DATA.find((p) => p.id === id);
+  const post = BLOG_DATA.find(
+    (p) => p.id === id || (Array.isArray(p.aliases) && p.aliases.includes(id)),
+  );
   const container = document.getElementById("blog-content");
 
   if (!post) {
@@ -50,8 +52,13 @@ function renderArticle(id) {
     return;
   }
 
+  // Canonicalize legacy IDs in the URL to avoid duplicates
+  if (post.id && post.id !== id) {
+    window.history.replaceState(null, "", `/blog?id=${post.id}`);
+  }
+
   // UPDATE SEO TAGS DYNAMICALLY
-  document.title = `${post.title} - Valorant Aim Trainer`;
+  document.title = `${post.title} - AimTrainerPro`;
   const metaDesc = document.querySelector('meta[name="description"]');
   if (metaDesc) {
     metaDesc.setAttribute("content", post.excerpt);

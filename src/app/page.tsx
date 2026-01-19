@@ -183,7 +183,7 @@ export default function Home() {
         <div id="main-menu" className="panel">
           <div className="panel-header">
             <h1 style={{ fontSize: "2rem" }}>
-              VALORANT <span className="brand-accent">TRAINER 3D</span>
+              AIMTRAINER <span className="brand-accent">PRO</span>
             </h1>
             <div style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>
               FREE ONLINE AIM TRAINER
@@ -239,18 +239,16 @@ export default function Home() {
                 }}
               >
                 <p>
-                  <strong>Valorant Aim Trainer Online</strong> is a free 3D tool
+                  <strong>AimTrainerPro</strong> is a free 3D tool
                   to improve your aim in browser. No download required.
                 </p>
-                <p>© 2025 Aim Pro 3D</p>
-                <p style={{ marginTop: "5px" }}>
-                  <a
-                    href="mailto:kbnoname1.1@gmail.com"
-                    style={{ color: "#555", textDecoration: "none" }}
-                  >
-                    kbnoname1.1@gmail.com
-                  </a>
+                <p style={{ marginTop: "10px", color: "#555" }}>
+                  AimTrainerPro is not affiliated with, endorsed, sponsored, or
+                  specifically approved by Riot Games, Inc. Valorant and Riot
+                  Games are trademarks or registered trademarks of Riot Games,
+                  Inc.
                 </p>
+                <p>© 2026 AimTrainerPro</p>
               </div>
             </div>
 
@@ -322,7 +320,7 @@ export default function Home() {
                     </div>
                     <div className="setting-group">
                       <label className="setting-label">
-                        Valorant Sensitivity
+                        In-game Sensitivity
                       </label>
                       <input
                         type="number"

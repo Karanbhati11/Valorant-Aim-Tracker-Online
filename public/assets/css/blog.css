@@ -1,6 +1,6 @@
 /* Inherit variables from main styles */
 :root {
-  --primary: #ff4655; /* Valorant Red */
+  --primary: #ff4655; /* Primary Red */
   --primary-hover: #ff6b77; /* Lighter Red for hovers */
   --bg-dark: #0f1217;
   --bg-panel: #1a1d24; /* Slightly lighter background for cards/tables */
