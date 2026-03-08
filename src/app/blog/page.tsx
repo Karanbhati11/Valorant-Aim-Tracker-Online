@@ -1,230 +1,166 @@
-"use client";
-
-import { useEffect, useState, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
+import type { Metadata } from "next";
 import Link from "next/link";
+import { redirect } from "next/navigation";
+import { getAllBlogPosts, getBlogPostBySlug } from "@/lib/blog-posts";
 
-function BlogContent() {
-  const searchParams = useSearchParams();
-  const postId = searchParams.get("id");
-  const [isLoading, setIsLoading] = useState(true);
+export const metadata: Metadata = {
+  title: "AimTrainerPro Blog | FPS Aim Training Guides",
+  description:
+    "Read practical FPS aim training guides for Valorant, CS2, and Fortnite. Improve flicks, tracking, sensitivity, and routines.",
+  alternates: {
+    canonical: "https://aimtrainerpro.online/blog",
+  },
+  openGraph: {
+    title: "AimTrainerPro Blog | FPS Aim Training Guides",
+    description:
+      "Long-form guides on aim training routines, sensitivity setup, crosshair strategy, and in-game transfer.",
+    url: "https://aimtrainerpro.online/blog",
+    type: "website",
+    siteName: "AimTrainerPro",
+  },
+};
 
-  useEffect(() => {
-    setIsLoading(true);
+type BlogIndexPageProps = {
+  searchParams?: {
+    id?: string;
+  };
+};
 
-    // Load blog CSS
-    if (!document.querySelector('link[href="/assets/css/blog.css"]')) {
-      const link = document.createElement("link");
-      link.rel = "stylesheet";
-      link.href = "/assets/css/blog.css";
-      document.head.appendChild(link);
+export default function BlogIndexPage({ searchParams }: BlogIndexPageProps) {
+  const legacyId = searchParams?.id;
+  if (legacyId) {
+    const post = getBlogPostBySlug(legacyId);
+    if (post) {
+      redirect(`/blog/${post.slug}`);
     }
+  }
 
-    // Only load scripts once on initial mount
-    const loadScripts = async () => {
-      // Check if scripts are already loaded
-      const scriptsLoaded =
-        (window as any).BLOG_DATA && (window as any).renderList;
-
-      if (!scriptsLoaded) {
-        // Load blog-data.js first
-        if (!document.querySelector('script[src="/assets/js/blog-data.js"]')) {
-          await new Promise((resolve) => {
-            const script = document.createElement("script");
-            script.src = "/assets/js/blog-data.js";
-            script.onload = () => resolve(true);
-            document.body.appendChild(script);
-          });
-        }
-
-        // Load blog-engine.js second
-        if (
-          !document.querySelector('script[src="/assets/js/blog-engine.js"]')
-        ) {
-          await new Promise((resolve) => {
-            const script = document.createElement("script");
-            script.src = "/assets/js/blog-engine.js";
-            script.onload = () => resolve(true);
-            document.body.appendChild(script);
-          });
-        }
-      }
-
-      // Manually trigger blog rendering
-      if (postId) {
-        if ((window as any).renderArticle) {
-          (window as any).renderArticle(postId);
-        }
-      } else {
-        if ((window as any).renderList) {
-          (window as any).renderList();
-        }
-      }
-
-      // Hide skeleton after a short delay to ensure content is rendered
-      setTimeout(() => setIsLoading(false), 300);
-    };
-
-    loadScripts();
-  }, [postId]);
+  const posts = getAllBlogPosts();
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://aimtrainerpro.online/",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Blog",
+        item: "https://aimtrainerpro.online/blog",
+      },
+    ],
+  };
 
   return (
-    <>
-      <style jsx>{`
-        html,
-        body {
-          overflow-y: auto !important;
-          overflow-x: hidden;
-          height: auto;
-          position: static;
-        }
+    <div className="blog-container">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
 
-        @keyframes shimmer {
-          0% {
-            background-position: -1000px 0;
-          }
-          100% {
-            background-position: 1000px 0;
-          }
-        }
+      <nav className="blog-nav" aria-label="Blog navigation">
+        <div className="blog-nav-top">
+          <div className="blog-brand-wrap">
+            <h1 className="blog-logo">
+              AIMTRAINERPRO <span style={{ color: "var(--primary)" }}>BLOG</span>
+            </h1>
+            <p className="blog-tagline">
+              Practical aim guides and routines for FPS players
+            </p>
+          </div>
 
-        .skeleton {
-          background: linear-gradient(
-            90deg,
-            rgba(255, 255, 255, 0.02) 25%,
-            rgba(255, 255, 255, 0.05) 50%,
-            rgba(255, 255, 255, 0.02) 75%
-          );
-          background-size: 1000px 100%;
-          animation: shimmer 2s infinite;
-          border-radius: 4px;
-        }
-
-        .skeleton-title {
-          height: 48px;
-          width: 60%;
-          margin: 0 auto 30px;
-        }
-
-        .skeleton-card {
-          background: rgba(255, 255, 255, 0.03);
-          border-radius: 8px;
-          overflow: hidden;
-        }
-
-        .skeleton-img {
-          height: 200px;
-          width: 100%;
-        }
-
-        .skeleton-text {
-          height: 20px;
-          margin: 10px 15px;
-        }
-
-        .skeleton-text-short {
-          height: 16px;
-          width: 70%;
-          margin: 10px 15px;
-        }
-      `}</style>
-
-      <div className="blog-container">
-        <nav className="blog-nav">
-          <Link href="/" className="back-link">
-            ← Back to Trainer
+          <Link href="/" className="back-link blog-back-btn">
+            Back to Trainer
           </Link>
-          <h1 className="blog-logo">
-            AIMTRAINERPRO <span style={{ color: "var(--primary)" }}>BLOG</span>
-          </h1>
-        </nav>
+        </div>
 
-        {isLoading && (
-          <div style={{ padding: "40px 0" }}>
-            {!postId ? (
-              // Skeleton for blog list
-              <>
-                <div className="skeleton skeleton-title"></div>
-                <div className="blog-grid">
-                  {[1, 2, 3].map((i) => (
-                    <div key={i} className="skeleton-card">
-                      <div className="skeleton skeleton-img"></div>
-                      <div className="skeleton skeleton-text"></div>
-                      <div className="skeleton skeleton-text"></div>
-                      <div className="skeleton skeleton-text-short"></div>
-                    </div>
-                  ))}
+        <div className="blog-nav-links" role="navigation" aria-label="Blog quick links">
+          <a
+            className="blog-pill"
+            href="https://valocrossdb.site/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Crosshairs
+          </a>
+        </div>
+      </nav>
+
+      <section className="blog-intro">
+        <h2 style={{ marginBottom: "10px", fontSize: "2.3rem", letterSpacing: "1px" }}>
+          Latest <span style={{ color: "var(--primary)" }}>Articles</span>
+        </h2>
+        <p style={{ margin: 0, color: "var(--text-muted)", maxWidth: "760px" }}>
+          Improve aim with structured guides and then practice instantly in the trainer. <Link href="/" style={{ color: "var(--primary)", textDecoration: "underline" }}>Start training</Link>{" "}
+          or{" "}
+          <a
+            href="https://valocrossdb.site/"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: "var(--primary)", textDecoration: "underline" }}
+          >
+            explore crosshairs
+          </a>
+          .
+        </p>
+      </section>
+
+      <div className="blog-content">
+        <div className="blog-grid">
+          {posts.map((post) => (
+            <Link key={post.slug} className="blog-card-link" href={`/blog/${post.slug}`}>
+              <article className="blog-card">
+                <img
+                  src={post.thumbnail}
+                  className="card-img"
+                  loading="lazy"
+                  alt={post.title}
+                />
+                <div className="card-content">
+                  <div className="card-date">{post.dateLabel}</div>
+                  <h3 className="card-title">{post.title}</h3>
+                  <p className="card-excerpt">{post.excerpt}</p>
+                  <div className="read-more">Read Article →</div>
                 </div>
-              </>
-            ) : (
-              // Skeleton for article view
-              <div style={{ maxWidth: "800px", margin: "0 auto" }}>
-                <div
-                  className="skeleton"
-                  style={{
-                    height: "40px",
-                    width: "200px",
-                    marginBottom: "20px",
-                  }}
-                ></div>
-                <div
-                  className="skeleton"
-                  style={{ height: "60px", width: "80%", marginBottom: "10px" }}
-                ></div>
-                <div
-                  className="skeleton"
-                  style={{ height: "20px", width: "40%", marginBottom: "30px" }}
-                ></div>
-                {[1, 2, 3, 4, 5].map((i) => (
-                  <div
-                    key={i}
-                    className="skeleton"
-                    style={{
-                      height: "16px",
-                      width: "100%",
-                      marginBottom: "10px",
-                    }}
-                  ></div>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-
-        <div
-          id="blog-content"
-          className="blog-content"
-          style={{ display: isLoading ? "none" : "block" }}
-        ></div>
-
-        <footer
-          style={{
-            marginTop: "40px",
-            padding: "18px 5% 30px",
-            borderTop: "1px solid var(--border)",
-            color: "var(--text-muted)",
-            fontSize: "0.8rem",
-            lineHeight: 1.4,
-          }}
-        >
-          <div>
-            AimTrainerPro is not affiliated with, endorsed, sponsored, or
-            specifically approved by Riot Games, Inc. Valorant and Riot Games
-            are trademarks or registered trademarks of Riot Games, Inc.
-          </div>
-          <div style={{ marginTop: "8px" }}>© 2026 AimTrainerPro</div>
-        </footer>
+              </article>
+            </Link>
+          ))}
+        </div>
       </div>
-    </>
-  );
-}
 
-export default function BlogPage() {
-  return (
-    <Suspense
-      fallback={<div style={{ minHeight: "100vh", background: "#0f0f23" }} />}
-    >
-      <BlogContent />
-    </Suspense>
+      <footer
+        style={{
+          marginTop: "40px",
+          padding: "18px 5% 30px",
+          borderTop: "1px solid var(--border)",
+          color: "var(--text-muted)",
+          fontSize: "0.8rem",
+          lineHeight: 1.4,
+        }}
+      >
+        <div>
+          AimTrainerPro is not affiliated with, endorsed, sponsored, or specifically approved by Riot Games, Inc.
+          Valorant and Riot Games are trademarks or registered trademarks of Riot Games, Inc.
+        </div>
+        <div style={{ marginTop: "8px" }}>
+          <a href="/about" style={{ color: "var(--text-muted)" }}>
+            About
+          </a>{" "}
+          ·{" "}
+          <a href="/privacy-policy" style={{ color: "var(--text-muted)" }}>
+            Privacy Policy
+          </a>{" "}
+          ·{" "}
+          <a href="/terms" style={{ color: "var(--text-muted)" }}>
+            Terms
+          </a>
+        </div>
+        <div style={{ marginTop: "8px" }}>© 2026 AimTrainerPro</div>
+      </footer>
+    </div>
   );
 }

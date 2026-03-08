@@ -33,6 +33,30 @@ body {
   backdrop-filter: blur(10px);
 }
 
+.blog-nav-links {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.blog-pill {
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.blog-pill:hover {
+  color: #fff;
+  border-color: var(--primary);
+  background: rgba(255, 70, 85, 0.15);
+}
+
 .blog-logo {
   font-size: 1.5rem;
   font-weight: 800;
@@ -76,6 +100,10 @@ body {
   min-height: 80vh;
 }
 
+.blog-intro {
+  margin-bottom: 24px;
+}
+
 .blog-content {
   min-height: 60vh;
   opacity: 1;
@@ -110,8 +138,9 @@ body {
 .card-img {
   width: 100%;
   height: 180px;
+  aspect-ratio: 16 / 9;
   object-fit: cover;
-  background: #222;
+  background: linear-gradient(135deg, #1f2532 0%, #161b24 100%);
   border-bottom: 1px solid var(--border);
 }
 
@@ -305,6 +334,18 @@ body {
 
 /* --- Mobile Responsiveness --- */
 @media (max-width: 768px) {
+  .blog-nav {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .blog-nav-links {
+    width: 100%;
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+
   .blog-grid {
     grid-template-columns: 1fr;
   }

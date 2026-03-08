@@ -254,6 +254,13 @@ export default function Home() {
                   Games are trademarks or registered trademarks of Riot Games,
                   Inc.
                 </p>
+                <p style={{ marginTop: "10px" }}>
+                  <a href="/about" style={{ color: "#666" }}>About</a> · {" "}
+                  <a href="/privacy-policy" style={{ color: "#666" }}>
+                    Privacy Policy
+                  </a>{" "}
+                  · <a href="/terms" style={{ color: "#666" }}>Terms</a>
+                </p>
                 <p>© 2026 AimTrainerPro</p>
               </div>
             </div>
