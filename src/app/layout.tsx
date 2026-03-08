@@ -86,6 +86,10 @@ export default function RootLayout({
           }}
         ></script>
 
+        {/* AdSense */}
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2970054316732906"
+     crossOrigin="anonymous"></script>
+
         {/* Three.js */}
         <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 

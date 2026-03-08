@@ -218,6 +218,12 @@ export default function Home() {
               </button>
               <button
                 className="nav-btn"
+                onClick={() => (window.location.href = "https://valocrossdb.site/")}
+              >
+                Crosshairs
+              </button>
+              <button
+                className="nav-btn"
                 onClick={() => (window.location.href = "/blog")}
               >
                 Blog
