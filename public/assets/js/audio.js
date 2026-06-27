@@ -4,13 +4,16 @@
  */
 
 const AudioSys = {
-  ctx: new (window.AudioContext || window.webkitAudioContext)(),
+  ctx: null,
   vol: 0.3,
 
   /**
    * Initialize audio context (needed for user interaction)
    */
   init() {
+    if (!this.ctx) {
+      this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+    }
     if (this.ctx.state === "suspended") {
       this.ctx.resume();
     }
@@ -20,6 +23,8 @@ const AudioSys = {
    * Play sound effects
    */
   play(type) {
+    if (!this.ctx) this.init();
+    if (!this.ctx) return; // bail if AudioContext unavailable
     const t = this.ctx.currentTime;
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();

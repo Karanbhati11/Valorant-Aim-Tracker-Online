@@ -1,0 +1,311 @@
+{
+    "common": {
+        "home": "Startseite",
+        "exercises": "Übungen",
+        "blog": "Blog",
+        "leaderboard": "Rangliste",
+        "settings": "Einstellungen",
+        "about": "Über uns",
+        "contact": "Kontakt",
+        "login": "Anmelden",
+        "signup": "Registrieren",
+        "logout": "Abmelden",
+        "language": "Sprache",
+        "loading": "Laden...",
+        "error": "Ein Fehler ist aufgetreten",
+        "notFound": "Seite nicht gefunden",
+        "backToHome": "Zurück zur Startseite"
+    },
+    "nav": {
+        "categories": "Kategorien",
+        "games": "Spiele",
+        "tools": "Werkzeuge",
+        "toggleMenu": "Navigationsmenü umschalten",
+        "skipToContent": "Zum Hauptinhalt springen"
+    },
+    "categories": {
+        "flicking": "Flicking",
+        "tracking": "Tracking",
+        "speed": "Geschwindigkeit",
+        "precision": "Präzision",
+        "reaction": "Reaktion",
+        "gameSpecific": "Spielspezifisch"
+    },
+    "games": {
+        "valorant": "Valorant",
+        "cs2": "CS2",
+        "fortnite": "Fortnite",
+        "apexLegends": "Apex Legends"
+    },
+    "tools": {
+        "sensitivityConverter": "Sensitivitätsumrechner",
+        "dpiAnalyzer": "DPI-Analysator"
+    },
+    "exercises": {
+        "categories": {
+            "flicking": "Flicking",
+            "tracking": "Tracking",
+            "speed": "Geschwindigkeit",
+            "precision": "Präzision",
+            "reaction": "Reaktion",
+            "game-specific": "Spielspezifisch"
+        },
+        "start": "Übung starten",
+        "difficulty": "Schwierigkeit",
+        "duration": "Dauer",
+        "score": "Punktzahl",
+        "accuracy": "Genauigkeit",
+        "allExercises": "Alle Übungen",
+        "stats": "Statistiken"
+    },
+    "footer": {
+        "exercises": "Übungen",
+        "categories": "Kategorien",
+        "tools": "Werkzeuge",
+        "games": "Spiele",
+        "content": "Inhalt",
+        "legal": "Rechtliches",
+        "allExercises": "Alle Übungen",
+        "leaderboard": "Rangliste",
+        "stats": "Statistiken",
+        "blog": "Blog",
+        "about": "Über uns",
+        "contact": "Kontakt",
+        "privacyPolicy": "Datenschutzrichtlinie",
+        "termsOfService": "Nutzungsbedingungen",
+        "disclaimer": "AimTrainerPro ist nicht mit Riot Games, Inc. verbunden, unterstützt, gesponsert oder genehmigt. Valorant und Riot Games sind Marken oder eingetragene Marken von Riot Games, Inc. Spielnamen, Logos und Marken sind Eigentum ihrer jeweiligen Inhaber.",
+        "copyright": "© {year} AimTrainerPro. Alle Rechte vorbehalten."
+    },
+    "errors": {
+        "generic": "Etwas ist schiefgelaufen. Bitte versuche es erneut.",
+        "networkError": "Netzwerkfehler. Bitte überprüfe deine Verbindung.",
+        "notFound": "Die Seite, die du suchst, existiert nicht.",
+        "unauthorized": "Du musst dich anmelden, um auf diese Seite zuzugreifen.",
+        "validationFailed": "Bitte überprüfe das Formular auf Fehler."
+    },
+    "meta": {
+        "title": "AimTrainerPro - Online-Zieltrainer",
+        "description": "Kostenloser Online-Zieltrainer zur Verbesserung deiner FPS-Präzision"
+    },
+    "home": {
+        "eyebrow": "Kostenloser Online-Aim-Trainer",
+        "subtitle": "Verbessere dein Aim für Valorant, CS2, Apex Legends, Fortnite und Overwatch 2 mit präzisen 3D-Übungen – direkt im Browser. Kein Download nötig.",
+        "selectMode": "Trainingsmodus wählen",
+        "stats": "Deine Statistiken",
+        "fineprint": "AimTrainerPro ist ein kostenloser browserbasierter 3D-Aim-Trainer für FPS-Spieler aller Spiele. Keine Installation, keine Anmeldung.",
+        "backToCategories": "← Zurück zu Kategorien",
+        "focus": "Fokus"
+    },
+    "language_selector": {
+        "label": "Sprache auswählen",
+        "current": "Aktuelle Sprache"
+    },
+    "about": {
+        "mission": "Unsere Mission ist es, Gamern zu helfen, ihr Aim durch zugängliche, browserbasierte Trainingstools zu verbessern — ohne Downloads oder Installationen.",
+        "whatYouCanPractice": "Was du trainieren kannst",
+        "skills": {
+            "flicking": {
+                "title": "Flicking",
+                "desc": "Trainiere schnelle, präzise Bewegungen, um plötzlich erscheinende Ziele auf deinem Bildschirm zu treffen."
+            },
+            "tracking": {
+                "title": "Tracking",
+                "desc": "Übe, dein Fadenkreuz mit gleichmäßiger Maussteuerung auf bewegliche Ziele zu halten."
+            },
+            "speed": {
+                "title": "Geschwindigkeit",
+                "desc": "Bringe deine Klickgeschwindigkeit ans Limit und behalte dabei die Genauigkeit unter Zeitdruck bei."
+            },
+            "precision": {
+                "title": "Präzision",
+                "desc": "Entwickle punktgenaue Zielgenauigkeit, indem du kleine Ziele mit minimaler Verschwendung triffst."
+            },
+            "reaction": {
+                "title": "Reaktion",
+                "desc": "Schärfe deine Reaktionszeit, indem du so schnell wie möglich auf visuelle Reize reagierst."
+            },
+            "gameSpecific": {
+                "title": "Spielspezifisch",
+                "desc": "Übe Drills, die auf Szenarien aus Valorant, CS2, Apex Legends und mehr zugeschnitten sind."
+            }
+        },
+        "whoItIsFor": "AimTrainerPro ist für alle, die ihre FPS-Leistung verbessern möchten — vom Gelegenheitsspieler bis zum Wettkampfspieler.",
+        "whyBrowser": "Keine Downloads, keine Installationen, kein Warten. Trainiere direkt im Browser auf jedem Gerät ohne Umstände.",
+        "faq": {
+            "q1": "Ist AimTrainerPro wirklich kostenlos?",
+            "a1": "Ja, alle Kernübungen sind vollständig kostenlos ohne versteckte Kosten.",
+            "q2": "Muss ich ein Konto erstellen?",
+            "a2": "Zum Trainieren ist kein Konto erforderlich. Registriere dich nur, wenn du deinen Fortschritt speichern und in der Rangliste erscheinen möchtest.",
+            "q3": "Verbessert das wirklich mein Aim im Spiel?",
+            "a3": "Regelmäßiges Training mit unseren Übungen baut Muskelgedächtnis auf, das sich direkt in bessere Leistung in FPS-Spielen übersetzt.",
+            "q4": "Welche Browser werden unterstützt?",
+            "a4": "AimTrainerPro funktioniert in allen modernen Browsern, einschließlich Chrome, Firefox, Edge und Safari."
+        },
+        "cta": "Jetzt mit dem Training beginnen",
+        "disclaimer": "AimTrainerPro ist ein unabhängiges Projekt und nicht mit einem Spiele-Publisher oder -Entwickler verbunden."
+    },
+    "settings": {
+        "gameSettings": "Spieleinstellungen",
+        "playerName": "Spielername",
+        "save": "Speichern",
+        "current": "Aktuell",
+        "sensitivity": "Empfindlichkeit",
+        "dpi": "DPI",
+        "edpiLabel": "eDPI",
+        "targetSize": "Zielgröße",
+        "targetColor": "Zielfarbe",
+        "crosshairCreator": "Fadenkreuz-Editor",
+        "style": "Stil",
+        "size": "Größe",
+        "color": "Farbe",
+        "opacity": "Deckkraft",
+        "saveNew": "Neu speichern",
+        "savedCrosshairs": "Gespeicherte Fadenkreuze",
+        "delete": "Löschen",
+        "clearHistory": "Verlauf löschen"
+    },
+    "trainer": {
+        "paused": "Pausiert",
+        "resume": "Fortsetzen",
+        "exit": "Beenden",
+        "complete": "Abgeschlossen",
+        "replay": "Wiederholen",
+        "menu": "Menü",
+        "score": "Punktzahl",
+        "time": "Zeit",
+        "accuracy": "Genauigkeit",
+        "hits": "Treffer",
+        "kps": "Kills pro Sekunde",
+        "clickToResume": "Klicken zum Fortsetzen",
+        "rotateDevice": "Gerät drehen",
+        "rotateLandscape": "Bitte drehe dein Gerät ins Querformat für das beste Erlebnis."
+    },
+    "blog": {
+        "title": "Aim-Training Tipps & Anleitungen",
+        "subtitle": "Expertenwissen, Spielstrategien und Trainingstechniken, um dein Aim zu verbessern.",
+        "startTraining": "Training starten",
+        "exploreCrosshairs": "Fadenkreuze erkunden",
+        "featured": "Empfohlen",
+        "latestArticles": "Neueste Artikel",
+        "readArticle": "Artikel lesen",
+        "backToBlog": "Zurück zum Blog"
+    },
+    "exerciseData": {
+        "flick_micro": {
+            "name": "Micro Flick",
+            "desc": "Trainiere präzise Kleinwinkel-Flicks zwischen 5° und 15°. Ziele erscheinen nah am Fadenkreuz und erfordern pixelgenaue Korrekturen."
+        },
+        "flick_medium": {
+            "name": "Mittlerer Flick",
+            "desc": "Übe Standard-Distanz-Flicks zwischen 16° und 90°. Simuliert typische FPS-Gefechte mit Gegnern in moderaten Winkeln."
+        },
+        "flick_wide": {
+            "name": "Weiter Flick",
+            "desc": "Meistere Extremwinkel-Flicks zwischen 91° und 180°. Ziele erscheinen hinter oder seitlich, trainiert schnelle 180°-Drehungen."
+        },
+        "flick_headshot": {
+            "name": "Headshot Flick",
+            "desc": "Nur Treffer in der kritischen Zone zählen. Jedes Ziel hat eine Headshot-Zone bei 30% des Standardradius. Treffer gibt 2x Punkte."
+        },
+        "flick_multi_target": {
+            "name": "Sequenzielle Eliminierung",
+            "desc": "Mehrere Ziele erscheinen gleichzeitig mit Nummern. Eliminiere sie in der Reihenfolge — falsche Reihenfolge zählt als Fehlschuss."
+        },
+        "flick_multi_target_easy": {
+            "name": "Sequenzielle Eliminierung (Leicht)",
+            "desc": "Einsteigerversion mit nur 2 Zielen pro Welle. Lerne Nummern zu lesen und in der richtigen Reihenfolge zu eliminieren."
+        },
+        "flick_multi_target_hard": {
+            "name": "Sequenzielle Eliminierung (Schwer)",
+            "desc": "Der ultimative Test — 6 Ziele in weiten Winkeln mit kleinen Hitboxen. Schnelle sequenzielle Flicks unter Zeitdruck."
+        },
+        "tracking_linear_strafe": {
+            "name": "Lineares Strafing",
+            "desc": "Verfolge ein Ziel, das sich mit konstanter Geschwindigkeit in gerader Linie bewegt. Baut fundamentales Tracking-Muskelgedächtnis auf."
+        },
+        "tracking_sinusoidal": {
+            "name": "Sinusförmige Bewegung",
+            "desc": "Verfolge ein Ziel auf einer glatten Sinuskurve. Trainiert die Fähigkeit, nicht-lineare Pfade vorherzusagen."
+        },
+        "tracking_random_direction": {
+            "name": "Zufällige Richtungswechsel",
+            "desc": "Verfolge ein Ziel, das alle 500ms–2000ms unvorhersehbar die Richtung wechselt. Entwickelt reaktives Tracking."
+        },
+        "tracking_acceleration": {
+            "name": "Beschleunigung & Verzögerung",
+            "desc": "Verfolge ein Ziel, das seine Geschwindigkeit zwischen 25% und 100% der Basisgeschwindigkeit variiert. Trainiert dynamische Anpassung."
+        },
+        "speed_blitz": {
+            "name": "Speed Blitz",
+            "desc": "Ziele erscheinen schnell über den Bildschirm. Klicke so viele wie möglich bevor sie verschwinden. Testet reine Klickgeschwindigkeit."
+        },
+        "speed_frenzy": {
+            "name": "Ziel-Frenzy",
+            "desc": "Mehrere Ziele erscheinen gleichzeitig und müssen vor der nächsten Welle beseitigt werden. Jede Welle erhöht die Anzahl."
+        },
+        "speed_switch": {
+            "name": "Schneller Wechsel",
+            "desc": "Zwei Ziele erscheinen auf gegenüberliegenden Seiten. Wechsle Klicks so schnell wie möglich zwischen ihnen."
+        },
+        "speed_cascade": {
+            "name": "Kaskade",
+            "desc": "Ziele fallen von oben mit steigender Geschwindigkeit. Klicke sie bevor sie den Boden erreichen."
+        },
+        "speed_gridshot": {
+            "name": "Gridshot Sprint",
+            "desc": "Ein 3x3-Raster von Zielen leuchtet in zufälligen Mustern auf. Beseitige markierte Ziele vor dem nächsten Muster."
+        },
+        "speed_burst": {
+            "name": "Feuerstoß",
+            "desc": "Ziele erscheinen in schnellen Stößen von 3–5. Eliminiere den gesamten Stoß bevor der nächste erscheint."
+        },
+        "precision_pixel_hunt": {
+            "name": "Pixel-Jagd",
+            "desc": "Winzige Ziele erscheinen an zufälligen Positionen. Nimm dir Zeit und triff jeden Schuss. Trainiert Feinmotorik."
+        },
+        "precision_dot_drill": {
+            "name": "Punkt-Übung",
+            "desc": "Kleine Punkte erscheinen auf einem Raster. Triff jeden Punkt präzise ohne daneben zu klicken. Genauigkeit ist entscheidend."
+        },
+        "precision_headshot_master": {
+            "name": "Headshot-Meister",
+            "desc": "Ziele haben eine sichtbare kritische Zone. Nur Treffer in der Zone zählen. Trainiert Fadenkreuz-Platzierung auf Kopfhöhe."
+        },
+        "precision_micro_correct": {
+            "name": "Mikro-Korrektur",
+            "desc": "Nach jedem Schuss erscheint das nächste Ziel sehr nah an der vorherigen Position. Trainiert Mikro-Anpassungen."
+        },
+        "precision_shrinking_targets": {
+            "name": "Schrumpfende Ziele",
+            "desc": "Ziele starten groß und schrumpfen. Klicke bevor sie verschwinden. Länger warten gibt höheren Präzisionsbonus."
+        },
+        "precision_steady_hand": {
+            "name": "Ruhige Hand",
+            "desc": "Halte den Cursor 500ms in einer kleinen Zone um einen Treffer zu registrieren. Testet Cursor-Stabilität und Geduld."
+        },
+        "reaction_flash": {
+            "name": "Blitz-Reflex",
+            "desc": "Ein einzelnes Ziel blitzt kurz auf dem Bildschirm auf. Klicke es bevor es verschwindet. Testet reine Reaktionszeit."
+        },
+        "reaction_pop_shot": {
+            "name": "Pop Shot",
+            "desc": "Ziele tauchen in unvorhersehbaren Intervallen hinter Deckung auf. Reagiere und schieße während der kurzen Sichtbarkeit."
+        },
+        "reaction_color_trigger": {
+            "name": "Farb-Auslöser",
+            "desc": "Ein rotes Ziel erscheint und wird nach kurzer Verzögerung grün. Schieße nur bei Grün — Rot kostet Punkte."
+        },
+        "reaction_wall_peek": {
+            "name": "Wand-Peek",
+            "desc": "Ein Ziel schiebt sich hinter einer Wand hervor, hält kurz und zieht sich zurück. Bestrafe den Peek bevor er verschwindet."
+        },
+        "reaction_multi_stimulus": {
+            "name": "Multi-Stimulus",
+            "desc": "Ein Ziel leuchtet an einer von mehreren Positionen auf, nie zweimal hintereinander am selben Ort. Reagiere schnell."
+        },
+        "reaction_speed_ladder": {
+            "name": "Geschwindigkeitsleiter",
+            "desc": "Jeder Treffer lässt das nächste Ziel schneller verschwinden. Das Fenster schrumpft bis du nicht mehr mithalten kannst."
+        }
+    }
+}

@@ -1,6 +1,11 @@
 import "server-only";
 import fs from "node:fs";
 import path from "node:path";
+import { getAuthorByName } from "@/lib/blog/authors";
+import type { AuthorProfile } from "@/lib/blog/authors";
+import { inferCategory } from "@/lib/blog/categories";
+import { getPostCategory } from "@/lib/blog/post-categories";
+import type { BlogCategorySlug } from "@/lib/blog/categories";
 
 type RawPost = {
   id: string;
@@ -8,6 +13,7 @@ type RawPost = {
   title: string;
   date: string;
   author: string;
+  category?: BlogCategorySlug;
   thumbnail?: string;
   excerpt: string;
   content: string;
@@ -20,6 +26,8 @@ export type BlogPost = {
   title: string;
   excerpt: string;
   author: string;
+  authorProfile: AuthorProfile;
+  category: BlogCategorySlug;
   dateLabel: string;
   dateISO: string;
   thumbnail: string;
@@ -146,12 +154,36 @@ function loadRawPosts(): RawPost[] {
   return JSON.parse(raw) as RawPost[];
 }
 
+/**
+ * Returns hand-written, SEO-optimized long-form HTML for a post when an
+ * override file exists at src/content/blog/<id>.html. These are unique,
+ * keyword-targeted articles (1500+ words) and bypass the generic appendix
+ * so there is no duplicate boilerplate across posts.
+ */
+function loadOverrideContent(id: string): string | null {
+  try {
+    const p = path.join(process.cwd(), "src", "content", "blog", `${id}.html`);
+    if (fs.existsSync(p)) {
+      const html = fs.readFileSync(p, "utf8").trim();
+      return html.length > 0 ? html : null;
+    }
+  } catch {
+    // ignore — fall back to generated content
+  }
+  return null;
+}
+
 function buildCache() {
   if (cachedPosts && cachedAliasMap) return;
 
   const posts = loadRawPosts()
     .map((post) => {
-      const enriched = ensureLongFormContent(post);
+      const override = loadOverrideContent(post.id);
+      const enriched = override
+        ? { html: normalizeLinks(override), words: countWordsFromHtml(override) }
+        : ensureLongFormContent(post);
+      const authorProfile = getAuthorByName(post.author);
+      const category: BlogCategorySlug = post.category ?? getPostCategory(post.id) ?? inferCategory(post.title, post.content);
       return {
         id: post.id,
         slug: post.id,
@@ -159,6 +191,8 @@ function buildCache() {
         title: post.title,
         excerpt: post.excerpt,
         author: post.author,
+        authorProfile,
+        category,
         dateLabel: post.date,
         dateISO: toISODate(post.date),
         thumbnail: resolveThumbnail(post.thumbnail),

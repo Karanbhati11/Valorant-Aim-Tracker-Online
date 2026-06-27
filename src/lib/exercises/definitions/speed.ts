@@ -1,0 +1,168 @@
+import type { ExerciseDefinition } from '../types';
+
+/**
+ * Speed exercises focus on rapid target acquisition and click throughput.
+ * Players must hit as many targets as possible in the given time window,
+ * prioritizing speed over precision.
+ */
+export const speedExercises: ExerciseDefinition[] = [
+  {
+    id: 'speed_blitz',
+    name: 'Speed Blitz',
+    description:
+      'Targets appear rapidly across the screen. Click as many as possible before they disappear. Tests raw click speed and cursor velocity.',
+    category: 'speed',
+    difficulty: 2,
+    duration: 30,
+    mechanics: {
+      targetSpawns: 1,
+      targetSize: 4.5,
+      targetStatic: true,
+      respawnDelay: 0.3,
+      minDistance: 7,
+      maxDistance: 21,
+    },
+    scoringRules: {
+      hitReward: 80,
+      misspenalty: 20,
+      speedWeight: 0.6,
+      accuracyWeight: 0.25,
+      consistencyWeight: 0.15,
+    },
+    stats: ['hitsPerSecond', 'accuracy', 'totalHits', 'averageReactionTime'],
+  },
+  {
+    id: 'speed_frenzy',
+    name: 'Target Frenzy',
+    description:
+      'Multiple targets spawn simultaneously and must be cleared before the next wave. Each wave increases the target count. Rewards aggressive clicking.',
+    category: 'speed',
+    difficulty: 3,
+    duration: 45,
+    mechanics: {
+      targetSpawns: 3,
+      targetSize: 4.0,
+      targetStatic: true,
+      respawnDelay: 0.1,
+      multiTarget: true,
+      minDistance: 8,
+      maxDistance: 22,
+    },
+    scoringRules: {
+      hitReward: 100,
+      misspenalty: 30,
+      speedWeight: 0.5,
+      accuracyWeight: 0.3,
+      consistencyWeight: 0.2,
+    },
+    stats: ['hitsPerSecond', 'accuracy', 'totalHits', 'peakClickRate'],
+  },
+  {
+    id: 'speed_switch',
+    name: 'Rapid Switch',
+    description:
+      'Two targets appear on opposite sides of the screen. Alternate clicks between them as fast as possible. Trains flick speed and rhythm.',
+    category: 'speed',
+    difficulty: 2,
+    duration: 30,
+    mechanics: {
+      targetSpawns: 2,
+      targetSize: 5.0,
+      targetStatic: true,
+      respawnDelay: 0,
+      multiTarget: true,
+      sequentialElimination: true,
+      minDistance: 20,
+      maxDistance: 21,
+    },
+    scoringRules: {
+      hitReward: 90,
+      misspenalty: 25,
+      speedWeight: 0.55,
+      accuracyWeight: 0.3,
+      consistencyWeight: 0.15,
+    },
+    stats: ['hitsPerSecond', 'accuracy', 'averageReactionTime', 'consistency'],
+  },
+  {
+    id: 'speed_cascade',
+    name: 'Cascade',
+    description:
+      'Targets fall from the top of the screen at increasing speed. Click them before they reach the bottom. Combines speed with vertical tracking.',
+    category: 'speed',
+    difficulty: 4,
+    duration: 60,
+    mechanics: {
+      targetSpawns: 1,
+      targetSize: 3.0,
+      targetStatic: false,
+      respawnDelay: 0.5,
+      pathSpeed: 18,
+      pathPattern: 'linear',
+      minDistance: 5,
+      maxDistance: 23,
+    },
+    scoringRules: {
+      hitReward: 120,
+      misspenalty: 40,
+      speedWeight: 0.5,
+      accuracyWeight: 0.35,
+      consistencyWeight: 0.15,
+    },
+    stats: ['hitsPerSecond', 'accuracy', 'totalHits', 'missedTargets'],
+  },
+  {
+    id: 'speed_gridshot',
+    name: 'Gridshot Sprint',
+    description:
+      'A 3x3 grid of targets lights up in random patterns. Clear highlighted targets before the next pattern appears. Tests spatial awareness and speed.',
+    category: 'speed',
+    difficulty: 3,
+    duration: 40,
+    mechanics: {
+      targetSpawns: 3,
+      targetSize: 6.0,
+      targetStatic: true,
+      gridBased: true,
+      respawnDelay: 0.2,
+      multiTarget: true,
+      minDistance: 10,
+      maxDistance: 17,
+    },
+    scoringRules: {
+      hitReward: 110,
+      misspenalty: 35,
+      speedWeight: 0.5,
+      accuracyWeight: 0.3,
+      consistencyWeight: 0.2,
+    },
+    stats: ['hitsPerSecond', 'accuracy', 'totalHits', 'averageReactionTime'],
+  },
+  {
+    id: 'speed_burst',
+    name: 'Burst Fire',
+    description:
+      'Targets appear in quick bursts of 3-5. Eliminate the entire burst before the next one spawns. Rewards controlled aggression.',
+    category: 'speed',
+    difficulty: 5,
+    duration: 60,
+    mechanics: {
+      targetSpawns: 5,
+      targetSize: 2.5,
+      targetStatic: true,
+      respawnDelay: 0.8,
+      multiTarget: true,
+      sequentialElimination: false,
+      minDistance: 6,
+      maxDistance: 22,
+    },
+    scoringRules: {
+      hitReward: 130,
+      misspenalty: 45,
+      speedWeight: 0.55,
+      accuracyWeight: 0.3,
+      consistencyWeight: 0.15,
+    },
+    stats: ['hitsPerSecond', 'accuracy', 'totalHits', 'burstClearTime'],
+  },
+];

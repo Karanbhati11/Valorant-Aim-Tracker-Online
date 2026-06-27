@@ -1,67 +1,59 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { loadExerciseUI, preloadExerciseScripts } from "@/lib/performance";
+import { installBridge } from "@/lib/exercises/exercise-bridge";
+import { installPipeline } from "@/lib/exercises/exercise-pipeline";
+import { localizeExercises } from "@/lib/exercises/exercise-i18n";
+import MobileExerciseRecommendation from "@/components/MobileExerciseRecommendation";
+import AccessibilitySettings from "@/components/AccessibilitySettings";
+import { useI18n } from "@/components/I18nProvider";
 
 export default function Home() {
   const gameContainerRef = useRef<HTMLDivElement>(null);
+  const { t, locale } = useI18n();
+
+  // Re-localize exercise cards when language changes
+  useEffect(() => {
+    localizeExercises(locale);
+    // Re-render the exercise grid if it's visible
+    if ((window as any).showTab && (window as any).EXERCISES) {
+      (window as any).renderExercises?.();
+    }
+  }, [locale]);
 
   useEffect(() => {
-    // Load all scripts dynamically (only once)
-    const scripts = [
-      "/assets/js/storage.js",
-      "/assets/js/audio.js",
-      "/assets/js/exercises/exercise-definitions.js",
-      "/assets/js/exercises/exercise-engine.js",
-      "/assets/js/ui.js",
-      "/assets/js/leaderboard.js",
-    ];
+    // Load Three.js on demand (only needed on the trainer homepage)
+    if (!(window as any).THREE) {
+      const script = document.createElement("script");
+      script.src = "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js";
+      script.async = true;
+      script.onload = () => initTrainer();
+      document.head.appendChild(script);
+    } else {
+      initTrainer();
+    }
 
-    // Check if scripts are already loaded
-    const loadedScripts = new Set<string>();
-    document.querySelectorAll("script[src]").forEach((script) => {
-      loadedScripts.add(script.getAttribute("src") || "");
-    });
+    function initTrainer() {
+      // Install the exercise bridge BEFORE loading vanilla JS scripts.
+      installBridge();
+      installPipeline();
 
-    // Load scripts and wait for them to complete
-    const scriptPromises = scripts.map((src) => {
-      return new Promise<void>((resolve) => {
-        // If script is already loaded, resolve immediately
-        if (loadedScripts.has(src)) {
-          resolve();
-          return;
+      // Apply locale to exercise names/descriptions
+      const storedLocale = localStorage.getItem('aimtrainerpro-locale') || 'en';
+      localizeExercises(storedLocale);
+
+      preloadExerciseScripts();
+
+      loadExerciseUI().then(() => {
+        if ((window as any).initEventListeners) {
+          (window as any).initEventListeners();
         }
-
-        const script = document.createElement("script");
-        script.src = src;
-        script.async = false;
-
-        script.onload = () => resolve();
-        script.onerror = () => {
-          // console.error(`Failed to load script: ${src}`);
-          resolve(); // Resolve even on error to prevent hanging
-        };
-
-        document.body.appendChild(script);
+        if ((window as any).showTab) {
+          (window as any).showTab("exercises");
+        }
       });
-    });
-
-    // Wait for all scripts to load before continuing
-    Promise.all(scriptPromises).then(() => {
-      // Trigger initialization after all scripts are loaded
-      // Initialize event listeners
-      if ((window as any).initEventListeners) {
-        (window as any).initEventListeners();
-        // console.log("Event listeners initialized");
-      }
-
-      // Call showTab to display exercises (mimics the load event behavior)
-      if ((window as any).showTab) {
-        (window as any).showTab("exercises");
-        // console.log("Scripts loaded, exercises initialized");
-      } else {
-        // console.warn("showTab not available after loading scripts");
-      }
-    });
+    }
 
     // Mobile orientation handler
     const handlePlayClick = () => {
@@ -106,27 +98,33 @@ export default function Home() {
         </div>
       </div>
 
+      <MobileExerciseRecommendation />
+
+      {/* ---------- FULL-SCREEN GAMEPLAY OVERLAYS ---------- */}
       <div
         id="game-container"
         ref={gameContainerRef}
         style={{
-          position: "absolute",
+          position: "fixed",
           top: 0,
           left: 0,
           width: "100%",
           height: "100%",
           zIndex: 0,
+          pointerEvents: "none",
         }}
       ></div>
 
       <canvas
         id="crosshair-canvas"
         style={{
-          position: "absolute",
+          position: "fixed",
           top: 0,
           left: 0,
+          width: "100vw",
+          height: "100vh",
           pointerEvents: "none",
-          zIndex: 5,
+          zIndex: 50,
         }}
       ></canvas>
 
@@ -180,383 +178,6 @@ export default function Home() {
         </div>
         <div id="center-msg">3</div>
 
-        <div id="main-menu" className="panel">
-          <div className="panel-header">
-            <h1 style={{ fontSize: "2rem" }}>
-              AIMTRAINER <span className="brand-accent">PRO</span>
-            </h1>
-            <div style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>
-              FREE ONLINE AIM TRAINER
-            </div>
-          </div>
-
-          <div className="content-area">
-            <div className="sidebar">
-              <button
-                className="nav-btn active"
-                onClick={() => (window as any).showTab?.("exercises")}
-              >
-                Exercises
-              </button>
-              <button
-                className="nav-btn"
-                onClick={() => (window as any).showTab?.("progress")}
-              >
-                Stats
-              </button>
-              <button
-                className="nav-btn"
-                onClick={() => (window as any).showTab?.("leaderboard")}
-              >
-                Leaderboard
-              </button>
-              <button
-                className="nav-btn"
-                onClick={() => (window as any).showTab?.("settings")}
-              >
-                Settings
-              </button>
-              <button
-                className="nav-btn"
-                onClick={() => (window.location.href = "https://valocrossdb.site/")}
-              >
-                Crosshairs
-              </button>
-              <button
-                className="nav-btn"
-                onClick={() => (window.location.href = "/blog")}
-              >
-                Blog
-              </button>
-              <button
-                className="nav-btn"
-                onClick={() => (window.location.href = "/contact")}
-              >
-                Contact
-              </button>
-
-              <div
-                style={{
-                  marginTop: "auto",
-                  padding: "20px",
-                  fontSize: "0.7rem",
-                  color: "#444",
-                  lineHeight: "1.4",
-                }}
-              >
-                <p>
-                  <strong>AimTrainerPro</strong> is a free 3D tool
-                  to improve your aim in browser. No download required.
-                </p>
-                <p style={{ marginTop: "10px", color: "#555" }}>
-                  AimTrainerPro is not affiliated with, endorsed, sponsored, or
-                  specifically approved by Riot Games, Inc. Valorant and Riot
-                  Games are trademarks or registered trademarks of Riot Games,
-                  Inc.
-                </p>
-                <p style={{ marginTop: "10px" }}>
-                  <a href="/about" style={{ color: "#666" }}>About</a> · {" "}
-                  <a href="/privacy-policy" style={{ color: "#666" }}>
-                    Privacy Policy
-                  </a>{" "}
-                  · <a href="/terms" style={{ color: "#666" }}>Terms</a>
-                </p>
-                <p>© 2026 AimTrainerPro</p>
-              </div>
-            </div>
-
-            <div id="tab-exercises" className="main-view">
-              <div id="category-selector">
-                <h2 style={{ color: "var(--accent)" }}>Select Training Mode</h2>
-                <div id="category-grid" className="mode-grid"></div>
-              </div>
-              <div id="exercises-container" style={{ display: "none" }}></div>
-            </div>
-
-            <div id="tab-progress" className="main-view hidden">
-              <h2 style={{ color: "var(--accent)" }}>Your Stats</h2>
-              <div id="progress-stats"></div>
-              <button
-                className="action-btn"
-                onClick={() => {
-                  (window as any).Storage?.clearStats?.();
-                  (window as any).renderProgress?.();
-                }}
-                style={{ marginTop: "20px", background: "#444" }}
-              >
-                Clear History
-              </button>
-            </div>
-
-            <div id="tab-settings" className="main-view hidden">
-              <div className="settings-container">
-                <div style={{ flex: 1 }}>
-                  <h3 style={{ color: "var(--accent)" }}>Game Settings</h3>
-                  <div
-                    style={{
-                      background: "rgba(255, 70, 85, 0.1)",
-                      padding: "15px",
-                      borderRadius: "6px",
-                      border: "1px solid rgba(255, 70, 85, 0.3)",
-                      marginBottom: "20px",
-                    }}
-                  >
-                    <div className="setting-group">
-                      <label className="setting-label">
-                        Player Display Name
-                      </label>
-                      <div style={{ display: "flex", gap: "10px" }}>
-                        <input
-                          type="text"
-                          id="player-name-input"
-                          placeholder="Your name"
-                          style={{ flex: 1 }}
-                        />
-                        <button
-                          className="action-btn primary"
-                          onClick={() =>
-                            (window as any).Settings?.updatePlayerName?.()
-                          }
-                        >
-                          Save
-                        </button>
-                      </div>
-                      <div
-                        style={{
-                          fontSize: "0.85rem",
-                          color: "#aaa",
-                          marginTop: "6px",
-                        }}
-                      >
-                        Current: <span id="player-name-display">Guest</span>
-                      </div>
-                    </div>
-                    <div className="setting-group">
-                      <label className="setting-label">
-                        In-game Sensitivity
-                      </label>
-                      <input
-                        type="number"
-                        id="val-sens-input"
-                        step="0.001"
-                        defaultValue="0.35"
-                        onChange={() =>
-                          (window as any).Settings?.updateSens?.()
-                        }
-                        style={{
-                          width: "100%",
-                          color: "var(--accent)",
-                          fontWeight: "bold",
-                        }}
-                      />
-                    </div>
-                    <div className="setting-group">
-                      <label className="setting-label">Mouse DPI</label>
-                      <input
-                        type="number"
-                        id="mouse-dpi-input"
-                        step="50"
-                        defaultValue="800"
-                        onChange={() =>
-                          (window as any).Settings?.updateSens?.()
-                        }
-                        style={{ width: "100%" }}
-                      />
-                    </div>
-                    <div
-                      id="edpi-display"
-                      style={{
-                        textAlign: "right",
-                        fontSize: "0.8rem",
-                        color: "#fff",
-                        opacity: 0.7,
-                        fontWeight: "bold",
-                      }}
-                    >
-                      eDPI: 280
-                    </div>
-                  </div>
-                  <div className="setting-group">
-                    <label className="setting-label">Target Size</label>
-                    <input
-                      type="range"
-                      id="target-size-slider"
-                      min="1"
-                      max="5"
-                      step="0.1"
-                      onChange={(e) =>
-                        (window as any).Settings?.setTargetSize?.(
-                          e.target.value
-                        )
-                      }
-                    />
-                  </div>
-                  <div className="setting-group">
-                    <label className="setting-label">Target Color</label>
-                    <div style={{ display: "flex", gap: "10px" }}>
-                      <div
-                        className="color-opt"
-                        style={{ background: "#00ffff" }}
-                        onClick={() =>
-                          (window as any).Settings?.setTargetColor?.("#00ffff")
-                        }
-                      ></div>
-                      <div
-                        className="color-opt"
-                        style={{ background: "#ff4655" }}
-                        onClick={() =>
-                          (window as any).Settings?.setTargetColor?.("#ff4655")
-                        }
-                      ></div>
-                      <div
-                        className="color-opt"
-                        style={{ background: "#ffff00" }}
-                        onClick={() =>
-                          (window as any).Settings?.setTargetColor?.("#ffff00")
-                        }
-                      ></div>
-                    </div>
-                  </div>
-                </div>
-
-                <div
-                  style={{
-                    flex: 1,
-                    background: "rgba(0, 0, 0, 0.2)",
-                    padding: "15px",
-                    borderRadius: "8px",
-                  }}
-                >
-                  <h3 style={{ color: "var(--accent)", marginTop: 0 }}>
-                    Crosshair Creator
-                  </h3>
-                  <div style={{ textAlign: "center", marginBottom: "15px" }}>
-                    <canvas
-                      id="crosshair-preview-canvas"
-                      width="150"
-                      height="150"
-                      style={{
-                        background: "#333",
-                        border: "1px solid #555",
-                      }}
-                    ></canvas>
-                  </div>
-                  <div className="setting-group">
-                    <label className="setting-label">Name</label>
-                    <input
-                      type="text"
-                      id="cr-name"
-                      placeholder="My Crosshair"
-                      onChange={() =>
-                        (window as any).CrosshairManager?.onInputChange?.()
-                      }
-                      style={{ width: "100%" }}
-                    />
-                  </div>
-                  <div style={{ display: "flex", gap: "10px" }}>
-                    <div style={{ flex: 1 }}>
-                      <label className="setting-label">Style</label>
-                      <select
-                        id="cr-style"
-                        onChange={() =>
-                          (window as any).CrosshairManager?.onInputChange?.()
-                        }
-                        style={{ width: "100%" }}
-                      >
-                        <option value="classic">Classic</option>
-                        <option value="dot">Dot</option>
-                        <option value="circle">Circle</option>
-                        <option value="plus">Plus</option>
-                      </select>
-                    </div>
-                    <div style={{ flex: 1 }}>
-                      <label className="setting-label">Size</label>
-                      <input
-                        type="number"
-                        id="cr-size"
-                        defaultValue="6"
-                        onChange={() =>
-                          (window as any).CrosshairManager?.onInputChange?.()
-                        }
-                        style={{ width: "100%" }}
-                      />
-                    </div>
-                  </div>
-                  <div
-                    style={{ display: "flex", gap: "10px", marginTop: "10px" }}
-                  >
-                    <div style={{ flex: 1 }}>
-                      <label className="setting-label">Color</label>
-                      <input
-                        type="color"
-                        id="cr-color"
-                        defaultValue="#00ff00"
-                        onChange={() =>
-                          (window as any).CrosshairManager?.onInputChange?.()
-                        }
-                        style={{ width: "100%" }}
-                      />
-                    </div>
-                    <div style={{ flex: 1 }}>
-                      <label className="setting-label">Opacity</label>
-                      <input
-                        type="number"
-                        id="cr-opacity"
-                        step="0.1"
-                        max="1"
-                        min="0.1"
-                        defaultValue="1"
-                        onChange={() =>
-                          (window as any).CrosshairManager?.onInputChange?.()
-                        }
-                        style={{ width: "100%" }}
-                      />
-                    </div>
-                  </div>
-                  <div
-                    style={{ marginTop: "15px", display: "flex", gap: "10px" }}
-                  >
-                    <button
-                      className="action-btn primary"
-                      onClick={() =>
-                        (window as any).CrosshairManager?.savePreset?.()
-                      }
-                    >
-                      Save New
-                    </button>
-                  </div>
-                  <hr style={{ borderColor: "#444", margin: "15px 0" }} />
-                  <label className="setting-label">Saved Crosshairs</label>
-                  <div style={{ display: "flex", gap: "10px" }}>
-                    <select
-                      id="saved-crosshairs"
-                      onChange={(e) =>
-                        (window as any).CrosshairManager?.loadPreset?.(
-                          e.target.value
-                        )
-                      }
-                      style={{ flex: 1 }}
-                    ></select>
-                    <button
-                      className="action-btn"
-                      onClick={() =>
-                        (window as any).CrosshairManager?.deletePreset?.()
-                      }
-                      style={{ background: "#444" }}
-                    >
-                      Del
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div id="tab-leaderboard" className="main-view hidden">
-              <div id="leaderboard-container"></div>
-            </div>
-          </div>
-        </div>
-
         <div id="exercise-hud" className="panel mini-menu hidden">
           <div style={{ position: "absolute", top: "20px", right: "30px" }}>
             <span
@@ -569,7 +190,6 @@ export default function Home() {
             <button
               className="action-btn"
               onClick={() => {
-                // console.log("[React] Exit button clicked");
                 (window as any).ExerciseController?.quit?.();
               }}
             >
@@ -578,7 +198,6 @@ export default function Home() {
             <button
               className="action-btn primary"
               onClick={() => {
-                // console.log("[React] Resume button clicked");
                 (window as any).ExerciseController?.resume?.();
               }}
             >
@@ -620,7 +239,6 @@ export default function Home() {
             <button
               className="action-btn"
               onClick={() => {
-                // console.log("[React] Menu button clicked");
                 (window as any).ExerciseController?.menu?.();
               }}
             >
@@ -629,13 +247,369 @@ export default function Home() {
             <button
               className="action-btn primary"
               onClick={() => {
-                // console.log("[React] Replay button clicked");
                 (window as any).ExerciseController?.repeatExercise?.();
               }}
             >
               Replay
             </button>
           </div>
+        </div>
+      </div>
+
+      {/* ---------- UNIFIED IN-FLOW TRAINER MENU ---------- */}
+      <div id="main-menu" className="trainer-shell">
+        <section className="trainer-hero">
+          <span className="eyebrow">{t("home.eyebrow")}</span>
+          <h1>
+            AimTrainer<span className="brand-accent">Pro</span>
+          </h1>
+          <p>{t("home.subtitle")}</p>
+        </section>
+
+        <nav className="trainer-tabs" aria-label="Trainer sections">
+          <button
+            className="nav-btn active"
+            onClick={() => (window as any).showTab?.("exercises")}
+          >
+            {t("common.exercises")}
+          </button>
+          <button
+            className="nav-btn"
+            onClick={() => (window as any).showTab?.("progress")}
+          >
+            {t("exercises.stats")}
+          </button>
+          <button
+            className="nav-btn"
+            onClick={() => (window as any).showTab?.("leaderboard")}
+          >
+            {t("common.leaderboard")}
+          </button>
+          <button
+            className="nav-btn"
+            onClick={() => (window as any).showTab?.("settings")}
+          >
+            {t("common.settings")}
+          </button>
+        </nav>
+
+        <div className="trainer-content">
+          <div id="tab-exercises" className="main-view">
+            <div id="category-selector">
+              <h2>{t("home.selectMode")}</h2>
+              <div id="category-grid" className="mode-grid"></div>
+            </div>
+            <div id="exercises-container" style={{ display: "none" }}></div>
+          </div>
+
+          <div id="tab-progress" className="main-view hidden">
+            <h2>{t("home.stats")}</h2>
+            <div id="progress-stats"></div>
+            <button
+              className="action-btn"
+              onClick={() => {
+                (window as any).Storage?.clearStats?.();
+                (window as any).renderProgress?.();
+              }}
+              style={{
+                marginTop: "20px",
+                flex: "none",
+                maxWidth: "220px",
+                background: "rgba(255,255,255,0.05)",
+              }}
+            >
+              Clear History
+            </button>
+          </div>
+
+          <div id="tab-settings" className="main-view hidden">
+            <AccessibilitySettings />
+            <div className="settings-container">
+              <div style={{ flex: 1 }}>
+                <h3 style={{ color: "var(--accent)" }}>Game Settings</h3>
+                <div
+                  style={{
+                    background: "rgba(99, 102, 241, 0.08)",
+                    padding: "15px",
+                    borderRadius: "10px",
+                    border: "1px solid rgba(99, 102, 241, 0.25)",
+                    marginBottom: "20px",
+                  }}
+                >
+                  <div className="setting-group">
+                    <label className="setting-label">Player Display Name</label>
+                    <div style={{ display: "flex", gap: "10px" }}>
+                      <input
+                        type="text"
+                        id="player-name-input"
+                        placeholder="Your name"
+                        style={{ flex: 1 }}
+                      />
+                      <button
+                        className="action-btn primary"
+                        style={{ flex: "none", padding: "10px 18px" }}
+                        onClick={() =>
+                          (window as any).Settings?.updatePlayerName?.()
+                        }
+                      >
+                        Save
+                      </button>
+                    </div>
+                    <div
+                      style={{
+                        fontSize: "0.85rem",
+                        color: "var(--text-muted)",
+                        marginTop: "6px",
+                      }}
+                    >
+                      Current: <span id="player-name-display">Guest</span>
+                    </div>
+                  </div>
+                  <div className="setting-group">
+                    <label className="setting-label">In-game Sensitivity</label>
+                    <input
+                      type="number"
+                      id="val-sens-input"
+                      step="0.001"
+                      defaultValue="0.35"
+                      onChange={() => (window as any).Settings?.updateSens?.()}
+                      style={{
+                        width: "100%",
+                        color: "var(--accent)",
+                        fontWeight: "bold",
+                      }}
+                    />
+                  </div>
+                  <div className="setting-group">
+                    <label className="setting-label">Mouse DPI</label>
+                    <input
+                      type="number"
+                      id="mouse-dpi-input"
+                      step="50"
+                      defaultValue="800"
+                      onChange={() => (window as any).Settings?.updateSens?.()}
+                      style={{ width: "100%" }}
+                    />
+                  </div>
+                  <div
+                    id="edpi-display"
+                    style={{
+                      textAlign: "right",
+                      fontSize: "0.8rem",
+                      color: "#fff",
+                      opacity: 0.7,
+                      fontWeight: "bold",
+                    }}
+                  >
+                    eDPI: 280
+                  </div>
+                </div>
+                <div className="setting-group">
+                  <label className="setting-label">
+                    Difficulty
+                  </label>
+                  <div id="difficulty-selector" style={{ display: "flex", gap: "8px" }}>
+                    <button
+                      type="button"
+                      className="difficulty-btn"
+                      data-difficulty="easy"
+                      onClick={() => (window as any).Settings?.setDifficulty?.("easy")}
+                      style={{ flex: 1, padding: "10px 12px", borderRadius: "8px", border: "1px solid var(--border)", background: "var(--bg-card)", color: "#4ade80", fontWeight: 600, fontSize: "0.85rem", cursor: "pointer" }}
+                    >
+                      Easy
+                    </button>
+                    <button
+                      type="button"
+                      className="difficulty-btn active"
+                      data-difficulty="medium"
+                      onClick={() => (window as any).Settings?.setDifficulty?.("medium")}
+                      style={{ flex: 1, padding: "10px 12px", borderRadius: "8px", border: "1px solid var(--primary)", background: "rgba(99,102,241,0.15)", color: "var(--primary)", fontWeight: 600, fontSize: "0.85rem", cursor: "pointer" }}
+                    >
+                      Medium
+                    </button>
+                    <button
+                      type="button"
+                      className="difficulty-btn"
+                      data-difficulty="hard"
+                      onClick={() => (window as any).Settings?.setDifficulty?.("hard")}
+                      style={{ flex: 1, padding: "10px 12px", borderRadius: "8px", border: "1px solid var(--border)", background: "var(--bg-card)", color: "#f87171", fontWeight: 600, fontSize: "0.85rem", cursor: "pointer" }}
+                    >
+                      Hard
+                    </button>
+                  </div>
+                </div>
+                <div className="setting-group">
+                  <label className="setting-label">Target Color</label>
+                  <div style={{ display: "flex", gap: "10px" }}>
+                    <div
+                      className="color-opt"
+                      style={{ background: "#00ffff" }}
+                      onClick={() =>
+                        (window as any).Settings?.setTargetColor?.("#00ffff")
+                      }
+                    ></div>
+                    <div
+                      className="color-opt"
+                      style={{ background: "#6366f1" }}
+                      onClick={() =>
+                        (window as any).Settings?.setTargetColor?.("#6366f1")
+                      }
+                    ></div>
+                    <div
+                      className="color-opt"
+                      style={{ background: "#ffff00" }}
+                      onClick={() =>
+                        (window as any).Settings?.setTargetColor?.("#ffff00")
+                      }
+                    ></div>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                style={{
+                  flex: 1,
+                  background: "rgba(0, 0, 0, 0.2)",
+                  padding: "15px",
+                  borderRadius: "10px",
+                }}
+              >
+                <h3 style={{ color: "var(--accent)", marginTop: 0 }}>
+                  Crosshair Creator
+                </h3>
+                <div style={{ textAlign: "center", marginBottom: "15px" }}>
+                  <canvas
+                    id="crosshair-preview-canvas"
+                    width="150"
+                    height="150"
+                    style={{
+                      background: "#333",
+                      border: "1px solid #555",
+                      borderRadius: "8px",
+                    }}
+                  ></canvas>
+                </div>
+                <div className="setting-group">
+                  <label className="setting-label">Name</label>
+                  <input
+                    type="text"
+                    id="cr-name"
+                    placeholder="My Crosshair"
+                    onChange={() =>
+                      (window as any).CrosshairManager?.onInputChange?.()
+                    }
+                    style={{ width: "100%" }}
+                  />
+                </div>
+                <div style={{ display: "flex", gap: "10px" }}>
+                  <div style={{ flex: 1 }}>
+                    <label className="setting-label">Style</label>
+                    <select
+                      id="cr-style"
+                      onChange={() =>
+                        (window as any).CrosshairManager?.onInputChange?.()
+                      }
+                      style={{ width: "100%" }}
+                    >
+                      <option value="classic">Classic</option>
+                      <option value="dot">Dot</option>
+                      <option value="circle">Circle</option>
+                      <option value="plus">Plus</option>
+                    </select>
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <label className="setting-label">Size</label>
+                    <input
+                      type="number"
+                      id="cr-size"
+                      defaultValue="6"
+                      onChange={() =>
+                        (window as any).CrosshairManager?.onInputChange?.()
+                      }
+                      style={{ width: "100%" }}
+                    />
+                  </div>
+                </div>
+                <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
+                  <div style={{ flex: 1 }}>
+                    <label className="setting-label">Color</label>
+                    <input
+                      type="color"
+                      id="cr-color"
+                      defaultValue="#00ff00"
+                      onChange={() =>
+                        (window as any).CrosshairManager?.onInputChange?.()
+                      }
+                      style={{ width: "100%" }}
+                    />
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <label className="setting-label">Opacity</label>
+                    <input
+                      type="number"
+                      id="cr-opacity"
+                      step="0.1"
+                      max="1"
+                      min="0.1"
+                      defaultValue="1"
+                      onChange={() =>
+                        (window as any).CrosshairManager?.onInputChange?.()
+                      }
+                      style={{ width: "100%" }}
+                    />
+                  </div>
+                </div>
+                <div style={{ marginTop: "15px", display: "flex", gap: "10px" }}>
+                  <button
+                    className="action-btn primary"
+                    onClick={() =>
+                      (window as any).CrosshairManager?.savePreset?.()
+                    }
+                  >
+                    Save New
+                  </button>
+                </div>
+                <hr style={{ borderColor: "var(--border)", margin: "15px 0" }} />
+                <label className="setting-label">Saved Crosshairs</label>
+                <div style={{ display: "flex", gap: "10px" }}>
+                  <select
+                    id="saved-crosshairs"
+                    onChange={(e) =>
+                      (window as any).CrosshairManager?.loadPreset?.(
+                        e.target.value
+                      )
+                    }
+                    style={{ flex: 1 }}
+                  ></select>
+                  <button
+                    className="action-btn"
+                    onClick={() =>
+                      (window as any).CrosshairManager?.deletePreset?.()
+                    }
+                    style={{
+                      flex: "none",
+                      padding: "10px 18px",
+                      background: "rgba(255,255,255,0.05)",
+                    }}
+                  >
+                    Del
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="tab-leaderboard" className="main-view hidden">
+            <div id="leaderboard-container"></div>
+          </div>
+        </div>
+
+        <div className="trainer-fineprint">
+          <p>{t("home.fineprint")}</p>
+          <p style={{ marginTop: "8px" }}>
+            <a href="/about">{t("common.about")}</a> · <a href="/privacy-policy">{t("footer.privacyPolicy")}</a>{" "}
+            · <a href="/terms">{t("footer.termsOfService")}</a>
+          </p>
         </div>
       </div>
     </>

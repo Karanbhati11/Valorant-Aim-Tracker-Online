@@ -1,4 +1,4 @@
-// File: C:\NEXTJS LIVE PROJECTS\Valorant Aim Trainer\Valorant-Aim-Tracker-Online\src\app\api\leaderboard\get\route.ts
+// File: C:\Live Projects\Valorant-Aim-Tracker-Online\src\app\api\leaderboard\get\route.ts
 import * as entry from '../../../../../../src/app/api/leaderboard/get/route.js'
 import type { NextRequest } from 'next/server.js'
 

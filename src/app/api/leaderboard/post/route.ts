@@ -1,103 +1,117 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getDatabase } from "@/lib/mongo";
+import {
+  validatePlayerName,
+  validateScore,
+  validateExerciseId,
+} from "@/lib/leaderboard/constants";
 
-// In-memory fallback leaderboard
-let mockLeaderboard = [
-  { name: "ProPlayer1", score: 8950, exerciseId: "static_grid" },
-  { name: "AimMaster", score: 8420, exerciseId: "static_grid" },
-  { name: "SpeedRunner", score: 7850, exerciseId: "micro_adjust" },
-  { name: "FlickKing", score: 9200, exerciseId: "dynamic_flicks" },
-];
+// CORS headers shared across responses
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type",
+};
 
 export async function POST(request: NextRequest) {
-  // CORS headers
   const headers = {
     "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type",
+    ...corsHeaders,
   };
 
   try {
     const payload = await request.json();
-    const name = (payload.name || "Anonymous").toString().substring(0, 64);
-    const score = parseInt(payload.score || 0, 10);
-    const exerciseId = (payload.exerciseId || "static_grid").toString();
 
-    if (!Number.isFinite(score) || score < 0) {
+    // Validate exercise ID
+    const exerciseValidation = validateExerciseId(payload.exerciseId);
+    if (!exerciseValidation.valid) {
       return NextResponse.json(
-        { error: "Invalid score" },
+        { error: exerciseValidation.error },
         { status: 400, headers }
       );
     }
+    const exerciseId = exerciseValidation.value!;
 
-    // console.log("[leaderboard-post] Posting score:", {
-    //   name,
-    //   score,
-    //   exerciseId,
-    // });
+    // Validate player name (1–64 chars)
+    const nameValidation = validatePlayerName(payload.name);
+    if (!nameValidation.valid) {
+      return NextResponse.json(
+        { error: nameValidation.error },
+        { status: 400, headers }
+      );
+    }
+    const name = nameValidation.sanitized!;
+
+    // Validate score against MAX_SCORE_PER_EXERCISE
+    const scoreValidation = validateScore(payload.score, exerciseId);
+    if (!scoreValidation.valid) {
+      return NextResponse.json(
+        { error: scoreValidation.error },
+        { status: 400, headers }
+      );
+    }
+    const score = scoreValidation.value!;
+
+    // Extract optional accuracy (0.0–1.0 as percentage of hits)
+    let accuracy: number | null = null;
+    if (payload.accuracy != null) {
+      const accNum = Number(payload.accuracy);
+      if (Number.isFinite(accNum) && accNum >= 0 && accNum <= 100) {
+        accuracy = accNum;
+      } else if (Number.isFinite(accNum) && accNum >= 0 && accNum <= 1) {
+        accuracy = accNum * 100;
+      }
+    }
+
+    // Extract difficulty (easy, medium, hard)
+    const VALID_DIFFICULTIES = ["easy", "medium", "hard"];
+    let difficulty: string = "medium";
+    if (payload.difficulty && typeof payload.difficulty === "string") {
+      const d = payload.difficulty.toLowerCase().trim();
+      if (VALID_DIFFICULTIES.includes(d)) difficulty = d;
+    }
 
     try {
       const db = await getDatabase();
       const col = db.collection("leaderboard");
-
-      const count = await col.countDocuments({ exerciseId });
       const now = new Date();
 
-      if (count < 10) {
-        await col.insertOne({ name, score, exerciseId, createdAt: now });
-        return NextResponse.json({ ok: true }, { headers });
-      }
+      await col.insertOne({
+        name,
+        score,
+        accuracy,
+        exerciseId,
+        difficulty,
+        createdAt: now,
+      });
 
-      const lowest = await col.findOne(
-        { exerciseId },
-        { sort: { score: 1, createdAt: 1 } }
+      // Get the player's rank for this exercise (all-time)
+      const rank = await col.countDocuments({
+        exerciseId,
+        score: { $gt: score },
+      }) + 1;
+
+      return NextResponse.json(
+        { ok: true, rank, exerciseId, score, name },
+        { headers }
       );
-      if (!lowest) {
-        await col.insertOne({ name, score, exerciseId, createdAt: now });
-        return NextResponse.json({ ok: true }, { headers });
-      }
-
-      if (score > (lowest as any).score) {
-        await col.insertOne({ name, score, exerciseId, createdAt: now });
-        await col.deleteOne({ _id: (lowest as any)._id });
-        return NextResponse.json({ ok: true, promoted: true }, { headers });
-      }
-
-      return NextResponse.json({ ok: true, promoted: false }, { headers });
     } catch (mongoError) {
-      // console.warn(
-      //   "[leaderboard-post] MongoDB connection failed, using mock data"
-      // );
-      // Fallback: add to mock leaderboard if not full
-      if (mockLeaderboard.length < 10) {
-        mockLeaderboard.push({ name, score, exerciseId });
-        mockLeaderboard.sort((a, b) => b.score - a.score);
-        return NextResponse.json({ ok: true }, { headers });
-      }
-
-      const lowest = mockLeaderboard[mockLeaderboard.length - 1];
-      if (score > lowest.score) {
-        mockLeaderboard.pop();
-        mockLeaderboard.push({ name, score, exerciseId });
-        mockLeaderboard.sort((a, b) => b.score - a.score);
-        return NextResponse.json({ ok: true, promoted: true }, { headers });
-      }
-
-      return NextResponse.json({ ok: true, promoted: false }, { headers });
+      return NextResponse.json(
+        { error: "Database temporarily unavailable" },
+        { status: 503, headers }
+      );
     }
-  } catch (err: any) {
-    // console.error("[leaderboard-post] Error:", err);
-    return NextResponse.json({ error: err.message }, { status: 500, headers });
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : "Internal server error";
+    return NextResponse.json(
+      { error: message },
+      { status: 500, headers }
+    );
   }
 }
 
 export async function OPTIONS(request: NextRequest) {
   return NextResponse.json(null, {
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "POST, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type",
-    },
+    headers: corsHeaders,
   });
 }

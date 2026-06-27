@@ -30,16 +30,17 @@ const Storage = {
   },
 
   sanitizeValues() {
-    // Fix 2D size values for 3D engine
+    // Target size is a global scale multiplier (0.4–1.5). Reset out-of-range
+    // or legacy absolute-size values to the neutral default of 1.
     let size = parseFloat(this.get(this.KEYS.TARGET_SIZE));
-    if (isNaN(size) || size > 10) {
-      this.set(this.KEYS.TARGET_SIZE, "2.0");
+    if (isNaN(size) || size < 0.4 || size > 1.5) {
+      this.set(this.KEYS.TARGET_SIZE, "1");
     }
   },
 
   setDefaults() {
     localStorage.setItem(this.KEYS.TARGET_COLOR, "#00ffff");
-    localStorage.setItem(this.KEYS.TARGET_SIZE, "2.0");
+    localStorage.setItem(this.KEYS.TARGET_SIZE, "1");
     localStorage.setItem(this.KEYS.SENSITIVITY, "0.314");
     localStorage.setItem(this.KEYS.VOLUME, "30");
     this.resetCrosshair();

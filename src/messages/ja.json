@@ -1,0 +1,311 @@
+{
+    "common": {
+        "home": "ホーム",
+        "exercises": "エクササイズ",
+        "blog": "ブログ",
+        "leaderboard": "リーダーボード",
+        "settings": "設定",
+        "about": "このサイトについて",
+        "contact": "お問い合わせ",
+        "login": "ログイン",
+        "signup": "新規登録",
+        "logout": "ログアウト",
+        "language": "言語",
+        "loading": "読み込み中...",
+        "error": "エラーが発生しました",
+        "notFound": "ページが見つかりません",
+        "backToHome": "ホームに戻る"
+    },
+    "nav": {
+        "categories": "カテゴリ",
+        "games": "ゲーム",
+        "tools": "ツール",
+        "toggleMenu": "ナビゲーションメニューを切り替え",
+        "skipToContent": "メインコンテンツへスキップ"
+    },
+    "categories": {
+        "flicking": "フリック",
+        "tracking": "トラッキング",
+        "speed": "スピード",
+        "precision": "精密",
+        "reaction": "反応",
+        "gameSpecific": "ゲーム別"
+    },
+    "games": {
+        "valorant": "Valorant",
+        "cs2": "CS2",
+        "fortnite": "Fortnite",
+        "apexLegends": "Apex Legends"
+    },
+    "tools": {
+        "sensitivityConverter": "感度コンバーター",
+        "dpiAnalyzer": "DPIアナライザー"
+    },
+    "exercises": {
+        "categories": {
+            "flicking": "フリック",
+            "tracking": "トラッキング",
+            "speed": "スピード",
+            "precision": "精密",
+            "reaction": "反応",
+            "game-specific": "ゲーム別"
+        },
+        "start": "エクササイズを開始",
+        "difficulty": "難易度",
+        "duration": "時間",
+        "score": "スコア",
+        "accuracy": "精度",
+        "allExercises": "すべてのエクササイズ",
+        "stats": "統計"
+    },
+    "footer": {
+        "exercises": "エクササイズ",
+        "categories": "カテゴリ",
+        "tools": "ツール",
+        "games": "ゲーム",
+        "content": "コンテンツ",
+        "legal": "法的情報",
+        "allExercises": "すべてのエクササイズ",
+        "leaderboard": "リーダーボード",
+        "stats": "統計",
+        "blog": "ブログ",
+        "about": "このサイトについて",
+        "contact": "お問い合わせ",
+        "privacyPolicy": "プライバシーポリシー",
+        "termsOfService": "利用規約",
+        "disclaimer": "AimTrainerProはRiot Games, Inc.と提携、支持、後援、または承認されていません。ValorantおよびRiot Gamesは、Riot Games, Inc.の商標または登録商標です。ゲーム名、ロゴ、商標はそれぞれの所有者に帰属します。",
+        "copyright": "© {year} AimTrainerPro. 全著作権所有。"
+    },
+    "errors": {
+        "generic": "問題が発生しました。もう一度お試しください。",
+        "networkError": "ネットワークエラー。接続を確認してください。",
+        "notFound": "お探しのページは存在しません。",
+        "unauthorized": "このページにアクセスするにはログインが必要です。",
+        "validationFailed": "フォームにエラーがないか確認してください。"
+    },
+    "meta": {
+        "title": "AimTrainerPro - オンラインエイムトレーナー",
+        "description": "FPSのエイムを向上させる無料オンラインエイムトレーナー"
+    },
+    "home": {
+        "eyebrow": "無料オンラインエイムトレーナー",
+        "subtitle": "Valorant、CS2、Apex Legends、Fortnite、Overwatch 2 のエイムを、ブラウザ上の精密な3Dドリルで鍛えよう。ダウンロード不要。",
+        "selectMode": "トレーニングモードを選択",
+        "stats": "あなたの統計",
+        "fineprint": "AimTrainerProはすべてのゲームのFPSプレイヤー向け無料ブラウザベース3Dエイムトレーナーです。インストール不要、登録不要。",
+        "backToCategories": "← カテゴリに戻る",
+        "focus": "フォーカス"
+    },
+    "language_selector": {
+        "label": "言語を選択",
+        "current": "現在の言語"
+    },
+    "about": {
+        "mission": "私たちの使命は、ダウンロードやインストール不要のブラウザベースのトレーニングツールで、ゲーマーのエイム向上を支援することです。",
+        "whatYouCanPractice": "練習できるスキル",
+        "skills": {
+            "flicking": {
+                "title": "フリック",
+                "desc": "画面上に突然現れるターゲットを素早く正確に狙い撃つ動きを練習します。"
+            },
+            "tracking": {
+                "title": "トラッキング",
+                "desc": "滑らかで安定したマウスコントロールで、動くターゲットにクロスヘアを合わせ続ける練習をします。"
+            },
+            "speed": {
+                "title": "スピード",
+                "desc": "時間制限のプレッシャー下で精度を保ちながら、クリック速度を限界まで高めます。"
+            },
+            "precision": {
+                "title": "精密",
+                "desc": "無駄な動きを最小限に抑え、小さなターゲットを正確に撃ち抜く技術を磨きます。"
+            },
+            "reaction": {
+                "title": "反応",
+                "desc": "視覚的な合図にできるだけ素早く反応し、反応速度を鍛えます。"
+            },
+            "gameSpecific": {
+                "title": "ゲーム別",
+                "desc": "Valorant、CS2、Apex Legendsなどで遭遇するシーンに合わせたドリルを練習します。"
+            }
+        },
+        "whoItIsFor": "AimTrainerProは、カジュアルプレイヤーから競技志向のプレイヤーまで、FPSのパフォーマンスを向上させたいすべての方のためのツールです。",
+        "whyBrowser": "ダウンロード不要、インストール不要、待ち時間ゼロ。どのデバイスのブラウザからでも、すぐにトレーニングを開始できます。",
+        "faq": {
+            "q1": "AimTrainerProは本当に無料ですか？",
+            "a1": "はい、すべてのコアトレーニングエクササイズは完全無料で、隠れた費用はありません。",
+            "q2": "アカウントを作成する必要がありますか？",
+            "a2": "トレーニングを始めるのにアカウントは不要です。進捗を保存したりリーダーボードに表示したい場合のみ登録してください。",
+            "q3": "実際にゲーム内のエイムは改善しますか？",
+            "a3": "当サイトのドリルを継続的に練習することで、FPSゲームでの実際のパフォーマンス向上に直結するマッスルメモリーが構築されます。",
+            "q4": "対応しているブラウザは？",
+            "a4": "AimTrainerProはChrome、Firefox、Edge、Safariを含むすべてのモダンブラウザで動作します。"
+        },
+        "cta": "今すぐトレーニングを始める",
+        "disclaimer": "AimTrainerProは独立したプロジェクトであり、いかなるゲームパブリッシャーや開発会社とも提携していません。"
+    },
+    "settings": {
+        "gameSettings": "ゲーム設定",
+        "playerName": "プレイヤー名",
+        "save": "保存",
+        "current": "現在",
+        "sensitivity": "感度",
+        "dpi": "DPI",
+        "edpiLabel": "eDPI",
+        "targetSize": "ターゲットサイズ",
+        "targetColor": "ターゲットの色",
+        "crosshairCreator": "クロスヘアエディター",
+        "style": "スタイル",
+        "size": "サイズ",
+        "color": "色",
+        "opacity": "不透明度",
+        "saveNew": "新規保存",
+        "savedCrosshairs": "保存済みクロスヘア",
+        "delete": "削除",
+        "clearHistory": "履歴をクリア"
+    },
+    "trainer": {
+        "paused": "一時停止中",
+        "resume": "再開",
+        "exit": "終了",
+        "complete": "完了",
+        "replay": "もう一度",
+        "menu": "メニュー",
+        "score": "スコア",
+        "time": "時間",
+        "accuracy": "精度",
+        "hits": "ヒット数",
+        "kps": "秒間キル数",
+        "clickToResume": "クリックして再開",
+        "rotateDevice": "デバイスを回転",
+        "rotateLandscape": "最適な体験のために、デバイスを横向きにしてください。"
+    },
+    "blog": {
+        "title": "エイムトレーニングのコツとガイド",
+        "subtitle": "エイムを向上させるための専門的なアドバイス、ゲーム戦略、トレーニングテクニック。",
+        "startTraining": "トレーニングを始める",
+        "exploreCrosshairs": "クロスヘアを探す",
+        "featured": "注目",
+        "latestArticles": "最新の記事",
+        "readArticle": "記事を読む",
+        "backToBlog": "ブログに戻る"
+    },
+    "exerciseData": {
+        "flick_micro": {
+            "name": "マイクロフリック",
+            "desc": "5°〜15°の小角度フリックを練習。ターゲットがクロスヘア付近に出現し、ピクセル単位の正確な調整が求められます。"
+        },
+        "flick_medium": {
+            "name": "ミディアムフリック",
+            "desc": "16°〜90°の標準距離フリックを練習。一般的なFPS戦闘での中程度の角度からの敵をシミュレートします。"
+        },
+        "flick_wide": {
+            "name": "ワイドフリック",
+            "desc": "91°〜180°の極端な角度のフリックをマスター。背後や横に出現するターゲットへの高速180°スナップを鍛えます。"
+        },
+        "flick_headshot": {
+            "name": "ヘッドショットフリック",
+            "desc": "クリティカルゾーンのみ有効。各ターゲットは標準半径の30%のヘッドショットゾーンを持ちます。命中で2倍ポイント。"
+        },
+        "flick_multi_target": {
+            "name": "連続排除",
+            "desc": "複数のターゲットが番号付きで同時出現。順番通りに排除 — 順序を間違えるとミスになります。"
+        },
+        "flick_multi_target_easy": {
+            "name": "連続排除（イージー）",
+            "desc": "1ウェーブ2ターゲットの初心者向けバージョン。番号を読み、順番に排除する練習です。"
+        },
+        "flick_multi_target_hard": {
+            "name": "連続排除（ハード）",
+            "desc": "究極のテスト — 広角に小さなヒットボックスの6ターゲット。時間制限下での高速連続フリック。"
+        },
+        "tracking_linear_strafe": {
+            "name": "リニアストレイフ",
+            "desc": "一定速度で直線移動するターゲットを追跡。基本的なトラッキングの筋肉記憶を構築します。"
+        },
+        "tracking_sinusoidal": {
+            "name": "正弦波運動",
+            "desc": "滑らかな正弦波を描くターゲットを追跡。非線形パスを予測・追従する能力を鍛えます。"
+        },
+        "tracking_random_direction": {
+            "name": "ランダム方向転換",
+            "desc": "500ms〜2000ms間隔で予測不能に方向を変えるターゲットを追跡。反応型トラッキングを開発します。"
+        },
+        "tracking_acceleration": {
+            "name": "加速と減速",
+            "desc": "基本速度の25%〜100%で速度が変化するターゲットを追跡。動的な速度調整を鍛えます。"
+        },
+        "speed_blitz": {
+            "name": "スピードブリッツ",
+            "desc": "ターゲットが画面中に素早く出現。消える前にできるだけ多くクリック。純粋なクリック速度テスト。"
+        },
+        "speed_frenzy": {
+            "name": "ターゲットフレンジー",
+            "desc": "複数ターゲットが同時出現し、次のウェーブ前に全て排除。ウェーブごとにターゲット数が増加。"
+        },
+        "speed_switch": {
+            "name": "ラピッドスイッチ",
+            "desc": "画面の両端に2つのターゲットが出現。できるだけ速く交互にクリック。フリック速度とリズムを鍛えます。"
+        },
+        "speed_cascade": {
+            "name": "カスケード",
+            "desc": "ターゲットが画面上部から加速しながら落下。下に到達する前にクリック。"
+        },
+        "speed_gridshot": {
+            "name": "グリッドショットスプリント",
+            "desc": "3x3のターゲットグリッドがランダムパターンで点灯。次のパターン前にハイライトされたターゲットを排除。"
+        },
+        "speed_burst": {
+            "name": "バーストファイア",
+            "desc": "ターゲットが3〜5の連射で出現。次が出る前にバースト全体を排除。制御された攻撃性が報われます。"
+        },
+        "precision_pixel_hunt": {
+            "name": "ピクセルハント",
+            "desc": "極小ターゲットがランダム位置に出現。時間をかけて確実に当てる。微細運動制御を鍛えます。"
+        },
+        "precision_dot_drill": {
+            "name": "ドットドリル",
+            "desc": "グリッド上に小さなドットが出現。外をクリックせずに各ドットを正確に撃つ。精度が最重要。"
+        },
+        "precision_headshot_master": {
+            "name": "ヘッドショットマスター",
+            "desc": "ターゲットに可視クリティカルゾーン付き。ゾーン内のヒットのみ有効。頭の高さのクロスヘア配置を訓練。"
+        },
+        "precision_micro_correct": {
+            "name": "マイクロ補正",
+            "desc": "各ショット後、次のターゲットが前の位置のすぐ近くに出現。微調整を鍛えます。"
+        },
+        "precision_shrinking_targets": {
+            "name": "縮小ターゲット",
+            "desc": "ターゲットが大きい状態から縮小。消える前にクリック。待つほど精密ボーナスが高くなります。"
+        },
+        "precision_steady_hand": {
+            "name": "ステディハンド",
+            "desc": "小さなゾーン内にカーソルを500ms保持してヒット登録。カーソルの安定性と忍耐を試します。"
+        },
+        "reaction_flash": {
+            "name": "フラッシュリフレックス",
+            "desc": "単一ターゲットが一瞬画面に表示。消える前にクリック。純粋な反応速度テスト。"
+        },
+        "reaction_pop_shot": {
+            "name": "ポップショット",
+            "desc": "ターゲットが予測不能なタイミングで遮蔽物から飛び出す。短い露出の間に反応して射撃。"
+        },
+        "reaction_color_trigger": {
+            "name": "カラートリガー",
+            "desc": "赤いターゲットが表示され、短い遅延後に緑に変化。緑の時だけ撃つ — 赤で撃つと減点。"
+        },
+        "reaction_wall_peek": {
+            "name": "ウォールピーク",
+            "desc": "ターゲットが壁から滑り出し、短時間保持して引っ込む。消える前にピークを罰する。"
+        },
+        "reaction_multi_stimulus": {
+            "name": "マルチスティミュラス",
+            "desc": "複数位置の1つでターゲットが点灯、同じ場所は連続しない。出現位置に素早く反応。"
+        },
+        "reaction_speed_ladder": {
+            "name": "スピードラダー",
+            "desc": "命中するたびに次のターゲットの表示時間が短縮。ついていけなくなるまで窓が狭まり続けます。"
+        }
+    }
+}

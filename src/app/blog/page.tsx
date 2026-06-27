@@ -2,16 +2,24 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getAllBlogPosts, getBlogPostBySlug } from "@/lib/blog-posts";
+import { generateHreflangMetadata } from "@/lib/seo/hreflang-metadata";
+import BlogThumb from "@/components/BlogThumb";
 
 export const metadata: Metadata = {
-  title: "AimTrainerPro Blog | FPS Aim Training Guides",
+  title: "AimTrainerPro Blog — FPS Aim Training Guides & Tips",
   description:
-    "Read practical FPS aim training guides for Valorant, CS2, and Fortnite. Improve flicks, tracking, sensitivity, and routines.",
+    "In-depth FPS aim training guides for Valorant, CS2, and Apex Legends. Learn flick aim, tracking, sensitivity optimization, crosshair strategy, and daily routines that transfer to ranked.",
+  keywords: [
+    "aim training guide", "valorant aim guide", "how to improve aim",
+    "flick aim guide", "tracking aim guide", "fps training routine",
+    "sensitivity guide valorant", "aim tips valorant", "cs2 aim tips",
+    "best aim routine", "aim trainer blog",
+  ],
   alternates: {
-    canonical: "https://aimtrainerpro.online/blog",
+    ...generateHreflangMetadata('/blog'),
   },
   openGraph: {
-    title: "AimTrainerPro Blog | FPS Aim Training Guides",
+    title: "AimTrainerPro Blog — FPS Aim Guides",
     description:
       "Long-form guides on aim training routines, sensitivity setup, crosshair strategy, and in-game transfer.",
     url: "https://aimtrainerpro.online/blog",
@@ -36,6 +44,8 @@ export default function BlogIndexPage({ searchParams }: BlogIndexPageProps) {
   }
 
   const posts = getAllBlogPosts();
+  const featured = posts[0];
+  const rest = posts.slice(1);
   const breadcrumbSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -62,105 +72,71 @@ export default function BlogIndexPage({ searchParams }: BlogIndexPageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
-      <nav className="blog-nav" aria-label="Blog navigation">
-        <div className="blog-nav-top">
-          <div className="blog-brand-wrap">
-            <h1 className="blog-logo">
-              AIMTRAINERPRO <span style={{ color: "var(--primary)" }}>BLOG</span>
-            </h1>
-            <p className="blog-tagline">
-              Practical aim guides and routines for FPS players
-            </p>
-          </div>
-
-          <Link href="/" className="back-link blog-back-btn">
-            Back to Trainer
-          </Link>
-        </div>
-
-        <div className="blog-nav-links" role="navigation" aria-label="Blog quick links">
-          <a
-            className="blog-pill"
-            href="https://valocrossdb.site/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Crosshairs
-          </a>
-        </div>
-      </nav>
-
-      <section className="blog-intro">
-        <h2 style={{ marginBottom: "10px", fontSize: "2.3rem", letterSpacing: "1px" }}>
-          Latest <span style={{ color: "var(--primary)" }}>Articles</span>
-        </h2>
-        <p style={{ margin: 0, color: "var(--text-muted)", maxWidth: "760px" }}>
-          Improve aim with structured guides and then practice instantly in the trainer. <Link href="/" style={{ color: "var(--primary)", textDecoration: "underline" }}>Start training</Link>{" "}
-          or{" "}
-          <a
-            href="https://valocrossdb.site/"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ color: "var(--primary)", textDecoration: "underline" }}
-          >
-            explore crosshairs
-          </a>
-          .
+      <header className="blog-hero">
+        <span className="blog-eyebrow">AimTrainerPro Blog</span>
+        <h1 className="blog-hero-title">
+          Aim guides that actually <span className="blog-accent">transfer in-game</span>
+        </h1>
+        <p className="blog-hero-sub">
+          Practical, no-fluff guides on flicking, tracking, sensitivity, and
+          training routines — then put them into practice instantly in the
+          browser trainer.
         </p>
-      </section>
+        <div className="blog-hero-cta">
+          <Link href="/" className="blog-btn blog-btn--primary">
+            Start training
+          </Link>
+          <a
+            href="https://valocrossdb.site/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="blog-btn"
+          >
+            Explore crosshairs
+          </a>
+        </div>
+      </header>
+
+      {featured && (
+        <Link className="blog-featured" href={`/blog/${featured.slug}`}>
+          <div className="blog-featured-media">
+            <BlogThumb seed={featured.slug} label={featured.category} />
+            <span className="blog-chip">Featured</span>
+          </div>
+          <div className="blog-featured-body">
+            <div className="card-date">{featured.dateLabel}</div>
+            <h2 className="blog-featured-title">{featured.title}</h2>
+            <p className="blog-featured-excerpt">{featured.excerpt}</p>
+            <span className="read-more">Read article →</span>
+          </div>
+        </Link>
+      )}
+
+      <h2 className="blog-section-title">Latest articles</h2>
 
       <div className="blog-content">
         <div className="blog-grid">
-          {posts.map((post) => (
+          {rest.map((post) => (
             <Link key={post.slug} className="blog-card-link" href={`/blog/${post.slug}`}>
               <article className="blog-card">
-                <img
-                  src={post.thumbnail}
-                  className="card-img"
-                  loading="lazy"
-                  alt={post.title}
-                />
+                <div className="card-media">
+                  <BlogThumb
+                    seed={post.slug}
+                    label={post.category}
+                    className="card-img"
+                  />
+                </div>
                 <div className="card-content">
                   <div className="card-date">{post.dateLabel}</div>
                   <h3 className="card-title">{post.title}</h3>
                   <p className="card-excerpt">{post.excerpt}</p>
-                  <div className="read-more">Read Article →</div>
+                  <div className="read-more">Read article →</div>
                 </div>
               </article>
             </Link>
           ))}
         </div>
       </div>
-
-      <footer
-        style={{
-          marginTop: "40px",
-          padding: "18px 5% 30px",
-          borderTop: "1px solid var(--border)",
-          color: "var(--text-muted)",
-          fontSize: "0.8rem",
-          lineHeight: 1.4,
-        }}
-      >
-        <div>
-          AimTrainerPro is not affiliated with, endorsed, sponsored, or specifically approved by Riot Games, Inc.
-          Valorant and Riot Games are trademarks or registered trademarks of Riot Games, Inc.
-        </div>
-        <div style={{ marginTop: "8px" }}>
-          <a href="/about" style={{ color: "var(--text-muted)" }}>
-            About
-          </a>{" "}
-          ·{" "}
-          <a href="/privacy-policy" style={{ color: "var(--text-muted)" }}>
-            Privacy Policy
-          </a>{" "}
-          ·{" "}
-          <a href="/terms" style={{ color: "var(--text-muted)" }}>
-            Terms
-          </a>
-        </div>
-        <div style={{ marginTop: "8px" }}>© 2026 AimTrainerPro</div>
-      </footer>
     </div>
   );
 }

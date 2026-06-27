@@ -7,6 +7,18 @@ import {
   getCanonicalBlogUrl,
   getSiteUrl,
 } from "@/lib/blog-posts";
+import { generateHreflangMetadata } from "@/lib/seo/hreflang-metadata";
+import { generateAuthorPersonSchema } from "@/lib/blog/authors";
+import { getCategoryBySlug } from "@/lib/blog/categories";
+import {
+  generateTableOfContents,
+  injectHeadingIds,
+  validateBlogContent,
+} from "@/lib/blog/content-validation";
+import InternalLinks from "@/components/InternalLink";
+import { inferTagsFromTitle } from "@/lib/blog/internal-linking";
+import type { TOCEntry } from "@/lib/content/types";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 
 type BlogArticlePageProps = {
   params: {
@@ -27,18 +39,18 @@ export function generateMetadata({ params }: BlogArticlePageProps): Metadata {
     };
   }
 
-  const canonical = getCanonicalBlogUrl(post.slug);
+  const hreflang = generateHreflangMetadata(`/blog/${params.slug}`);
   return {
     title: `${post.title} | AimTrainerPro Blog`,
     description: post.excerpt,
     alternates: {
-      canonical,
+      ...hreflang,
     },
     openGraph: {
       title: post.title,
       description: post.excerpt,
       type: "article",
-      url: canonical,
+      url: getCanonicalBlogUrl(params.slug),
       siteName: "AimTrainerPro",
       publishedTime: post.dateISO,
       authors: [post.author],
@@ -60,9 +72,72 @@ export function generateMetadata({ params }: BlogArticlePageProps): Metadata {
   };
 }
 
+function TableOfContents({ entries }: { entries: TOCEntry[] }) {
+  return (
+    <nav className="toc" aria-label="Table of contents">
+      <h2 className="toc-title">Table of Contents</h2>
+      <ol className="toc-list">
+        {entries.map((entry) => (
+          <li
+            key={entry.id}
+            className={entry.level === 3 ? "toc-item toc-item--nested" : "toc-item"}
+          >
+            <a href={`#${entry.id}`} className="toc-link">
+              {entry.text}
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+  );
+}
+
+function WordCountBadge({ count }: { count: number }) {
+  const readingTime = Math.ceil(count / 238); // Average reading speed
+  return (
+    <span className="word-count-badge">
+      {count.toLocaleString()} words · {readingTime} min read
+    </span>
+  );
+}
+
 export default function BlogArticlePage({ params }: BlogArticlePageProps) {
   const post = getBlogPostBySlug(params.slug);
   if (!post) notFound();
+
+  // Validate content and enforce requirements
+  const validation = validateBlogContent(post.contentHtml);
+
+  // Prevent publication if below minimum word count (Requirement 9.7)
+  if (!validation.valid && validation.wordCount < 1500) {
+    return (
+      <div className="blog-container">
+        <div className="article-view">
+          <div className="content-error" role="alert">
+            <h1>Content Requirements Not Met</h1>
+            <p>
+              This post cannot be published. Current word count:{" "}
+              <strong>{validation.wordCount}</strong>. Minimum required:{" "}
+              <strong>1,500 words</strong>.
+            </p>
+            <p>Please add {1500 - validation.wordCount} more words before publishing.</p>
+            <Link href="/blog" className="back-link">
+              Back to Blog
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Generate table of contents for posts exceeding 2000 words (Requirement 9.2)
+  const tableOfContents = generateTableOfContents(post.contentHtml, post.wordCount);
+
+  // Inject heading IDs for anchor navigation
+  const processedHtml = injectHeadingIds(post.contentHtml);
+
+  const authorPersonSchema = generateAuthorPersonSchema(post.authorProfile);
+  const categoryData = getCategoryBySlug(post.category);
 
   const articleSchema = {
     "@context": "https://schema.org",
@@ -72,7 +147,9 @@ export default function BlogArticlePage({ params }: BlogArticlePageProps) {
     image: [`${getSiteUrl()}${post.thumbnail}`],
     author: {
       "@type": "Person",
-      name: post.author,
+      name: post.authorProfile.name,
+      url: post.authorProfile.profileUrl,
+      description: post.authorProfile.bio,
     },
     publisher: {
       "@type": "Organization",
@@ -86,32 +163,14 @@ export default function BlogArticlePage({ params }: BlogArticlePageProps) {
     dateModified: post.dateISO,
     mainEntityOfPage: getCanonicalBlogUrl(post.slug),
     wordCount: post.wordCount,
+    articleSection: categoryData?.name ?? post.category,
   };
 
-  const breadcrumbSchema = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Home",
-        item: "https://aimtrainerpro.online/",
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: "Blog",
-        item: "https://aimtrainerpro.online/blog",
-      },
-      {
-        "@type": "ListItem",
-        position: 3,
-        name: post.title,
-        item: getCanonicalBlogUrl(post.slug),
-      },
-    ],
-  };
+  const breadcrumbItems = [
+    { label: "Home", href: "/" },
+    { label: "Blog", href: "/blog" },
+    { label: post.title, href: `/blog/${post.slug}` },
+  ];
 
   return (
     <div className="blog-container">
@@ -121,37 +180,9 @@ export default function BlogArticlePage({ params }: BlogArticlePageProps) {
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(authorPersonSchema.data) }}
       />
-
-      <nav className="blog-nav" aria-label="Blog navigation">
-        <div className="blog-nav-top">
-          <div className="blog-brand-wrap">
-            <h1 className="blog-logo">
-              AIMTRAINERPRO <span style={{ color: "var(--primary)" }}>BLOG</span>
-            </h1>
-            <p className="blog-tagline">Practical aim guides and routines for FPS players</p>
-          </div>
-
-          <Link href="/" className="back-link blog-back-btn">
-            Back to Trainer
-          </Link>
-        </div>
-
-        <div className="blog-nav-links" role="navigation" aria-label="Blog quick links">
-          <Link className="blog-pill" href="/blog">
-            All Articles
-          </Link>
-          <a
-            className="blog-pill"
-            href="https://valocrossdb.site/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Crosshairs
-          </a>
-        </div>
-      </nav>
+      <Breadcrumbs items={breadcrumbItems} />
 
       <article className="article-view">
         <Link href="/blog" className="back-link" style={{ marginBottom: "20px" }}>
@@ -162,43 +193,22 @@ export default function BlogArticlePage({ params }: BlogArticlePageProps) {
           <h1 className="article-title">{post.title}</h1>
           <div className="article-meta">
             <span>Published on {post.dateLabel}</span>
-            <span>by {post.author}</span>
-            <span>{post.wordCount} words</span>
+            <span>by {post.authorProfile.name}</span>
+            <span>{categoryData?.name ?? post.category}</span>
+            <WordCountBadge count={post.wordCount} />
           </div>
         </header>
 
-        <div className="article-body" dangerouslySetInnerHTML={{ __html: post.contentHtml }} />
-      </article>
+        {tableOfContents && <TableOfContents entries={tableOfContents} />}
 
-      <footer
-        style={{
-          marginTop: "40px",
-          padding: "18px 5% 30px",
-          borderTop: "1px solid var(--border)",
-          color: "var(--text-muted)",
-          fontSize: "0.8rem",
-          lineHeight: 1.4,
-        }}
-      >
-        <div>
-          AimTrainerPro is not affiliated with, endorsed, sponsored, or specifically approved by Riot Games, Inc.
-          Valorant and Riot Games are trademarks or registered trademarks of Riot Games, Inc.
-        </div>
-        <div style={{ marginTop: "8px" }}>
-          <a href="/about" style={{ color: "var(--text-muted)" }}>
-            About
-          </a>{" "}
-          ·{" "}
-          <a href="/privacy-policy" style={{ color: "var(--text-muted)" }}>
-            Privacy Policy
-          </a>{" "}
-          ·{" "}
-          <a href="/terms" style={{ color: "var(--text-muted)" }}>
-            Terms
-          </a>
-        </div>
-        <div style={{ marginTop: "8px" }}>© 2026 AimTrainerPro</div>
-      </footer>
+        <div className="article-body" dangerouslySetInnerHTML={{ __html: processedHtml }} />
+
+        <InternalLinks
+          category={post.category}
+          currentSlug={post.slug}
+          tags={inferTagsFromTitle(post.title)}
+        />
+      </article>
     </div>
   );
 }

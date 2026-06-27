@@ -1,4 +1,4 @@
-// File: C:\NEXTJS LIVE PROJECTS\Valorant Aim Trainer\Valorant-Aim-Tracker-Online\src\app\page.tsx
+// File: C:\Live Projects\Valorant-Aim-Tracker-Online\src\app\page.tsx
 import * as entry from '../../../src/app/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

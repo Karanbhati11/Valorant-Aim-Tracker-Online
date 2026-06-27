@@ -1,9 +1,13 @@
 /**
  * Exercise Definitions
- * 5 Core Exercises - Tuned for 3D Room Z=-45
+ * Core exercises + integration with TypeScript exercise registry via bridge.
+ * 
+ * When the ExerciseBridge is installed (from the TypeScript registry),
+ * the EXERCISES object is populated with 30+ exercises across 6 categories.
+ * Falls back to the original 5 core exercises if the bridge is not available.
  */
 
-const EXERCISES = {
+const EXERCISES_FALLBACK = {
   CORE: {
     category: "Core Training",
     icon: "🏆",
@@ -95,7 +99,17 @@ const EXERCISES = {
   },
 };
 
+// Use the bridge-provided EXERCISES if available, otherwise use fallback
+// The bridge is installed by the React app before this script initializes
+var EXERCISES = (typeof window !== 'undefined' && window.EXERCISES) || EXERCISES_FALLBACK;
+
 function getExerciseById(id) {
+  // Prefer bridge lookup if available (searches all 30+ exercises)
+  if (typeof window !== 'undefined' && window.ExerciseBridge && window.ExerciseBridge.getExerciseById) {
+    const bridgeResult = window.ExerciseBridge.getExerciseById(id);
+    if (bridgeResult) return bridgeResult;
+  }
+  // Fallback: search local EXERCISES object
   for (const cat of Object.values(EXERCISES)) {
     const ex = cat.exercises.find((e) => e.id === id);
     if (ex) return ex;
