@@ -16,7 +16,10 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/api/", "/_next/", "/admin/"],
+        // NOTE: Do NOT block /_next/ — Googlebot needs the JS/CSS/font assets
+        // under /_next/static/ to render pages. Blocking them breaks rendering
+        // and hurts indexing. Only non-public paths are disallowed here.
+        disallow: ["/api/", "/admin/"],
       },
     ],
     sitemap: `${siteUrl}/sitemap.xml`,
