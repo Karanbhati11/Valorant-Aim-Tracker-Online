@@ -8,7 +8,11 @@ import Header from "@/components/Header";
 import OfflineIndicator from "@/components/OfflineIndicator";
 import WebVitalsOptimizer from "@/components/WebVitalsOptimizer";
 import { I18nProvider } from "@/components/I18nProvider";
-import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
+import { GoogleAnalytics } from "@next/third-parties/google";
+import ConsentBanner from "@/components/ConsentBanner";
+
+// Public GTM container ID, sourced from the environment rather than hardcoded.
+const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID;
 
 /**
  * Next.js font optimization: preloads Inter font files, applies font-display: swap,
@@ -102,8 +106,46 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={inter.variable} suppressHydrationWarning>
-      <GoogleTagManager gtmId="GTM-W4KGDZVW" />
       <head>
+        {/*
+          Google Consent Mode v2 — DEFAULT state.
+          This MUST execute before the GTM container script below so that all
+          tags read a denied-by-default consent state and no data leaks before
+          the user makes a choice. `wait_for_update` gives the client-side
+          cookie banner time to read any previously stored preference.
+        */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('consent', 'default', {
+                'ad_storage': 'denied',
+                'ad_user_data': 'denied',
+                'ad_personalization': 'denied',
+                'analytics_storage': 'denied',
+                'wait_for_update': 500
+              });
+              gtag('set', 'ads_data_redaction', true);
+            `,
+          }}
+        />
+        {/*
+          Google Tag Manager container script. Injected directly beneath the
+          consent default so the container initializes with consent already set.
+          The container ID is pulled from NEXT_PUBLIC_GTM_ID.
+        */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+              new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+              j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+              'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+              })(window,document,'script','dataLayer','${GTM_ID}');
+            `,
+          }}
+        />
         {/* Apple PWA meta tags for Safari installability */}
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -137,7 +179,7 @@ export default function RootLayout({
         {/* Google Tag Manager (noscript) — fallback for users with JS disabled */}
         <noscript>
           <iframe
-            src="https://www.googletagmanager.com/ns.html?id=GTM-W4KGDZVW"
+            src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
             height="0"
             width="0"
             style={{ display: "none", visibility: "hidden" }}
@@ -157,6 +199,8 @@ export default function RootLayout({
           </main>
           <Footer />
         </I18nProvider>
+        {/* Cookie consent banner — fires gtag consent update on accept */}
+        <ConsentBanner />
         {/*
           Google Analytics (GA4) via the official @next/third-parties component.
           This correctly initializes gtag AND automatically sends page_view hits
