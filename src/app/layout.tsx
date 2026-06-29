@@ -8,7 +8,7 @@ import Header from "@/components/Header";
 import OfflineIndicator from "@/components/OfflineIndicator";
 import WebVitalsOptimizer from "@/components/WebVitalsOptimizer";
 import { I18nProvider } from "@/components/I18nProvider";
-import { GoogleAnalytics } from "@next/third-parties/google";
+import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
 
 /**
  * Next.js font optimization: preloads Inter font files, applies font-display: swap,
@@ -102,6 +102,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={inter.variable} suppressHydrationWarning>
+      <GoogleTagManager gtmId="GTM-W4KGDZVW" />
       <head>
         {/* Apple PWA meta tags for Safari installability */}
         <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -133,6 +134,16 @@ export default function RootLayout({
         ></script>
       </head>
       <body className={`${inter.className} bg-primary text-white`}>
+        {/* Google Tag Manager (noscript) — fallback for users with JS disabled */}
+        <noscript>
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?id=GTM-W4KGDZVW"
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
+          />
+        </noscript>
+        {/* End Google Tag Manager (noscript) */}
         <I18nProvider>
           {/* Skip navigation link for keyboard users - WCAG 2.4.1 */}
           <a href="#main-content" className="skip-to-content">
