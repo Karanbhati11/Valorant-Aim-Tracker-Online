@@ -1,0 +1,1 @@
+self.__SSG_MANIFEST=new Set(["\u002Fblog\u002F[slug]","\u002Fcrosshair-database\u002Fpro\u002F[player]"]);self.__SSG_MANIFEST_CB&&self.__SSG_MANIFEST_CB()

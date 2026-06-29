@@ -1,5 +1,1 @@
-{
-  "node": {},
-  "edge": {},
-  "encryptionKey": "nWqVhVKg32ourpAneiCAtJbtpiF1U9qWqD3lT8g2Buo="
-}
+{"node":{"fb1b5dca356eabe79eba339947b5151bb586354d":{"workers":{"app/crosshairs/page":"76960"},"layer":{"app/crosshairs/page":"rsc"}}},"edge":{},"encryptionKey":"KLmoxBljgbeT9qiTKpgw1t5l+jslG6MmfVtlA8J6Mb4="}

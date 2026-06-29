@@ -1,25 +1,272 @@
 {
   "pages": {
-    "/[locale]/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/[locale]/page.js"
-    ],
-    "/[locale]/layout": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/[locale]/layout.js"
+    "/_not-found/page": [
+      "static/chunks/webpack-7c9d98fa7d9ab662.js",
+      "static/chunks/fd9d1056-dcba7f094ce3d609.js",
+      "static/chunks/117-b93b2d5c59297f67.js",
+      "static/chunks/main-app-f7ac27332c2a0d45.js",
+      "static/chunks/app/_not-found/page-b54079f2332706f3.js"
     ],
     "/layout": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/layout.css",
-      "static/chunks/app/layout.js"
+      "static/chunks/webpack-7c9d98fa7d9ab662.js",
+      "static/chunks/fd9d1056-dcba7f094ce3d609.js",
+      "static/chunks/117-b93b2d5c59297f67.js",
+      "static/chunks/main-app-f7ac27332c2a0d45.js",
+      "static/css/9fa1476dec75da51.css",
+      "static/chunks/972-8eb402881ae5f86b.js",
+      "static/chunks/639-8d7963f217d6d4a2.js",
+      "static/chunks/908-7ac18db991bd57cb.js",
+      "static/chunks/app/layout-c5c631ab457b13ab.js"
     ],
     "/loading": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/loading.js"
+      "static/chunks/webpack-7c9d98fa7d9ab662.js",
+      "static/chunks/fd9d1056-dcba7f094ce3d609.js",
+      "static/chunks/117-b93b2d5c59297f67.js",
+      "static/chunks/main-app-f7ac27332c2a0d45.js",
+      "static/chunks/app/loading-f3570157fd8fa89e.js"
+    ],
+    "/challenge/[code]/page": [
+      "static/chunks/webpack-7c9d98fa7d9ab662.js",
+      "static/chunks/fd9d1056-dcba7f094ce3d609.js",
+      "static/chunks/117-b93b2d5c59297f67.js",
+      "static/chunks/main-app-f7ac27332c2a0d45.js",
+      "static/chunks/972-8eb402881ae5f86b.js",
+      "static/chunks/app/challenge/[code]/page-afa20938b7a90ca1.js"
+    ],
+    "/crosshair/[id]/page": [
+      "static/chunks/webpack-7c9d98fa7d9ab662.js",
+      "static/chunks/fd9d1056-dcba7f094ce3d609.js",
+      "static/chunks/117-b93b2d5c59297f67.js",
+      "static/chunks/main-app-f7ac27332c2a0d45.js",
+      "static/chunks/972-8eb402881ae5f86b.js",
+      "static/chunks/app/crosshair/[id]/page-e1aa4aec090cde1d.js"
+    ],
+    "/page": [
+      "static/chunks/webpack-7c9d98fa7d9ab662.js",
+      "static/chunks/fd9d1056-dcba7f094ce3d609.js",
+      "static/chunks/117-b93b2d5c59297f67.js",
+      "static/chunks/main-app-f7ac27332c2a0d45.js",
+      "static/chunks/908-7ac18db991bd57cb.js",
+      "static/chunks/407-e88345084aef56b9.js",
+      "static/chunks/app/page-3ca43758f0b1a50c.js"
+    ],
+    "/contact/page": [
+      "static/chunks/webpack-7c9d98fa7d9ab662.js",
+      "static/chunks/fd9d1056-dcba7f094ce3d609.js",
+      "static/chunks/117-b93b2d5c59297f67.js",
+      "static/chunks/main-app-f7ac27332c2a0d45.js",
+      "static/chunks/app/contact/page-c1d8a6e1acc0c620.js"
+    ],
+    "/admin/analytics/page": [
+      "static/chunks/webpack-7c9d98fa7d9ab662.js",
+      "static/chunks/fd9d1056-dcba7f094ce3d609.js",
+      "static/chunks/117-b93b2d5c59297f67.js",
+      "static/chunks/main-app-f7ac27332c2a0d45.js",
+      "static/chunks/app/admin/analytics/page-103e24d48733bbee.js"
+    ],
+    "/about/page": [
+      "static/chunks/webpack-7c9d98fa7d9ab662.js",
+      "static/chunks/fd9d1056-dcba7f094ce3d609.js",
+      "static/chunks/117-b93b2d5c59297f67.js",
+      "static/chunks/main-app-f7ac27332c2a0d45.js",
+      "static/chunks/972-8eb402881ae5f86b.js",
+      "static/chunks/908-7ac18db991bd57cb.js",
+      "static/chunks/app/about/page-9adccadf55e8d0ee.js"
+    ],
+    "/crosshair-database/funny/page": [
+      "static/chunks/webpack-7c9d98fa7d9ab662.js",
+      "static/chunks/fd9d1056-dcba7f094ce3d609.js",
+      "static/chunks/117-b93b2d5c59297f67.js",
+      "static/chunks/main-app-f7ac27332c2a0d45.js",
+      "static/chunks/972-8eb402881ae5f86b.js",
+      "static/chunks/514-d98e55f50880a74a.js",
+      "static/chunks/442-64066523667c2be2.js",
+      "static/chunks/app/crosshair-database/funny/page-cdcac6579477f6ec.js"
+    ],
+    "/crosshair-database/best/page": [
+      "static/chunks/webpack-7c9d98fa7d9ab662.js",
+      "static/chunks/fd9d1056-dcba7f094ce3d609.js",
+      "static/chunks/117-b93b2d5c59297f67.js",
+      "static/chunks/main-app-f7ac27332c2a0d45.js",
+      "static/chunks/972-8eb402881ae5f86b.js",
+      "static/chunks/514-d98e55f50880a74a.js",
+      "static/chunks/442-64066523667c2be2.js",
+      "static/chunks/app/crosshair-database/best/page-ea4d6fe9d06b2a31.js"
+    ],
+    "/crosshair-database/page": [
+      "static/chunks/webpack-7c9d98fa7d9ab662.js",
+      "static/chunks/fd9d1056-dcba7f094ce3d609.js",
+      "static/chunks/117-b93b2d5c59297f67.js",
+      "static/chunks/main-app-f7ac27332c2a0d45.js",
+      "static/chunks/972-8eb402881ae5f86b.js",
+      "static/chunks/514-d98e55f50880a74a.js",
+      "static/chunks/442-64066523667c2be2.js",
+      "static/chunks/app/crosshair-database/page-0a056eda6d24b3ef.js"
+    ],
+    "/crosshairs/page": [
+      "static/chunks/webpack-7c9d98fa7d9ab662.js",
+      "static/chunks/fd9d1056-dcba7f094ce3d609.js",
+      "static/chunks/117-b93b2d5c59297f67.js",
+      "static/chunks/main-app-f7ac27332c2a0d45.js",
+      "static/chunks/972-8eb402881ae5f86b.js",
+      "static/chunks/514-d98e55f50880a74a.js",
+      "static/chunks/app/crosshairs/page-d5ff158be3320a97.js"
+    ],
+    "/crosshair-database/dot/page": [
+      "static/chunks/webpack-7c9d98fa7d9ab662.js",
+      "static/chunks/fd9d1056-dcba7f094ce3d609.js",
+      "static/chunks/117-b93b2d5c59297f67.js",
+      "static/chunks/main-app-f7ac27332c2a0d45.js",
+      "static/chunks/972-8eb402881ae5f86b.js",
+      "static/chunks/514-d98e55f50880a74a.js",
+      "static/chunks/442-64066523667c2be2.js",
+      "static/chunks/app/crosshair-database/dot/page-39191243b6e2edef.js"
+    ],
+    "/cs2-aim-trainer/page": [
+      "static/chunks/webpack-7c9d98fa7d9ab662.js",
+      "static/chunks/fd9d1056-dcba7f094ce3d609.js",
+      "static/chunks/117-b93b2d5c59297f67.js",
+      "static/chunks/main-app-f7ac27332c2a0d45.js",
+      "static/chunks/972-8eb402881ae5f86b.js",
+      "static/chunks/app/cs2-aim-trainer/page-d80e3cfba514a6b7.js"
+    ],
+    "/privacy-policy/page": [
+      "static/chunks/webpack-7c9d98fa7d9ab662.js",
+      "static/chunks/fd9d1056-dcba7f094ce3d609.js",
+      "static/chunks/117-b93b2d5c59297f67.js",
+      "static/chunks/main-app-f7ac27332c2a0d45.js",
+      "static/chunks/972-8eb402881ae5f86b.js",
+      "static/chunks/app/privacy-policy/page-8a3a81a3b50d4077.js"
+    ],
+    "/flick-aim-trainer/page": [
+      "static/chunks/webpack-7c9d98fa7d9ab662.js",
+      "static/chunks/fd9d1056-dcba7f094ce3d609.js",
+      "static/chunks/117-b93b2d5c59297f67.js",
+      "static/chunks/main-app-f7ac27332c2a0d45.js",
+      "static/chunks/972-8eb402881ae5f86b.js",
+      "static/chunks/app/flick-aim-trainer/page-28bf398354a5fd7a.js"
+    ],
+    "/crosshair-database/pro/[player]/page": [
+      "static/chunks/webpack-7c9d98fa7d9ab662.js",
+      "static/chunks/fd9d1056-dcba7f094ce3d609.js",
+      "static/chunks/117-b93b2d5c59297f67.js",
+      "static/chunks/main-app-f7ac27332c2a0d45.js",
+      "static/chunks/972-8eb402881ae5f86b.js",
+      "static/chunks/app/crosshair-database/pro/[player]/page-e80118fade96fef1.js"
+    ],
+    "/terms/page": [
+      "static/chunks/webpack-7c9d98fa7d9ab662.js",
+      "static/chunks/fd9d1056-dcba7f094ce3d609.js",
+      "static/chunks/117-b93b2d5c59297f67.js",
+      "static/chunks/main-app-f7ac27332c2a0d45.js",
+      "static/chunks/972-8eb402881ae5f86b.js",
+      "static/chunks/app/terms/page-63c62b5d759653c1.js"
+    ],
+    "/valorant-aim-trainer/page": [
+      "static/chunks/webpack-7c9d98fa7d9ab662.js",
+      "static/chunks/fd9d1056-dcba7f094ce3d609.js",
+      "static/chunks/117-b93b2d5c59297f67.js",
+      "static/chunks/main-app-f7ac27332c2a0d45.js",
+      "static/chunks/972-8eb402881ae5f86b.js",
+      "static/chunks/app/valorant-aim-trainer/page-ad6ba345f38c10aa.js"
+    ],
+    "/[locale]/page": [
+      "static/chunks/webpack-7c9d98fa7d9ab662.js",
+      "static/chunks/fd9d1056-dcba7f094ce3d609.js",
+      "static/chunks/117-b93b2d5c59297f67.js",
+      "static/chunks/main-app-f7ac27332c2a0d45.js",
+      "static/chunks/908-7ac18db991bd57cb.js",
+      "static/chunks/407-e88345084aef56b9.js",
+      "static/chunks/app/[locale]/page-83c5a3c080401c96.js"
+    ],
+    "/[locale]/layout": [
+      "static/chunks/webpack-7c9d98fa7d9ab662.js",
+      "static/chunks/fd9d1056-dcba7f094ce3d609.js",
+      "static/chunks/117-b93b2d5c59297f67.js",
+      "static/chunks/main-app-f7ac27332c2a0d45.js",
+      "static/chunks/app/[locale]/layout-af97dfb6d16482e6.js"
+    ],
+    "/blog/page": [
+      "static/chunks/webpack-7c9d98fa7d9ab662.js",
+      "static/chunks/fd9d1056-dcba7f094ce3d609.js",
+      "static/chunks/117-b93b2d5c59297f67.js",
+      "static/chunks/main-app-f7ac27332c2a0d45.js",
+      "static/chunks/972-8eb402881ae5f86b.js",
+      "static/chunks/app/blog/page-a947ba7add0de912.js"
+    ],
+    "/blog/layout": [
+      "static/chunks/webpack-7c9d98fa7d9ab662.js",
+      "static/chunks/fd9d1056-dcba7f094ce3d609.js",
+      "static/chunks/117-b93b2d5c59297f67.js",
+      "static/chunks/main-app-f7ac27332c2a0d45.js",
+      "static/css/de048cc5be0ebfcb.css",
+      "static/chunks/app/blog/layout-ee0b88222d0cd7ef.js"
+    ],
+    "/blog/[slug]/page": [
+      "static/chunks/webpack-7c9d98fa7d9ab662.js",
+      "static/chunks/fd9d1056-dcba7f094ce3d609.js",
+      "static/chunks/117-b93b2d5c59297f67.js",
+      "static/chunks/main-app-f7ac27332c2a0d45.js",
+      "static/chunks/972-8eb402881ae5f86b.js",
+      "static/chunks/app/blog/[slug]/page-b4852cec2efd88e3.js"
+    ],
+    "/tools/edpi-calculator/page": [
+      "static/chunks/webpack-7c9d98fa7d9ab662.js",
+      "static/chunks/fd9d1056-dcba7f094ce3d609.js",
+      "static/chunks/117-b93b2d5c59297f67.js",
+      "static/chunks/main-app-f7ac27332c2a0d45.js",
+      "static/chunks/972-8eb402881ae5f86b.js",
+      "static/chunks/app/tools/edpi-calculator/page-efafad84a41c99b3.js"
+    ],
+    "/tools/edpi-calculator/layout": [
+      "static/chunks/webpack-7c9d98fa7d9ab662.js",
+      "static/chunks/fd9d1056-dcba7f094ce3d609.js",
+      "static/chunks/117-b93b2d5c59297f67.js",
+      "static/chunks/main-app-f7ac27332c2a0d45.js",
+      "static/chunks/app/tools/edpi-calculator/layout-a6cac0e55834feca.js"
+    ],
+    "/tools/dpi-analyzer/page": [
+      "static/chunks/webpack-7c9d98fa7d9ab662.js",
+      "static/chunks/fd9d1056-dcba7f094ce3d609.js",
+      "static/chunks/117-b93b2d5c59297f67.js",
+      "static/chunks/main-app-f7ac27332c2a0d45.js",
+      "static/chunks/app/tools/dpi-analyzer/page-1adc0e1471d28a08.js"
+    ],
+    "/tools/dpi-analyzer/layout": [
+      "static/chunks/webpack-7c9d98fa7d9ab662.js",
+      "static/chunks/fd9d1056-dcba7f094ce3d609.js",
+      "static/chunks/117-b93b2d5c59297f67.js",
+      "static/chunks/main-app-f7ac27332c2a0d45.js",
+      "static/chunks/app/tools/dpi-analyzer/layout-5d682b17dc9546df.js"
+    ],
+    "/tools/sensitivity-converter/page": [
+      "static/chunks/webpack-7c9d98fa7d9ab662.js",
+      "static/chunks/fd9d1056-dcba7f094ce3d609.js",
+      "static/chunks/117-b93b2d5c59297f67.js",
+      "static/chunks/main-app-f7ac27332c2a0d45.js",
+      "static/chunks/app/tools/sensitivity-converter/page-36ed52c642be6c58.js"
+    ],
+    "/tools/sensitivity-converter/layout": [
+      "static/chunks/webpack-7c9d98fa7d9ab662.js",
+      "static/chunks/fd9d1056-dcba7f094ce3d609.js",
+      "static/chunks/117-b93b2d5c59297f67.js",
+      "static/chunks/main-app-f7ac27332c2a0d45.js",
+      "static/chunks/app/tools/sensitivity-converter/layout-bd59637df118639f.js"
+    ],
+    "/tools/fov-calculator/page": [
+      "static/chunks/webpack-7c9d98fa7d9ab662.js",
+      "static/chunks/fd9d1056-dcba7f094ce3d609.js",
+      "static/chunks/117-b93b2d5c59297f67.js",
+      "static/chunks/main-app-f7ac27332c2a0d45.js",
+      "static/chunks/972-8eb402881ae5f86b.js",
+      "static/chunks/app/tools/fov-calculator/page-4db26d154fc8d54d.js"
+    ],
+    "/tools/fov-calculator/layout": [
+      "static/chunks/webpack-7c9d98fa7d9ab662.js",
+      "static/chunks/fd9d1056-dcba7f094ce3d609.js",
+      "static/chunks/117-b93b2d5c59297f67.js",
+      "static/chunks/main-app-f7ac27332c2a0d45.js",
+      "static/chunks/app/tools/fov-calculator/layout-b11684ab4306ed38.js"
     ]
   }
 }

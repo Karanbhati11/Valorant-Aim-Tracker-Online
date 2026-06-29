@@ -8,6 +8,7 @@ import Header from "@/components/Header";
 import OfflineIndicator from "@/components/OfflineIndicator";
 import WebVitalsOptimizer from "@/components/WebVitalsOptimizer";
 import { I18nProvider } from "@/components/I18nProvider";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 /**
  * Next.js font optimization: preloads Inter font files, applies font-display: swap,
@@ -145,6 +146,13 @@ export default function RootLayout({
           </main>
           <Footer />
         </I18nProvider>
+        {/*
+          Google Analytics (GA4) via the official @next/third-parties component.
+          This correctly initializes gtag AND automatically sends page_view hits
+          on client-side route changes. It loads with the afterInteractive
+          strategy so it does not block LCP.
+        */}
+        <GoogleAnalytics gaId="G-RW21VMXTMF" />
       </body>
     </html>
   );

@@ -265,10 +265,9 @@ export class DOMBatcher {
  * to improve LCP. These scripts are loaded after the page is interactive.
  */
 export const DEFERRED_THIRD_PARTY_SCRIPTS: DeferredScript[] = [
-  {
-    src: 'https://www.googletagmanager.com/gtag/js?id=G-RW21VMXTMF',
-    attributes: {},
-  },
+  // NOTE: Google Analytics (gtag.js) is intentionally NOT listed here.
+  // It is loaded via the <GoogleAnalytics> component from @next/third-parties
+  // in app/layout.tsx, which handles gtag init and SPA route-change pageviews.
   {
     src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2970054316732906',
     attributes: { crossorigin: 'anonymous' },

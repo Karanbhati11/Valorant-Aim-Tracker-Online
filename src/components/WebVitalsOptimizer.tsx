@@ -22,21 +22,12 @@ import {
 
 export default function WebVitalsOptimizer() {
   useEffect(() => {
-    // Defer analytics and ad scripts until after the page is interactive.
+    // Defer ad scripts until after the page is interactive.
     // This prevents them from competing with LCP resources on the network.
+    // NOTE: Google Analytics is now handled by the <GoogleAnalytics> component
+    // from @next/third-parties (see app/layout.tsx), which correctly initializes
+    // gtag and tracks client-side route changes. Do not init GA here.
     deferThirdPartyScripts(DEFERRED_THIRD_PARTY_SCRIPTS);
-
-    // Initialize Google Analytics dataLayer after scripts load.
-    // The gtag function is defined immediately so events can be queued,
-    // but the actual GA script is deferred.
-    if (typeof window !== 'undefined') {
-      (window as any).dataLayer = (window as any).dataLayer || [];
-      function gtag(...args: any[]) {
-        (window as any).dataLayer.push(args);
-      }
-      gtag('js', new Date());
-      gtag('config', 'G-RW21VMXTMF');
-    }
 
     // Ensure all fonts use font-display: swap to prevent CLS from FOIT
     ensureFontStability();
