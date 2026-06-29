@@ -11,9 +11,6 @@ import { I18nProvider } from "@/components/I18nProvider";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import ConsentBanner from "@/components/ConsentBanner";
 
-// Public GTM container ID, sourced from the environment rather than hardcoded.
-const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID;
-
 /**
  * Next.js font optimization: preloads Inter font files, applies font-display: swap,
  * and generates optimized @font-face declarations to prevent FOUT/FOUC and CLS.
@@ -109,7 +106,7 @@ export default function RootLayout({
       <head>
         {/*
           Google Consent Mode v2 — DEFAULT state.
-          This MUST execute before the GTM container script below so that all
+          This MUST execute before Google Analytics (gtag.js) loads so that
           tags read a denied-by-default consent state and no data leaks before
           the user makes a choice. `wait_for_update` gives the client-side
           cookie banner time to read any previously stored preference.
@@ -131,21 +128,13 @@ export default function RootLayout({
           }}
         />
         {/*
-          Google Tag Manager container script. Injected directly beneath the
-          consent default so the container initializes with consent already set.
-          The container ID is pulled from NEXT_PUBLIC_GTM_ID.
+          Google Analytics (GA4) via the official @next/third-parties component,
+          loaded directly below the consent default. It initializes gtag with
+          the consent state already set to denied and automatically sends
+          page_view hits on client-side route changes. Loads with the
+          afterInteractive strategy so it does not block LCP.
         */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-              new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-              j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-              'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-              })(window,document,'script','dataLayer','${GTM_ID}');
-            `,
-          }}
-        />
+        <GoogleAnalytics gaId="G-RW21VMXTMF" />
         {/* Apple PWA meta tags for Safari installability */}
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -176,16 +165,6 @@ export default function RootLayout({
         ></script>
       </head>
       <body className={`${inter.className} bg-primary text-white`}>
-        {/* Google Tag Manager (noscript) — fallback for users with JS disabled */}
-        <noscript>
-          <iframe
-            src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
-            height="0"
-            width="0"
-            style={{ display: "none", visibility: "hidden" }}
-          />
-        </noscript>
-        {/* End Google Tag Manager (noscript) */}
         <I18nProvider>
           {/* Skip navigation link for keyboard users - WCAG 2.4.1 */}
           <a href="#main-content" className="skip-to-content">
@@ -201,13 +180,6 @@ export default function RootLayout({
         </I18nProvider>
         {/* Cookie consent banner — fires gtag consent update on accept */}
         <ConsentBanner />
-        {/*
-          Google Analytics (GA4) via the official @next/third-parties component.
-          This correctly initializes gtag AND automatically sends page_view hits
-          on client-side route changes. It loads with the afterInteractive
-          strategy so it does not block LCP.
-        */}
-        <GoogleAnalytics gaId="G-RW21VMXTMF" />
       </body>
     </html>
   );
