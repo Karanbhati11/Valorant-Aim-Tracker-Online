@@ -13,7 +13,6 @@ import { getCategoryBySlug } from "@/lib/blog/categories";
 import {
   generateTableOfContents,
   injectHeadingIds,
-  validateBlogContent,
 } from "@/lib/blog/content-validation";
 import InternalLinks from "@/components/InternalLink";
 import { inferTagsFromTitle } from "@/lib/blog/internal-linking";
@@ -104,31 +103,6 @@ function WordCountBadge({ count }: { count: number }) {
 export default function BlogArticlePage({ params }: BlogArticlePageProps) {
   const post = getBlogPostBySlug(params.slug);
   if (!post) notFound();
-
-  // Validate content and enforce requirements
-  const validation = validateBlogContent(post.contentHtml);
-
-  // Prevent publication if below minimum word count (Requirement 9.7)
-  if (!validation.valid && validation.wordCount < 1500) {
-    return (
-      <div className="blog-container">
-        <div className="article-view">
-          <div className="content-error" role="alert">
-            <h1>Content Requirements Not Met</h1>
-            <p>
-              This post cannot be published. Current word count:{" "}
-              <strong>{validation.wordCount}</strong>. Minimum required:{" "}
-              <strong>1,500 words</strong>.
-            </p>
-            <p>Please add {1500 - validation.wordCount} more words before publishing.</p>
-            <Link href="/blog" className="back-link">
-              Back to Blog
-            </Link>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   // Generate table of contents for posts exceeding 2000 words (Requirement 9.2)
   const tableOfContents = generateTableOfContents(post.contentHtml, post.wordCount);

@@ -922,4 +922,24 @@ const BLOG_DATA = [
       <p>Run these drills in our <a href="/" style="color: var(--primary); text-decoration: underline;">online aim trainer</a>, then continue with <a href="/blog?id=best-aim-training-routine-daily-plan" style="color: var(--accent);">the full daily routine</a>.</p>
     `,
   },
+  {
+    id: "best-fov-setting-for-fps-game",
+    title: "Best FOV Setting for FPS Games (And Why It Affects Your Aim)",
+    date: "July 1, 2026",
+    author: "Aim Pro Coach",
+    thumbnail: "assets/blog/thumb-21.jpg",
+    excerpt:
+      "FOV isn't just a visual preference — it quietly changes how your sensitivity feels. Here's how to pick the right value and keep your aim consistent when you switch.",
+    content: ``,
+  },
+  {
+    id: "recoil-control-guide-valorant-cs2",
+    title: "Recoil Control Guide for Valorant and CS2 (Spray Patterns Explained)",
+    date: "July 1, 2026",
+    author: "Aim Pro Coach",
+    thumbnail: "assets/blog/thumb-22.jpg",
+    excerpt:
+      "Recoil control is a tracking problem with a predictable curve, not a memorization drill. Here's how to actually practice it and when to use sprays vs bursts.",
+    content: ``,
+  },
 ];

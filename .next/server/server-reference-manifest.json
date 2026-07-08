@@ -1,5 +1,14 @@
 {
-  "node": {},
+  "node": {
+    "fb1b5dca356eabe79eba339947b5151bb586354d": {
+      "workers": {
+        "app/crosshairs/page": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5CLive%20Projects%5C%5CValorant-Aim-Tracker-Online%5C%5Csrc%5C%5Clib%5C%5Ccrosshair%5C%5Cactions.ts%22%2C%5B%22saveCrosshair%22%5D%5D%5D&__client_imported__=!"
+      },
+      "layer": {
+        "app/crosshairs/page": "rsc"
+      }
+    }
+  },
   "edge": {},
-  "encryptionKey": "mrH41SG3KXqtlQTqLirDxd24ehyQHcY4bc36CfyZ4MU="
+  "encryptionKey": "pbG15+AGwpY9Y2WRcRkoq/8Y06NKrB6gEmtue/hlVj8="
 }
